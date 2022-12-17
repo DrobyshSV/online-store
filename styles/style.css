@@ -133,10 +133,25 @@ select {
    height: 800px;
 }
 .products{
+   margin: 0 auto;
+   padding: 5px;
    border: 1px solid #000;
    max-width: 885px;
    width: 100%;
    height: 800px;
+   display: flex;
+   justify-content: space-between;
+   flex-wrap: wrap;
+}
+.products__item{
+   display: flex;
+   justify-content: space-around;
+   flex-direction: column;
+   align-items: center;
+   padding: 10px;
+   border: 2px solid #000;
+   width: 180px;
+   height: 345px;
 }
 /* ============= FOOTER ============== */
 .footer{
