@@ -93,7 +93,6 @@ select {
    margin: 0px auto;
 }
 .header{
-  
    margin: 0px auto;
    padding: 50px 0px 40px 0px;
    border-bottom: 2px solid #000;
@@ -107,11 +106,13 @@ select {
    display:flex;
    justify-content: center;
    align-items: center;
-}
-.navigation__item {
    font-size: 24px;
 }
+.navigation__item a{
+  text-decoration: none;
+}
 .inscription{
+   color: #000;
    font-size: 32px;
 }
 .navigation-icons{
@@ -153,6 +154,9 @@ select {
    width: 180px;
    height: 345px;
 }
+.products__name, .products__description{
+   align-self: flex-start;
+}
 /* ============= FOOTER ============== */
 .footer{
    margin: 0 auto;
@@ -167,8 +171,13 @@ select {
 }
 .box__item{
    color: #fff;
+   text-decoration: none;
+}
+.box__item a{
+   text-decoration: none;
 }
 #footer-inscription{
+   color: #fff;
    font-weight: 500;
    font-size: 24px;
 }
