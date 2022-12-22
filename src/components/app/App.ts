@@ -12,6 +12,7 @@ class App {
   private static defaultPageId = 'current-page';
   private header: Header;
   private footer: Footer;
+  private product: ProductPage;
 
   static renderNewPage(idPage: string) {
     const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
@@ -47,11 +48,13 @@ class App {
   constructor() {
     this.header = new Header('header', 'header-container');
     this.footer = new Footer('footer', 'footer-container');
+    this.product = new ProductPage('1');
   }
 
   start() {
     App.container.append(this.header.render());
     App.renderNewPage('main-page');
+    App.container.append(this.product.render());
     this.enableRouteChange();
     App.container.append(this.footer.render());
   }

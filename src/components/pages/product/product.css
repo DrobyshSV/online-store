@@ -1,0 +1,15 @@
+.product-container{
+   margin: 0 auto;
+   display: flex;
+   justify-content: space-around;
+   flex-direction: column;
+   align-items: center;
+   padding: 10px;
+   border: 2px solid #000;
+   width: 180px;
+   height: 345px;
+}
+.product__name,
+.product__description {
+   align-self: flex-start;
+}
