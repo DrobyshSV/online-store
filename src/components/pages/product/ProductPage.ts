@@ -9,15 +9,42 @@ class ProductPage extends Page {
   constructor(id: string) {
     super(id);
   }
-
+  
   createProductContainer(phoneName: string, phoneImg: string, phoneDescription:string){
     const productContainer = document.createElement('div');
     productContainer.classList.add('product-container');
+    this.container.append(productContainer);
     const stucture = `
-      <div class = "product__name">${phoneName}</div>
-      <div class = "product__"img><img src="${phoneImg}" alt="test"></img></div>
-      <div class = "product__description">${phoneDescription}</div>
-      <div class = "product__other">o o o</div>
+      <div class = "product__wrap">
+        <div class = "product__source">
+          <div class = "product__name">${phoneName}</div>
+          <div class = "product__name">${phoneName}</div>
+          <div class = "product__name">${phoneName}</div>
+          <div class = "product__name">${phoneName}</div>
+        </div>
+        <div class = "product__name">${phoneName}</div>
+        <div class = "product__main">
+          <div class = "product__galery">
+            <div class = "product__image"><img src="#" alt="product"></img></div>
+            <div class = "product__image"><img src="#" alt="product"></img></div>
+            <div class = "product__image"><img src="#" alt="product"></img></div>
+          </div>
+          <div class = "product__img"><img src="#" alt="product"></img></div>
+          <div class = "product__description">
+            <div class = "product__description item"></div>
+            <div class = "product__description item"></div>
+            <div class = "product__description item"></div>
+            <div class = "product__description item"></div>
+            <div class = "product__description item"></div>
+            <div class = "product__description item"></div>
+          </div>
+          <div class = "product__price">
+            <div class = "product__price item"></div>
+            <div class = "product__price item"></div>
+            <div class = "product__price item"></div>
+          </div>
+        </div>
+      </div>
    `;
     productContainer.innerHTML = stucture;
     return productContainer;
@@ -25,7 +52,6 @@ class ProductPage extends Page {
 
   render() {
     const prod = this.createProductContainer('Iphone', 'undefined', 'test');
-    this.container.append(prod)
     return this.container;
   }
 }

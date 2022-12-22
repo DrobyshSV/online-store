@@ -48,16 +48,15 @@ class App {
   constructor() {
     this.header = new Header('header', 'header-container');
     this.footer = new Footer('footer', 'footer-container');
-    this.product = new ProductPage('1');
+    this.product = new ProductPage('one');
   }
 
   start() {
     App.container.append(this.header.render());
-    App.renderNewPage('main-page');
+    App.renderNewPage('main-page');           
     App.container.append(this.product.render());
     this.enableRouteChange();
     App.container.append(this.footer.render());
   }
 }
-
 export default App;
