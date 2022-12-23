@@ -9,10 +9,9 @@ import ErrorPage from '../pages/error/ErrorPage';
 
 class App {
   private static container: HTMLElement = document.body;
-  private static defaultPageId = 'current-page';
+  private static defaultPageId = PageIds.ProductPage;
   private header: Header;
   private footer: Footer;
-  private product: ProductPage;
 
   static renderNewPage(idPage: string) {
     const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
@@ -48,13 +47,11 @@ class App {
   constructor() {
     this.header = new Header('header', 'header-container');
     this.footer = new Footer('footer', 'footer-container');
-    this.product = new ProductPage('one');
   }
 
   start() {
     App.container.append(this.header.render());
-    App.renderNewPage('main-page');           
-    App.container.append(this.product.render());
+    App.renderNewPage('product-page');           
     this.enableRouteChange();
     App.container.append(this.footer.render());
   }

@@ -3,7 +3,7 @@
    border: 1px solid black;
    max-width: 1225px;
    width: 100%;
-   height: 450px;
+   height: 495px;
 }
 .product__source{
    flex-direction: row;
@@ -40,8 +40,18 @@
    width: 100%;
    max-width: 485px;
 }
+.product__description .item{
+   height: 67px;
+}
 .product__price{
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
    border: 1px solid black;
    width: 100%;
    max-width: 245px;
+}
+.product__price .item{
+   height: 67px;
 }

@@ -9,20 +9,31 @@ class ProductPage extends Page {
   constructor(id: string) {
     super(id);
   }
-  
-  createProductContainer(phoneName: string, phoneImg: string, phoneDescription:string){
+
+  getFetch(dataUrl: string){
+        let newObj;
+        fetch(dataUrl)
+        .then((response) => {
+          return response.json();
+        })  
+        
+  }
+
+  createProductContainer(productId: string){
+    const dataUrl = 'https://dummyjson.com/products/' + productId;
+    const test = this.getFetch(dataUrl);
+    console.log(test);
     const productContainer = document.createElement('div');
     productContainer.classList.add('product-container');
-    this.container.append(productContainer);
     const stucture = `
       <div class = "product__wrap">
         <div class = "product__source">
-          <div class = "product__name">${phoneName}</div>
-          <div class = "product__name">${phoneName}</div>
-          <div class = "product__name">${phoneName}</div>
-          <div class = "product__name">${phoneName}</div>
+          <div class = "product__name"></div>
+          <div class = "product__name"></div>
+          <div class = "product__name"></div>
+          <div class = "product__name"></div>
         </div>
-        <div class = "product__name">${phoneName}</div>
+        <div class = "product__name"></div>
         <div class = "product__main">
           <div class = "product__galery">
             <div class = "product__image"><img src="#" alt="product"></img></div>
@@ -46,12 +57,14 @@ class ProductPage extends Page {
         </div>
       </div>
    `;
+
     productContainer.innerHTML = stucture;
     return productContainer;
   }
 
   render() {
-    const prod = this.createProductContainer('Iphone', 'undefined', 'test');
+    const prod = this.createProductContainer('1');
+    this.container.append(prod)
     return this.container;
   }
 }
