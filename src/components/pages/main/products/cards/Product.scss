@@ -1,0 +1,9 @@
+.product {
+  max-width: 200px;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid black;
+}
