@@ -1,7 +1,7 @@
 import AppLoader from './appLoader';
 
 export type ProductType = {
-  id: number
+  id: number;
   title: string;
   description: string;
   price: number;
@@ -27,7 +27,7 @@ class AppController extends AppLoader {
       {
         endpoint: 'products',
       },
-      callback
+      callback,
     );
   }
 }
