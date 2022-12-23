@@ -3,7 +3,7 @@ import { ProductType } from '../controller/controller';
 
 class Products {
   draw(data: Array<ProductType>) {
-    (document.querySelector('#main-page') as HTMLElement).innerHTML = '';
+    (document.querySelector('.cards__section') as HTMLElement).innerHTML = '';
     const fragment = document.createDocumentFragment();
     data.forEach((item, index: number) => {
       const productCard: HTMLElement = document.createElement('div');
@@ -13,6 +13,7 @@ class Products {
       productName.innerHTML = `<span>${item.title}</span>`;
       const productImg: HTMLImageElement = document.createElement('img');
       productImg.setAttribute('width', '150px');
+      productImg.setAttribute('height', '150px');
       productImg.src = item.images[0];
       const productBrand: HTMLElement = document.createElement('span');
       productBrand.innerText = item.brand;
@@ -29,7 +30,7 @@ class Products {
       productPriceWrapper.append(productPriceTitle, productAddBtn);
       fragment.append(productCard);
     });
-    (document.querySelector('#main-page') as HTMLElement).append(fragment);
+    (document.querySelector('.cards__section') as HTMLElement).append(fragment);
   }
 }
 
