@@ -10,18 +10,19 @@ class ProductPage extends Page {
     super(id);
   }
 
-  getFetch(dataUrl: string){
-        let newObj;
-        fetch(dataUrl)
-        .then((response) => {
-          return response.json();
-        })  
-        
+  async getFetch(dataUrl: string){
+    return fetch(dataUrl)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      return data;
+    });
   }
-
-  createProductContainer(productId: string){
+  
+  async createProductContainer(productId: string){
     const dataUrl = 'https://dummyjson.com/products/' + productId;
-    const test = this.getFetch(dataUrl);
+    let test = await this.getFetch(dataUrl);
     console.log(test);
     const productContainer = document.createElement('div');
     productContainer.classList.add('product-container');
@@ -63,8 +64,9 @@ class ProductPage extends Page {
   }
 
   render() {
-    const prod = this.createProductContainer('1');
-    this.container.append(prod)
+    this.createProductContainer('1').then((productContainer) => {
+      this.container.append(productContainer);
+    })
     return this.container;
   }
 }
