@@ -10,6 +10,7 @@ class ProductPage extends Page {
     super(id);
   }
 
+  
   async getFetch(dataUrl: string){
     return fetch(dataUrl)
     .then((response) => {
@@ -25,6 +26,7 @@ class ProductPage extends Page {
     let productInfo = await this.getFetch(dataUrl);
     const productContainer = document.createElement('div');
     productContainer.classList.add('product-container');
+    
 
     const productTitle = productInfo.title;
     const productDescription = productInfo.description;
@@ -36,7 +38,8 @@ class ProductPage extends Page {
     const productRating = productInfo.rating;
     const productStock = productInfo.stock;
 
-    const stucture = `
+    // CODE STRUCTURE
+    const structure = `
       <div class = "product__wrap">
         <div class = "product__source">
           <div class = "product__source source_item"><p>Store<span>/</span></p></div>
@@ -46,9 +49,10 @@ class ProductPage extends Page {
         </div>
         <div class = "product__main">
           <div class = "product__galery">
-            <div class = "product__image"><img src="${productImages[1]}" alt="product"></img></div>
-            <div class = "product__image"><img src="${productImages[2]}" alt="product"></img></div>
-            <div class = "product__image"><img src="${productImages[3]}" alt="product"></img></div>
+            <div class="product__image" onclick="function setNewImg(){const newImg = document.querySelector('.main_img img');newImg.src = '${productImages[1]}'}setNewImg()"><img src="${productImages[1]}" alt="product"></img>
+            </div>
+            <div class="product__image" onclick="function setNewImg(){const newImg = document.querySelector('.main_img img');newImg.src = '${productImages[2]}'}setNewImg()"><img src="${productImages[2]}" alt="product"></img></div>
+            <div class="product__image" onclick="function setNewImg(){const newImg = document.querySelector('.main_img img');newImg.src = '${productImages[3]}'}setNewImg()"><img src="${productImages[3]}" alt="product"></img></div>
           </div>
           
           <div class = "product__image main_img"><img src="${productImages[4]}" alt="product"></img></div>
@@ -72,15 +76,17 @@ class ProductPage extends Page {
         </div>
       </div>
    `;
-
-    productContainer.innerHTML = stucture;
+        
+    productContainer.innerHTML = structure;
     return productContainer;
+  
   }
 
   render() {
     this.createProductContainer('12').then((productContainer) => {
       this.container.append(productContainer);
     })
+   
     return this.container;
   }
 }
