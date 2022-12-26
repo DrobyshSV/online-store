@@ -1,12 +1,13 @@
 import ProductsLoader from './ProductsLoader';
 
 const url = 'https://dummyjson.com/';
-const limit = '100';
+/*const limit = '100';*/
 
 class AppLoader extends ProductsLoader {
-  constructor() {
+  constructor(/*search = ''*/) {
     super(url, {
-      limit: limit, // лимит продуктов
+      /*search: search,*/
+      /*limit: limit, // лимит продуктов*/
     });
   }
 }

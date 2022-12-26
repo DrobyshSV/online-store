@@ -22,12 +22,15 @@ export interface ISources {
 }
 
 class AppController extends AppLoader {
-  getSources(callback: ((data?: ISources) => void) | undefined) {
+  getSources(callback: ((data?: ISources) => void) | undefined, search = '') {
     super.getResp(
       {
-        endpoint: 'products',
+        endpoint: 'products/',
+        options: {
+          search: search,
+        },
       },
-      callback,
+      callback
     );
   }
 }

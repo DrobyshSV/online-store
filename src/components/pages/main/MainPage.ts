@@ -14,9 +14,25 @@ class MainPage extends Page {
   }
 
   render() {
+    const sectionCards = document.createElement('section');
+    sectionCards.classList.add('cards__section');
+    const filtersSection = document.createElement('section');
+    filtersSection.classList.add('filters__section');
+    this.container.append(filtersSection, sectionCards);
     this.controller.getSources((data) => {
       this.cards.drawProducts(data);
     });
+    (document.querySelector('input') as HTMLElement).addEventListener('input', (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target) {
+        this.controller = new AppController();
+        this.controller.getSources((data) => {
+          this.cards.drawProducts(data);
+          return this.container;
+        }, target.value);
+      }
+    });
+
     return this.container;
   }
 }

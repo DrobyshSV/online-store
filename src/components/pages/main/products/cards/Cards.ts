@@ -12,11 +12,6 @@ class Cards {
   }
 
   drawProducts(data: ISources | undefined) {
-    const sectionCards = document.createElement('section');
-    sectionCards.classList.add('cards__section');
-    const filtersSection = document.createElement('section');
-    filtersSection.classList.add('filters__section');
-    (document.querySelector('#main-page') as HTMLElement).append(filtersSection, sectionCards);
     if (data) {
       const products = data.products;
       this.products.draw(products);

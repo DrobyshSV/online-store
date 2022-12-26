@@ -1,5 +1,6 @@
 export interface IOptions {
   limit?: string;
+  search?: string;
 }
 
 type RespType = {
@@ -7,7 +8,9 @@ type RespType = {
   options?: Partial<OptionsType>;
 };
 type OptionsType = {
-  sources: string;
+  sources?: string;
+  limit?: string;
+  search?: string;
 };
 
 enum StatusCode {
@@ -18,10 +21,12 @@ enum StatusCode {
 class ProductsLoader {
   baseLink: string;
   options: IOptions;
+  private searchKeyEvent: string;
 
   constructor(baseLink: string, options: IOptions) {
     this.baseLink = baseLink;
     this.options = options;
+    this.searchKeyEvent = '';
   }
 
   getResp(
@@ -44,11 +49,11 @@ class ProductsLoader {
   }
 
   makeUrl(options: IOptions, endpoint: string) {
-    const urlOptions: { [index: string]: string } = { ...this.options };
-    let url = `${this.baseLink}${endpoint}?`;
+    const urlOptions: { [index: string]: string } = { ...this.options, ...options };
+    let url = `${this.baseLink}${endpoint}`;
 
     Object.keys(urlOptions).forEach((key) => {
-      url += `${key}=${urlOptions[key]}&`;
+      url += `${key}?q=${urlOptions[key]}&`;
     });
 
     return url.slice(0, -1);
@@ -58,7 +63,7 @@ class ProductsLoader {
     fetch(this.makeUrl(options, endpoint), { method })
       .then(this.errorHandler)
       .then((res): Promise<any> => res.json())
-      .then((data) => callback(data))
+      .then((data) => callback({ ...data }))
       .catch((err: Error) => console.error(err));
   }
 }
