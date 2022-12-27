@@ -9,7 +9,7 @@ import ErrorPage from '../pages/error/ErrorPage';
 
 class App {
   private static container: HTMLElement = document.body;
-  private static defaultPageId = 'current-page';
+  private static defaultPageId = PageIds.MainPage;
   private header: Header;
   private footer: Footer;
 

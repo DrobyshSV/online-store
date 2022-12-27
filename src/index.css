@@ -14,6 +14,7 @@ header {
 
 main {
   min-height: calc(100vh - 240px);
+  display: flex;
 }
 
 footer {
