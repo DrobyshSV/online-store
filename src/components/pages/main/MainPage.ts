@@ -12,27 +12,29 @@ class MainPage extends Page {
     this.controller = new AppController();
     this.cards = new Cards();
   }
-
+  inputEvent(e: Event) {
+    const target = e.target as HTMLInputElement;
+    if (target) {
+      this.controller = new AppController();
+      this.controller.getSources((data) => {
+        this.cards.drawProducts(data);
+        return this.container;
+      }, target.value);
+    }
+  }
+  getSection(className: string) {
+    const section = document.createElement('section');
+    section.classList.add(className);
+    return section
+  }
   render() {
-    const sectionCards = document.createElement('section');
-    sectionCards.classList.add('cards__section');
-    const filtersSection = document.createElement('section');
-    filtersSection.classList.add('filters__section');
-    this.container.append(filtersSection, sectionCards);
+    this.container.append(this.getSection('filters__section'))
+    this.container.append(this.getSection('cards__section'))
     this.controller.getSources((data) => {
       this.cards.drawProducts(data);
     });
-    (document.querySelector('input') as HTMLElement).addEventListener('input', (e) => {
-      const target = e.target as HTMLInputElement;
-      if (target) {
-        this.controller = new AppController();
-        this.controller.getSources((data) => {
-          this.cards.drawProducts(data);
-          return this.container;
-        }, target.value);
-      }
-    });
-
+    (document.querySelector('input') as HTMLElement)
+      .addEventListener('input', (e) => this.inputEvent(e));
     return this.container;
   }
 }
