@@ -6,12 +6,14 @@ import MainPage from '../pages/main/MainPage';
 import ProductPage from '../pages/product/ProductPage';
 import BasketPage from '../pages/basket/BasketPage';
 import ErrorPage from '../pages/error/ErrorPage';
+import Payment from '../payment/Payment';
 
 class App {
   private static container: HTMLElement = document.body;
   private static defaultPageId = PageIds.ProductPage;
   private header: Header;
   private footer: Footer;
+  private payment: Payment;
 
   static renderNewPage(idPage: string) {
     const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
@@ -47,10 +49,12 @@ class App {
   constructor() {
     this.header = new Header('header', 'header-container');
     this.footer = new Footer('footer', 'footer-container');
+    this.payment = new Payment('payment')
   }
 
   start() {
     App.container.append(this.header.render());
+    App.container.append(this.payment.render());
     App.renderNewPage('product-page');           
     this.enableRouteChange();
     App.container.append(this.footer.render());
