@@ -1,23 +1,4 @@
-import { ProductType } from './controller';
-
-export interface IOptions {
-  limit?: string;
-}
-
-type RespType = {
-  endpoint: string;
-  options?: Partial<OptionsType>;
-};
-type OptionsType = {
-  sources?: string;
-  limit?: string;
-  search?: string;
-};
-
-enum StatusCode {
-  Unauthorized = 401,
-  NotFound = 404,
-}
+import { IOptions, ProductType, RespType, StatusCode } from '../../../../types/types';
 
 class ProductsLoader {
   baseLink: string;

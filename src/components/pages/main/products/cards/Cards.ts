@@ -1,5 +1,5 @@
-import {ISources, ProductType} from '../controller/controller';
 import Products from './Products';
+import { ProductType } from '../../../../types/types';
 
 class Cards {
   private products: Products;

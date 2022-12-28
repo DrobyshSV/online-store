@@ -1,14 +1,15 @@
 import Page from '../../common/Page';
-import AppController, { ProductType } from './products/controller/controller';
+import AppController from './products/controller/controller';
 import Cards from './products/cards/Cards';
 import Filters from './Filters/Filters';
+import { ProductType } from '../../types/types';
 
 class MainPage extends Page {
   static TextObject = {};
   private controller: AppController;
   private cards: Cards;
   private filter: Filters;
-  private filterContainer: HTMLElement;
+  readonly filterContainer: HTMLElement;
   public state: Array<ProductType>;
 
   constructor(id: string) {
@@ -54,8 +55,8 @@ class MainPage extends Page {
         this.cards.drawProducts(data);
       }
     });
-    (document.querySelector('input') as HTMLElement)
-      .addEventListener('input', (e) => this.inputEvent(e));
+    const inputSearch = document.querySelector('input') as HTMLElement;
+    inputSearch.addEventListener('input', (e) => this.inputEvent(e));
     return this.container;
   }
 }

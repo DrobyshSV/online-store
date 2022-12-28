@@ -1,5 +1,4 @@
 import './Filters.scss';
-import {ISources} from '../products/controller/controller';
 
 let arr = ['smartphones', 'laptops', 'fragrances', 'skincare', 'groceries', 'home-decoration', 'furniture', 'tops',
   'womens-dresses', 'womens-shoes', 'mens-shirts', 'mens-shoes', 'mens-watches', 'womens-watches', 'womens-bags',
@@ -18,28 +17,11 @@ let arr1 = ['Apple', 'Samsung', 'OPPO', 'Huawei', 'APPle', 'Microsoft Surface', 
   'Ifei Home', 'DADAWU', 'YIOSI'];
 
 class Filters {
-  /*private categories: Array<string>;*/
   private container: HTMLDivElement;
- /* private brands: any;*/
 
   constructor() {
-    /*this.brands = this.getFetch();*/
-    /*this.categories = arr;*/
     this.container = document.createElement('div');
   }
-
-  /*async getFetch(dataUrl = 'https://dummyjson.com/products?limit=100') {
-    debugger
-    return fetch(dataUrl)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data: ISources) => {
-        let set = new Set();
-        data.products.forEach(el => set.add(el.brand));
-        console.log(Array.from(set));
-      });
-  }*/
 
   getCheckbox(array: Array<string>) {
     const divFilterList = document.createElement('div');
