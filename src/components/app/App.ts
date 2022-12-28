@@ -10,7 +10,7 @@ import Payment from '../payment/Payment';
 
 class App {
   private static container: HTMLElement = document.body;
-  private static defaultPageId = PageIds.ProductPage;
+  private static defaultPageId = PageIds.MainPage;
   private header: Header;
   private footer: Footer;
   private payment: Payment;
