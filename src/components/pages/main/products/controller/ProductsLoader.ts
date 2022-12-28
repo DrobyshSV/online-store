@@ -1,6 +1,7 @@
+import { ProductType } from './controller';
+
 export interface IOptions {
   limit?: string;
-  search?: string;
 }
 
 type RespType = {
@@ -21,12 +22,12 @@ enum StatusCode {
 class ProductsLoader {
   baseLink: string;
   options: IOptions;
-  private searchKeyEvent: string;
+  public state: Array<ProductType>;
 
   constructor(baseLink: string, options: IOptions) {
     this.baseLink = baseLink;
     this.options = options;
-    this.searchKeyEvent = '';
+    this.state = [];
   }
 
   getResp(
@@ -51,9 +52,8 @@ class ProductsLoader {
   makeUrl(options: IOptions, endpoint: string) {
     const urlOptions: { [index: string]: string } = { ...this.options, ...options };
     let url = `${this.baseLink}${endpoint}`;
-
     Object.keys(urlOptions).forEach((key) => {
-      url += `${key}?q=${urlOptions[key]}&`;
+      url += `?${key}=${urlOptions[key]}&`;
     });
 
     return url.slice(0, -1);
@@ -63,7 +63,12 @@ class ProductsLoader {
     fetch(this.makeUrl(options, endpoint), { method })
       .then(this.errorHandler)
       .then((res): Promise<any> => res.json())
-      .then((data) => callback({ ...data }))
+      .then((data) => {
+        if (this.state.length === 0) {
+          this.state = [...data.products];
+        }
+        callback(this.state);
+      })
       .catch((err: Error) => console.error(err));
   }
 }

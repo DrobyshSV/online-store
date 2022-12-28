@@ -1,5 +1,5 @@
 import Page from '../../common/Page';
-import AppController from './products/controller/controller';
+import AppController, { ProductType } from './products/controller/controller';
 import Cards from './products/cards/Cards';
 import Filters from './Filters/Filters';
 
@@ -9,35 +9,50 @@ class MainPage extends Page {
   private cards: Cards;
   private filter: Filters;
   private filterContainer: HTMLElement;
+  public state: Array<ProductType>;
 
   constructor(id: string) {
     super(id);
     this.controller = new AppController();
+    this.state = this.controller.state;
     this.cards = new Cards();
-    this.filterContainer = this.getSection('filters__section')
-    this.filter = new Filters()
+    this.filterContainer = this.getSection('filters__section');
+    this.filter = new Filters();
   }
+
   inputEvent(e: Event) {
+    this.state = this.controller.state;
     const target = e.target as HTMLInputElement;
     if (target) {
-      this.controller = new AppController();
-      this.controller.getSources((data) => {
-        this.cards.drawProducts(data);
-        return this.container;
-      }, target.value);
+      const data = this.state.filter((obj) => {
+        if (
+          obj.brand.toLowerCase().includes(target.value.toLowerCase()) ||
+          obj.price.toString().toLowerCase().includes(target.value.toLowerCase()) ||
+          obj.title.toLowerCase().includes(target.value.toLowerCase()) ||
+          obj.description.toLowerCase().includes(target.value.toLowerCase()) ||
+          obj.category.toLowerCase().includes(target.value.toLowerCase())
+        ) {
+          return obj;
+        }
+      });
+      this.cards.drawProducts(data);
     }
   }
+
   getSection(className: string) {
     const section = document.createElement('section');
     section.classList.add(className);
-    return section
+    return section;
   }
+
   render() {
-    this.container.append(this.filterContainer)
-    this.filterContainer.append(this.filter.init())
-    this.container.append(this.getSection('cards__section'))
+    this.container.append(this.filterContainer);
+    this.filterContainer.append(this.filter.init());
+    this.container.append(this.getSection('cards__section'));
     this.controller.getSources((data) => {
-      this.cards.drawProducts(data);
+      if (data) {
+        this.cards.drawProducts(data);
+      }
     });
     (document.querySelector('input') as HTMLElement)
       .addEventListener('input', (e) => this.inputEvent(e));

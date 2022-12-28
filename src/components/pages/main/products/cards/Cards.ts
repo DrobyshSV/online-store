@@ -1,4 +1,4 @@
-import { ISources } from '../controller/controller';
+import {ISources, ProductType} from '../controller/controller';
 import Products from './Products';
 
 class Cards {
@@ -8,10 +8,9 @@ class Cards {
     this.products = new Products();
   }
 
-  drawProducts(data: ISources | undefined) {
-    if (data) {
-      const products = data.products;
-      this.products.draw(products);
+  drawProducts(data: Array<ProductType>) {
+    if (data.length !== 0) {
+      this.products.draw(data);
     }
   }
 }
