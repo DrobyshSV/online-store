@@ -9,9 +9,7 @@
   height: 100px;
   margin-top: 30px;
 }
-.slider-track {
-  background-color: #a82929;
-}
+
 input[type="range"] {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -91,4 +89,10 @@ input[type="range"]:active::-webkit-slider-thumb {
   position: relative;
   text-align: center;
   color: #ffffff;
+  .range1::after {
+    content: '€';
+  }
+  .range2::after {
+    content: '€';
+  }
 }

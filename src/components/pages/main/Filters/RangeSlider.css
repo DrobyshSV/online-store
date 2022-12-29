@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .wrapper {
   margin: 0 auto;
   position: relative;
@@ -8,10 +9,6 @@
   position: relative;
   height: 100px;
   margin-top: 30px;
-}
-
-.slider-track {
-  background-color: #a82929;
 }
 
 input[type=range] {
@@ -93,6 +90,12 @@ input[type=range]:active::-webkit-slider-thumb {
   position: relative;
   text-align: center;
   color: #ffffff;
+}
+.values .range1::after {
+  content: "€";
+}
+.values .range2::after {
+  content: "€";
 }
 
 /*# sourceMappingURL=RangeSlider.css.map */
