@@ -4,6 +4,28 @@ import Cards from './products/cards/Cards';
 import Filters from './Filters/Filters';
 import { ProductType } from '../../types/types';
 
+export type FilterStateType = {
+  categories: Array<string>;
+  brands: Array<string>;
+  setCategory: (str: string) => void;
+  setBrand: (str: string) => void;
+};
+
+export const filterState: FilterStateType = {
+  categories: [],
+  brands: [],
+  setCategory(category: string) {
+    if (!this.categories.some((t) => t === category)) {
+      this.categories.push(category);
+    }
+  },
+  setBrand(brand: string) {
+    if (!this.brands.some((t) => t === brand)) {
+      this.brands.push(brand);
+    }
+  },
+};
+
 class MainPage extends Page {
   static TextObject = {};
   private controller: AppController;
@@ -52,6 +74,12 @@ class MainPage extends Page {
     this.container.append(this.getSection('cards__section'));
     this.controller.getSources((data) => {
       if (data) {
+        data.forEach((t) => {
+          filterState.setCategory(t.category);
+          filterState.setBrand(t.brand);
+        });
+        this.filter.getCheckbox(1, filterState.categories);
+        this.filter.getCheckbox(2, filterState.brands);
         this.cards.drawProducts(data);
       }
     });
