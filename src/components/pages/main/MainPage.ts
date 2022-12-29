@@ -4,6 +4,48 @@ import Cards from './products/cards/Cards';
 import Filters from './Filters/Filters';
 import { ProductType } from '../../types/types';
 
+export type FilterStateType = {
+  categories: Array<string>;
+  brands: Array<string>;
+  price: Array<number>;
+  stock: Array<number>;
+  setCategory: (str: string) => void;
+  setBrand: (str: string) => void;
+  setPrice: (str: number) => void;
+  setStock: (str: number) => void;
+};
+
+export const filterState: FilterStateType = {
+  categories: [],
+  brands: [],
+  price: [],
+  stock: [],
+  setCategory(category: string) {
+    if (!this.categories.some((t) => t === category)) {
+      this.categories.push(category);
+      this.categories.sort();
+    }
+  },
+  setBrand(brand: string) {
+    if (!this.brands.some((t) => t === brand)) {
+      this.brands.push(brand);
+      this.brands.sort();
+    }
+  },
+  setPrice(price: number) {
+    if (!this.price.some((t) => t === price)) {
+      this.price.push(price);
+    }
+    this.price.sort((a, b) => a - b);
+  },
+  setStock(stock: number) {
+    if (!this.stock.some((t) => t === stock)) {
+      this.stock.push(stock);
+    }
+    this.stock.sort((a, b) => a - b);
+  },
+};
+
 class MainPage extends Page {
   static TextObject = {};
   private controller: AppController;
@@ -52,6 +94,30 @@ class MainPage extends Page {
     this.container.append(this.getSection('cards__section'));
     this.controller.getSources((data) => {
       if (data) {
+        data.forEach((t) => {
+          filterState.setCategory(t.category);
+          filterState.setBrand(t.brand);
+          filterState.setPrice(t.price);
+          filterState.setStock(t.stock);
+        });
+        this.filter.checkbox.getCheckboxes(
+          this.filter.categoryFilterList.lastElementChild as HTMLElement,
+          filterState.categories
+        );
+        this.filter.checkbox.getCheckboxes(
+          this.filter.brandFilterList.lastElementChild as HTMLElement,
+          filterState.brands
+        );
+        this.filter.range.getDoubleRange(
+          this.filter.priceFilterList.lastElementChild as HTMLElement,
+          filterState.price[0].toString(),
+          filterState.price[filterState.price.length - 1].toString()
+        );
+        this.filter.range.getDoubleRange(
+          this.filter.stockFilterList.lastElementChild as HTMLElement,
+          filterState.stock[0].toString(),
+          filterState.stock.reverse()[0].toString()
+        );
         this.cards.drawProducts(data);
       }
     });

@@ -9,7 +9,7 @@ class Cards {
   }
 
   drawProducts(data: Array<ProductType>) {
-    if (data.length !== 0) {
+    if (data) {
       this.products.draw(data);
     }
   }
