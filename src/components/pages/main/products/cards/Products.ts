@@ -1,5 +1,5 @@
 import './Product.scss';
-import { ProductType } from '../controller/controller';
+import { ProductType } from '../../../../types/types';
 
 class Products {
   draw(data: Array<ProductType>) {

@@ -52,14 +52,11 @@ class App {
     this.header = new Header('header', 'header-container');
     this.footer = new Footer('footer', 'footer-container');
     this.payment = new Payment('payment');
-    this.basket = new Basket('basket');
   }
 
   start() {
     App.container.append(this.header.render());
-    App.container.append(this.payment.render());
-    App.container.append(this.basket.render());
-    App.renderNewPage('product-page');           
+    App.renderNewPage('basket-page');
     this.enableRouteChange();
     App.container.append(this.footer.render());
   }

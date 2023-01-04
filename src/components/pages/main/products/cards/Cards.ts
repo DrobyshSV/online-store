@@ -1,5 +1,5 @@
-import { ISources } from '../controller/controller';
 import Products from './Products';
+import { ProductType } from '../../../../types/types';
 
 class Cards {
   private products: Products;
@@ -8,10 +8,9 @@ class Cards {
     this.products = new Products();
   }
 
-  drawProducts(data: ISources | undefined) {
+  drawProducts(data: Array<ProductType>) {
     if (data) {
-      const products = data.products;
-      this.products.draw(products);
+      this.products.draw(data);
     }
   }
 }

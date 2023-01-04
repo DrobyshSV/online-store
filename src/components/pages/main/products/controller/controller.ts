@@ -1,34 +1,11 @@
 import AppLoader from './appLoader';
-
-export type ProductType = {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  brand: string;
-  category: string;
-  thumbnail: string;
-  images: Array<string>;
-};
-
-export interface ISources {
-  products: Array<ProductType>;
-  total: number;
-  skip: number;
-  limit: number;
-}
+import { ProductType } from '../../../../types/types';
 
 class AppController extends AppLoader {
-  getSources(callback: ((data?: ISources) => void) | undefined, search = '') {
+  getSources(callback: ((data?: Array<ProductType>) => void) | undefined) {
     super.getResp(
       {
-        endpoint: 'products/',
-        options: {
-          search: search,
-        },
+        endpoint: 'products',
       },
       callback
     );
