@@ -1,6 +1,7 @@
 /* BLOCKS */
 .product-container{
    height: 130vh;
+   margin: 0 auto;
 }
 .product__wrap{
    display: flex;

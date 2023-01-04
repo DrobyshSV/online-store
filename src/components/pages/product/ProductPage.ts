@@ -1,7 +1,9 @@
 import Page from '../../common/Page';
 import './product.css'
 
-class ProductPage extends Page {
+
+class ProductPage extends Page{
+  
   static TextObject = {
     MainTitle: 'Settings Page',
   };
@@ -71,7 +73,13 @@ class ProductPage extends Page {
             
             <div class = "product__price">
               <div class = "product__price elem">${productPrice}$</div>
-              <div class = "product__price elem"><p>add to card</p></div>
+              <div class = "product__price elem" onclick="function popUpPay(){
+                const popupPay = document.querySelector('.popup__pay');
+                const paument = document.querySelector('#payment');
+                paument.classList.add('open');
+                popupPay.classList.add('open');
+              }
+            popUpPay()"><p>add to card</p></div>
               <div class = "product__price elem"><p>buy now</p></div>
             </div>
 
@@ -89,7 +97,7 @@ class ProductPage extends Page {
                 const popUp = document.querySelector('.popup');
                 const popupClose = document.querySelector('.popup__close');
                 popUp.classList.remove('open');
-              } closePopup()">
+              }closePopup()">
           <div class = "popup__content">
               <a href = "#" class = "popup__close" onclick = "function closePopup(){
                 const popUp = document.querySelector('.popup');

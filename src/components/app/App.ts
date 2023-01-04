@@ -7,13 +7,15 @@ import ProductPage from '../pages/product/ProductPage';
 import BasketPage from '../pages/basket/BasketPage';
 import ErrorPage from '../pages/error/ErrorPage';
 import Payment from '../payment/Payment';
+import Basket from '../basket/Basket';
 
 class App {
   private static container: HTMLElement = document.body;
-  private static defaultPageId = PageIds.MainPage;
+  private static defaultPageId = PageIds.ProductPage;
   private header: Header;
   private footer: Footer;
   private payment: Payment;
+  private basket: Basket;
 
   static renderNewPage(idPage: string) {
     const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
@@ -54,7 +56,7 @@ class App {
 
   start() {
     App.container.append(this.header.render());
-    App.renderNewPage('main-page');
+    App.renderNewPage('basket-page');
     this.enableRouteChange();
     App.container.append(this.footer.render());
   }
