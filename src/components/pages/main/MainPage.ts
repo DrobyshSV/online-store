@@ -100,7 +100,7 @@ class MainPage extends Page {
     return section;
   }
 
-  addListener() {
+  addEventListener() {
     const allCheckboxes = this.filterContainer.querySelectorAll('.checkbox__input');
     allCheckboxes.forEach((t, i) => {
       t.addEventListener('click', (e) => {
@@ -112,14 +112,14 @@ class MainPage extends Page {
     const rangeInputs2 = this.filterContainer.querySelectorAll('.slider-2');
     rangeInputs1.forEach((t, i) => {
       t.addEventListener('click', (e) => {
-        this.getDataForRangeListenerCallback(i);
-        this.addRangeFilter(e, i, 'left');
+        const arr = this.getDataForRangeListenerCallback(i);
+        this.addRangeFilter(arr);
       });
     });
     rangeInputs2.forEach((t, i) => {
       t.addEventListener('click', (e) => {
-        this.getDataForRangeListenerCallback(i);
-        this.addRangeFilter(e, i, 'right');
+        const arr = this.getDataForRangeListenerCallback(i);
+        this.addRangeFilter(arr);
       });
     });
   }
@@ -156,7 +156,7 @@ class MainPage extends Page {
       }
     });
     console.log(arr);
-    filterState.setFilter(arr);
+    return arr;
   }
 
   addCheckboxFilter(e: Event) {
@@ -201,108 +201,32 @@ class MainPage extends Page {
         }
       }
     });
-    this.filter.categoryFilterList.querySelectorAll('.checkbox-line').forEach((t) => {
-      this.toUpdateCheckboxSpan(t, data);
-    });
-    this.filter.brandFilterList.querySelectorAll('.checkbox-line').forEach((t) => {
-      this.toUpdateCheckboxSpan(t, data);
-    });
+    this.toUpdateCheckboxSpan(data);
+    this.toUpdateCheckboxSpan(data);
     filterState.setFilter(data);
-    console.log(data);
     this.cards.drawProducts(data);
   }
 
-  toUpdateCheckboxSpan(t: Element, data: Array<ProductType>) {
-    (t.lastElementChild as HTMLSpanElement).innerHTML = '';
-    (t.lastElementChild as HTMLSpanElement).textContent = `(${this.filter.checkbox.countOfProductsAll(
-      data,
-      (t.firstChild as HTMLInputElement).id.slice(0, -1),
-      t.parentNode as HTMLElement
-    )}/${this.filter.checkbox.countOfProductsAll(
-      filterState.state,
-      (t.firstChild as HTMLInputElement).id.slice(0, -1),
-      t.parentNode as HTMLElement
-    )})`;
+  toUpdateCheckboxSpan(data: Array<ProductType>) {
+    this.filterContainer.querySelectorAll('.checkbox-line').forEach((el) => {
+      (el.lastElementChild as HTMLSpanElement).innerHTML = '';
+      (el.lastElementChild as HTMLSpanElement).textContent = `(${this.filter.checkbox.countOfProductsAll(
+        data,
+        (el.firstChild as HTMLInputElement).id.slice(0, -1),
+        el.parentNode as HTMLElement
+      )}/${this.filter.checkbox.countOfProductsAll(
+        filterState.state,
+        (el.firstChild as HTMLInputElement).id.slice(0, -1),
+        el.parentNode as HTMLElement
+      )})`;
+    });
   }
 
-  addRangeFilter(e: Event, i: number, range: string) {
-    debugger
-    const arr = filterState.filter;
-    this.cards.drawProducts(arr);
-    (this.filter.priceFilterList.lastElementChild as HTMLElement).innerHTML = '';
-    (this.filter.stockFilterList.lastElementChild as HTMLElement).innerHTML = '';
-    const target = e.target as HTMLInputElement;
-    if (i === 0 && range === 'left') {
-      this.filter.range.getDoubleRange(
-        this.filter.priceFilterList.lastElementChild as HTMLElement,
-        target.value,
-        arr.sort((a, b) => a.price - b.price)[arr.length - 1].price.toString(),
-        filterState.price[0].toString(),
-        filterState.price[filterState.price.length - 1].toString()
-      );
-      this.filter.range.getDoubleRange(
-        this.filter.stockFilterList.lastElementChild as HTMLElement,
-        arr.sort((a, b) => a.stock - b.stock)[0].stock.toString(),
-        arr[arr.length - 1].stock.toString(),
-        filterState.stock[0].toString(),
-        filterState.stock[filterState.stock.length - 1].toString()
-      );
-    }
-    if (i === 1 && range === 'left') {
-      this.filter.range.getDoubleRange(
-        this.filter.priceFilterList.lastElementChild as HTMLElement,
-        arr.sort((a, b) => a.price - b.price)[0].price.toString(),
-        arr[arr.length - 1].price.toString(),
-        filterState.price[0].toString(),
-        filterState.price[filterState.price.length - 1].toString()
-      );
-      this.filter.range.getDoubleRange(
-        this.filter.stockFilterList.lastElementChild as HTMLElement,
-        target.value,
-        arr.sort((a, b) => a.stock - b.stock)[arr.length - 1].stock.toString(),
-        filterState.stock[0].toString(),
-        filterState.stock[filterState.stock.length - 1].toString()
-      );
-    }
-    if (i === 0 && range === 'right') {
-      this.filter.range.getDoubleRange(
-        this.filter.priceFilterList.lastElementChild as HTMLElement,
-        arr.sort((a, b) => a.price - b.price)[0].price.toString(),
-        target.value,
-        filterState.price[0].toString(),
-        filterState.price[filterState.price.length - 1].toString()
-      );
-      this.filter.range.getDoubleRange(
-        this.filter.stockFilterList.lastElementChild as HTMLElement,
-        arr.sort((a, b) => a.stock - b.stock)[0].stock.toString(),
-        arr[arr.length - 1].stock.toString(),
-        filterState.stock[0].toString(),
-        filterState.stock[filterState.stock.length - 1].toString()
-      );
-    }
-    if (i === 1 && range === 'right') {
-      this.filter.range.getDoubleRange(
-        this.filter.priceFilterList.lastElementChild as HTMLElement,
-        arr.sort((a, b) => a.price - b.price)[0].price.toString(),
-        arr[arr.length - 1].price.toString(),
-        filterState.price[0].toString(),
-        filterState.price[filterState.price.length - 1].toString()
-      );
-      this.filter.range.getDoubleRange(
-        this.filter.stockFilterList.lastElementChild as HTMLElement,
-        arr.sort((a, b) => a.stock - b.stock)[0].stock.toString(),
-        target.value,
-        filterState.stock[0].toString(),
-        filterState.stock[filterState.stock.length - 1].toString()
-      );
-    }
-    this.filter.categoryFilterList.querySelectorAll('.checkbox-line').forEach((t) => {
-      this.toUpdateCheckboxSpan(t as HTMLSpanElement, arr);
-    });
-    this.filter.brandFilterList.querySelectorAll('.checkbox-line').forEach((t) => {
-      this.toUpdateCheckboxSpan(t as HTMLSpanElement, arr);
-    });
-    this.addListener();
+  addRangeFilter(arr: Array<ProductType>) {
+    const data = arr;
+    this.cards.drawProducts(data);
+    this.toUpdateCheckboxSpan(data);
+    this.toUpdateCheckboxSpan(data);
   }
 
   render() {
@@ -344,7 +268,7 @@ class MainPage extends Page {
           filterState.stock[filterState.stock.length - 1].toString()
         );
         this.cards.drawProducts(data);
-        this.addListener();
+        this.addEventListener();
       }
     });
     const inputSearch = document.querySelector('input') as HTMLElement;
