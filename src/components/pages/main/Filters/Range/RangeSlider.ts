@@ -1,8 +1,7 @@
 import CreateHtml from '../CreateHtml';
 
 class RangeSlider extends CreateHtml {
-  getDoubleRange(node: HTMLElement, min: string, max: string) {
-    debugger
+  getDoubleRange(node: HTMLElement, minValue: string, maxValue: string, min: string, max: string) {
     const divWrapper = this.createElement('div', 'wrapper');
     const values = this.createElement('div', 'values');
     const range1 = this.createElement('span', 'range1');
@@ -16,14 +15,14 @@ class RangeSlider extends CreateHtml {
     const divSliderTrack = this.createElement('div', 'slider-track');
     const inputSlider1 = this.createElement('input', 'slider-1') as HTMLInputElement;
     inputSlider1.setAttribute('type', 'range');
-    inputSlider1.setAttribute('min', range1.textContent);
-    inputSlider1.setAttribute('max', range2.textContent);
-    inputSlider1.setAttribute('value', range1.textContent);
+    inputSlider1.setAttribute('min', min);
+    inputSlider1.setAttribute('max', max);
+    inputSlider1.setAttribute('value', minValue);
     const inputSlider2 = this.createElement('input', 'slider-2') as HTMLInputElement;
     inputSlider2.setAttribute('type', 'range');
-    inputSlider2.setAttribute('min', range1.textContent);
-    inputSlider2.setAttribute('max', range2.textContent);
-    inputSlider2.setAttribute('value', range2.textContent);
+    inputSlider2.setAttribute('min', min);
+    inputSlider2.setAttribute('max', max);
+    inputSlider2.setAttribute('value', maxValue);
     divContainer.append(divSliderTrack, inputSlider1, inputSlider2);
     divWrapper.append(values, divContainer);
     node.append(divWrapper);
