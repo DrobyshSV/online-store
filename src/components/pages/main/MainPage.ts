@@ -2,17 +2,21 @@ import Page from '../../common/Page';
 import AppController from './products/controller/controller';
 import Cards from './products/cards/Cards';
 import Filters from './Filters/Filters';
-import { ProductType } from '../../types/types';
+import {ProductType} from '../../types/types';
 
 export type FilterStateType = {
   categories: Array<string>;
   brands: Array<string>;
   price: Array<number>;
   stock: Array<number>;
+  state: Array<ProductType>;
+  filter: Array<ProductType>;
   setCategory: (str: string) => void;
   setBrand: (str: string) => void;
   setPrice: (str: number) => void;
   setStock: (str: number) => void;
+  setState: (arr: Array<ProductType>) => void;
+  setFilter: (arr: Array<ProductType>) => void;
 };
 
 export const filterState: FilterStateType = {
@@ -20,6 +24,8 @@ export const filterState: FilterStateType = {
   brands: [],
   price: [],
   stock: [],
+  state: [],
+  filter: [],
   setCategory(category: string) {
     if (!this.categories.some((t) => t === category)) {
       this.categories.push(category);
@@ -27,7 +33,7 @@ export const filterState: FilterStateType = {
     }
   },
   setBrand(brand: string) {
-    if (!this.brands.some((t) => t === brand)) {
+    if (!this.brands.some((t) => t.toLowerCase() === brand.toLowerCase())) {
       this.brands.push(brand);
       this.brands.sort();
     }
@@ -44,6 +50,12 @@ export const filterState: FilterStateType = {
     }
     this.stock.sort((a, b) => a - b);
   },
+  setState(arr: Array<ProductType>) {
+    this.state = [...arr];
+  },
+  setFilter(arr: Array<ProductType>) {
+    this.filter = [...arr];
+  },
 };
 
 class MainPage extends Page {
@@ -52,7 +64,7 @@ class MainPage extends Page {
   private cards: Cards;
   private filter: Filters;
   readonly filterContainer: HTMLElement;
-  public state: Array<ProductType>;
+  private state: Array<ProductType>;
 
   constructor(id: string) {
     super(id);
@@ -88,12 +100,143 @@ class MainPage extends Page {
     return section;
   }
 
+  addEventListener() {
+    const allCheckboxes = this.filterContainer.querySelectorAll('.checkbox__input');
+    allCheckboxes.forEach((t, i) => {
+      t.addEventListener('click', (e) => {
+        this.addCheckboxFilter(e);
+      });
+    });
+
+    const rangeInputs1 = this.filterContainer.querySelectorAll('.slider-1');
+    const rangeInputs2 = this.filterContainer.querySelectorAll('.slider-2');
+    rangeInputs1.forEach((t, i) => {
+      t.addEventListener('click', (e) => {
+        const arr = this.getDataForRangeListenerCallback(i);
+        this.addRangeFilter(arr);
+      });
+    });
+    rangeInputs2.forEach((t, i) => {
+      t.addEventListener('click', (e) => {
+        const arr = this.getDataForRangeListenerCallback(i);
+        this.addRangeFilter(arr);
+      });
+    });
+  }
+
+  getDataForRangeListenerCallback(index: number) {
+    const range1 = this.filterContainer.querySelectorAll('.range1');
+    const range2 = this.filterContainer.querySelectorAll('.range2');
+    const allCheckboxes = this.filterContainer.querySelectorAll('.checkbox__input');
+    const arr: Array<ProductType> = [];
+    let isAnyCheckedCheckedBox = false;
+    allCheckboxes.forEach((t) => {
+      if ((t as HTMLInputElement).checked) {
+        isAnyCheckedCheckedBox = true;
+        return;
+      }
+    });
+    const state = isAnyCheckedCheckedBox ? filterState.filter : filterState.state;
+    state.forEach((t) => {
+      if (index === 0) {
+        if (
+          t.price >= Number((range1[index] as HTMLSpanElement).innerText) &&
+          t.price <= Number((range2[index] as HTMLSpanElement).innerText)
+        ) {
+          arr.push(t);
+        }
+      }
+      if (index === 1) {
+        if (
+          t.stock >= Number((range1[index] as HTMLSpanElement).innerText) &&
+          t.stock <= Number((range2[index] as HTMLSpanElement).innerText)
+        ) {
+          arr.push(t);
+        }
+      }
+    });
+    console.log(arr);
+    return arr;
+  }
+
+  addCheckboxFilter(e: Event) {
+    const categoryCheckboxes = this.filter.categoryFilterList.querySelectorAll('.checkbox__input');
+    const brandCheckboxes = this.filter.brandFilterList.querySelectorAll('.checkbox__input');
+
+    const categoryArray: Array<string> = [];
+    const brandArray: Array<string> = [];
+    categoryCheckboxes.forEach((t) => {
+      if ((t as HTMLInputElement).checked) {
+        categoryArray.push(t.id.slice(0, -1));
+      }
+    });
+    brandCheckboxes.forEach((t) => {
+      if ((t as HTMLInputElement).checked) {
+        brandArray.push(t.id.slice(0, -1));
+      }
+    });
+    let data = filterState.state.filter((obj) => {
+      if (categoryArray.length !== 0) {
+        if (categoryArray.includes(obj.category)) {
+          return obj;
+        }
+      } else {
+        if (brandArray.length !== 0) {
+          if (brandArray.includes(obj.brand)) {
+            return obj;
+          }
+        }
+      }
+    });
+    data = data.filter((obj) => {
+      if (brandArray.length !== 0) {
+        if (brandArray.includes(obj.brand)) {
+          return obj;
+        }
+      } else {
+        if (categoryArray.length !== 0) {
+          if (categoryArray.includes(obj.category)) {
+            return obj;
+          }
+        }
+      }
+    });
+    this.toUpdateCheckboxSpan(data);
+    this.toUpdateCheckboxSpan(data);
+    filterState.setFilter(data);
+    this.cards.drawProducts(data);
+  }
+
+  toUpdateCheckboxSpan(data: Array<ProductType>) {
+    this.filterContainer.querySelectorAll('.checkbox-line').forEach((el) => {
+      (el.lastElementChild as HTMLSpanElement).innerHTML = '';
+      (el.lastElementChild as HTMLSpanElement).textContent = `(${this.filter.checkbox.countOfProductsAll(
+        data,
+        (el.firstChild as HTMLInputElement).id.slice(0, -1),
+        el.parentNode as HTMLElement
+      )}/${this.filter.checkbox.countOfProductsAll(
+        filterState.state,
+        (el.firstChild as HTMLInputElement).id.slice(0, -1),
+        el.parentNode as HTMLElement
+      )})`;
+    });
+  }
+
+  addRangeFilter(arr: Array<ProductType>) {
+    const data = arr;
+    this.cards.drawProducts(data);
+    this.toUpdateCheckboxSpan(data);
+    this.toUpdateCheckboxSpan(data);
+  }
+
   render() {
     this.container.append(this.filterContainer);
     this.filterContainer.append(this.filter.init());
     this.container.append(this.getSection('cards__section'));
     this.controller.getSources((data) => {
       if (data) {
+        filterState.setState(data);
+        filterState.setFilter(data);
         data.forEach((t) => {
           filterState.setCategory(t.category);
           filterState.setBrand(t.brand);
@@ -102,23 +245,30 @@ class MainPage extends Page {
         });
         this.filter.checkbox.getCheckboxes(
           this.filter.categoryFilterList.lastElementChild as HTMLElement,
-          filterState.categories
+          filterState.categories,
+          'category__checkbox_span'
         );
         this.filter.checkbox.getCheckboxes(
           this.filter.brandFilterList.lastElementChild as HTMLElement,
-          filterState.brands
+          filterState.brands,
+          'brand__checkbox_span'
         );
         this.filter.range.getDoubleRange(
           this.filter.priceFilterList.lastElementChild as HTMLElement,
+          filterState.price[0].toString(),
+          filterState.price[filterState.price.length - 1].toString(),
           filterState.price[0].toString(),
           filterState.price[filterState.price.length - 1].toString()
         );
         this.filter.range.getDoubleRange(
           this.filter.stockFilterList.lastElementChild as HTMLElement,
           filterState.stock[0].toString(),
-          filterState.stock.reverse()[0].toString()
+          filterState.stock[filterState.stock.length - 1].toString(),
+          filterState.stock[0].toString(),
+          filterState.stock[filterState.stock.length - 1].toString()
         );
         this.cards.drawProducts(data);
+        this.addEventListener();
       }
     });
     const inputSearch = document.querySelector('input') as HTMLElement;

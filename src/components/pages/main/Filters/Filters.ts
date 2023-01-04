@@ -3,9 +3,10 @@ import './RangeSlider.scss';
 import Checkbox from './Checkbox/Checkbox';
 import RangeSlider from './Range/RangeSlider';
 import CreateHtml from './CreateHtml';
+import {ProductType} from '../../../types/types';
 
 class Filters {
-  private container: HTMLElement;
+  private container: DocumentFragment;
   public range: RangeSlider;
   public checkbox: Checkbox;
   public categoryFilterList: HTMLElement;
@@ -39,9 +40,9 @@ class Filters {
   }
 
   init() {
-    const div = document.createElement('div');
-    div.append(this.categoryFilterList, this.brandFilterList, this.priceFilterList, this.stockFilterList);
-    return div;
+    const fragment = document.createDocumentFragment();
+    fragment.append(this.categoryFilterList, this.brandFilterList, this.priceFilterList, this.stockFilterList);
+    return fragment;
   }
 }
 
