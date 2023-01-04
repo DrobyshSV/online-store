@@ -7,6 +7,7 @@ header form{position:relative;width:300px;margin:0 auto;background:#fcfaeb}heade
 /* BLOCKS */
 .product-container{
    height: 130vh;
+   margin: 0 auto;
 }
 .product__wrap{
    display: flex;
@@ -210,4 +211,3 @@ header form{position:relative;width:300px;margin:0 auto;background:#fcfaeb}heade
    right: 0px;
    top: 0px;
 }
-
