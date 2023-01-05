@@ -3,6 +3,7 @@ import AppController from './products/controller/controller';
 import Cards from './products/cards/Cards';
 import Filters from './Filters/Filters';
 import {ProductType} from '../../types/types';
+import rangeSlider from './Filters/Range/RangeSlider';
 
 export type FilterStateType = {
   categories: Array<string>;
@@ -65,6 +66,9 @@ class MainPage extends Page {
   private filter: Filters;
   readonly filterContainer: HTMLElement;
   private state: Array<ProductType>;
+  private url: URL;
+  private urlParams: URLSearchParams;
+  private routerParams: Record<string, string>;
 
   constructor(id: string) {
     super(id);
@@ -73,6 +77,9 @@ class MainPage extends Page {
     this.cards = new Cards();
     this.filterContainer = this.getSection('filters__section');
     this.filter = new Filters();
+    this.routerParams = {}
+    this.url = new URL('http://localhost:5333/');
+    this.urlParams = new URLSearchParams(this.routerParams);
   }
 
   inputEvent(e: Event) {
@@ -113,13 +120,13 @@ class MainPage extends Page {
     rangeInputs1.forEach((t, i) => {
       t.addEventListener('click', (e) => {
         const arr = this.getDataForRangeListenerCallback(i);
-        this.addRangeFilter(arr);
+        this.addRangeFilter(arr, e, i);
       });
     });
     rangeInputs2.forEach((t, i) => {
       t.addEventListener('click', (e) => {
         const arr = this.getDataForRangeListenerCallback(i);
-        this.addRangeFilter(arr);
+        this.addRangeFilter(arr, e, i);
       });
     });
   }
@@ -203,6 +210,17 @@ class MainPage extends Page {
     });
     this.toUpdateCheckboxSpan(data);
     this.toUpdateCheckboxSpan(data);
+    if (brandArray.length > 0) {
+      this.routerParams = {...this.routerParams, brand: brandArray.join('↕') }
+      console.log(this.routerParams);
+    }
+    if (categoryArray.length > 0) {
+      this.routerParams = {...this.routerParams, category: categoryArray.join('↕') }
+      console.log(this.routerParams);
+    }
+    this.urlParams = new URLSearchParams(this.routerParams);
+    this.url.search = this.urlParams.toString();
+    history.pushState('', '', this.url.search);
     filterState.setFilter(data);
     this.cards.drawProducts(data);
   }
@@ -222,7 +240,23 @@ class MainPage extends Page {
     });
   }
 
-  addRangeFilter(arr: Array<ProductType>) {
+  addRangeFilter(arr: Array<ProductType>, e: Event, i: number) {
+    e.preventDefault();
+    const target = e.target as HTMLInputElement;
+    console.log(target);
+    let typeOfRange: string | undefined = target.parentElement?.classList[1].split('-')[0];
+    let a = target.classList.toString() === 'slider-1' ?
+      [target.value, (target.nextElementSibling as HTMLInputElement).value]
+      : [(target.previousElementSibling as HTMLInputElement).value, target.value];
+
+    console.log(typeOfRange);
+    if (typeOfRange) {
+      this.routerParams = {...this.routerParams, [typeOfRange]: a.join('↕')};
+    }
+    console.log(this.routerParams);
+    this.urlParams = new URLSearchParams(this.routerParams);
+    this.url.search = this.urlParams.toString();
+    history.pushState('', '', this.url.search);
     const data = arr;
     this.cards.drawProducts(data);
     this.toUpdateCheckboxSpan(data);
@@ -254,6 +288,7 @@ class MainPage extends Page {
           'brand__checkbox_span'
         );
         this.filter.range.getDoubleRange(
+          'price-container',
           this.filter.priceFilterList.lastElementChild as HTMLElement,
           filterState.price[0].toString(),
           filterState.price[filterState.price.length - 1].toString(),
@@ -261,6 +296,7 @@ class MainPage extends Page {
           filterState.price[filterState.price.length - 1].toString()
         );
         this.filter.range.getDoubleRange(
+          'stock-container',
           this.filter.stockFilterList.lastElementChild as HTMLElement,
           filterState.stock[0].toString(),
           filterState.stock[filterState.stock.length - 1].toString(),

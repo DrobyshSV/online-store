@@ -1,7 +1,7 @@
 import CreateHtml from '../CreateHtml';
 
 class RangeSlider extends CreateHtml {
-  getDoubleRange(node: HTMLElement, minValue: string, maxValue: string, min: string, max: string) {
+  getDoubleRange( type: string,node: HTMLElement, minValue: string, maxValue: string, min: string, max: string) {
     const divWrapper = this.createElement('div', 'wrapper');
     const values = this.createElement('div', 'values');
     const range1 = this.createElement('span', 'range1');
@@ -12,6 +12,7 @@ class RangeSlider extends CreateHtml {
     range2.textContent = max;
     values.append(range1, dash, range2);
     const divContainer = this.createElement('div', 'container');
+    divContainer.classList.add(type)
     const divSliderTrack = this.createElement('div', 'slider-track');
     const inputSlider1 = this.createElement('input', 'slider-1') as HTMLInputElement;
     inputSlider1.setAttribute('type', 'range');
