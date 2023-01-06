@@ -77,10 +77,49 @@ class Basket extends ProductPage{
       `;
       this.container.innerHTML = structure;
    }
+   async getBasketInfo(){
+      await this.basketStructure();
+      const dataUrl = 'https://dummyjson.com/products/' + '34';
+      let productInfo = await this.getFetch(dataUrl);
+      let amount: number = 0;
+
+      const productPrice = productInfo.price;
+      const buttonPlus = document.querySelector('.basket_button-plus') as HTMLElement;
+      const buttonMinus = document.querySelector('.basket_button-minus') as HTMLElement;
+      const productAmount = document.querySelector('.basket__product-amount') as HTMLElement;
+      const basketProductPrice = document.querySelector('.basket__product-price') as HTMLElement;
+      const basketInfoProd = document.querySelector('.basket__info-prod') as HTMLElement;
+      const basketInfoTotal = document.querySelector('.basket__info-total') as HTMLElement;
+
+      buttonPlus.addEventListener('click', () => {
+       amount++
+       productAmount.innerHTML = amount.toString();
+       basketProductPrice.innerHTML = (amount*productPrice + '$').toString();
+       basketInfoProd.innerHTML = 'Products:' + amount.toString();
+       basketInfoTotal.innerHTML = ('Total:' + amount*productPrice + '$').toString();
+      })
+      buttonMinus.addEventListener('click', () => {
+       amount--
+       basketProductPrice.innerHTML = (amount*productPrice + '$').toString()
+       basketInfoProd.innerHTML = 'Products:' + amount.toString();
+       basketInfoTotal.innerHTML = ('Total:' + amount*productPrice + '$').toString();
+       if(amount <= 0) {
+         basketProductPrice.innerHTML = '0$'
+         basketInfoProd.innerHTML = 'Products: 0'
+         basketInfoTotal.innerHTML = 'Total: 0$'
+         productAmount.innerHTML = '0';
+         return amount=0;
+       }
+       productAmount.innerHTML = amount.toString()
+       return amount
+      })
+      return amount
+   }
    
    
  render() {
    this.basketStructure();
+   this.getBasketInfo();
     
     return this.container;
   }
