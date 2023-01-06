@@ -80,7 +80,7 @@ class ProductPage extends Page{
                 popupPay.classList.add('open');
               }
             popUpPay()"><p>add to card</p></div>
-              <div class = "product__price elem"><p>buy now</p></div>
+              <div class = "product__price elem"><a href="http://localhost:5333/#basket">buy now</a></div>
             </div>
 
             <div class = "product__description item"><span class = "pre__description">Brand:</span> ${productBrand}</div>

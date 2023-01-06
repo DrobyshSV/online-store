@@ -2,27 +2,86 @@ import './basket.css'
 import ProductPage from '../pages/product/ProductPage';
 
 class Basket extends ProductPage{
-
-   async basket(){
-      const getProductPageInfo = this.createProductContainer('34');
-      const productDescription = (await getProductPageInfo).querySelector('.product__description') as HTMLElement;
-      productDescription.addEventListener('click', () => {
-         console.log('Testing');
+   async getFetch(dataUrl: string){
+    return fetch(dataUrl)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      return data;
     });
-    this.container.append(productDescription);
-}
-
-   async innerInfo(){
-      const max = await this.createProductContainer('34');
-      const productPrice = max.querySelector('.product__price') as HTMLElement;
-      const fest = document.createElement('p')
-      fest.innerHTML = 'This is a test';
-      productPrice.append(fest)
-      this.container.append(productPrice);
-      console.log(productPrice)
+  }
+  
+   async basketStructure(){
+      const dataUrl = 'https://dummyjson.com/products/' + '34';
+      let productInfo = await this.getFetch(dataUrl);
+      const productTitle = productInfo.title;
+      const productDescription = productInfo.description;
+      const productCategory = productInfo.category;
+      const productBrand = productInfo.brand;
+      const productDiscount = productInfo.discountPercentage;
+      const productImages = productInfo.images;
+      const productPrice = productInfo.price;
+      const productRating = productInfo.rating;
+      const productStock = productInfo.stock;
+      console.log(productTitle);
+      const structure = `
+         <div class="basket__container">
+            <div class="basket__product-wrapper">
+                <div class="basket__product-header">
+                  <p>Products In Cart</p>
+                  <p>ITEMS:</p>
+                  <p>Num</p>
+                  <p>PAGE:</p>
+                  <div class="basket__pagination">
+                     <button type="button" class="basket__pagination-left"><</button>
+                     <p>Num</p>
+                     <button type="button" class="basket__pagination-right">></button>
+                  </div>
+                </div>
+                <div class="basket__product-body">
+                  <div class="basket__product-img">
+                     <p>Num</p>
+                     <img src="${productImages[1]}" alt="альтернативный текст">
+                  </div>
+                  <div class="basket__product-info">
+                     <p>${productTitle}</p>
+                     <p>${productDescription}</p>
+                     <div class="basket__product-rating">
+                        <p>${productRating}</p>
+                        <p>${productDiscount}</p>
+                     </div>
+                  </div>
+                  <div class="basket__product-count">
+                     <p>Stock: ${productStock}</p>
+                     <div class="basket__product-buttons">
+                        <button type="button" class="basket_button-plus">+</button>
+                        <div class="basket__product-amount"></div>
+                        <button type="button" class="basket_button-minus">-</button>
+                     </div>
+                     <p class="basket__product-price"></p>
+                  </div>
+                </div>
+            </div>
+            <div class="basket__info-wrapper">
+               <p>Summary</p>
+               <p class="basket__info-prod">Products:</p>
+               <p class="basket__info-total">Total:</p>
+               <form class="basket__form" action="" novalidate>
+                  <input type="text" class="basket__info-input" name="promo" placeholder="Enter a promocode"></input>
+                  <p>Promo for test: 'RS', 'EPM'</p>
+                  <button type="submit">Submit</button>
+               </form>
+            </div>
+         </div>
+      `;
+      this.container.innerHTML = structure;
    }
+   
+   
  render() {
-    this.basket();
+   this.basketStructure();
+    
     return this.container;
   }
 }

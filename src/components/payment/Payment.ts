@@ -159,9 +159,10 @@ class Payment extends ProductPage{
     //   const popUpPay = document.querySelector('.popup__pay') as HTMLElement;;
     //   popUpPay.classList.remove('open');
     // })
-    closeButton.addEventListener('click', () =>{
+    closeButton.addEventListener('click', (e) =>{
       const popUpPay = document.querySelector('.popup__pay') as HTMLElement;;
       popUpPay.classList.remove('open');
+      e.preventDefault();
     })
    
   }

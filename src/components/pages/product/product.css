@@ -96,6 +96,10 @@
    text-transform: uppercase;
    margin-bottom: 15px;
 }
+.product__price .elem a{
+   text-decoration: none;
+   color: red;
+}
 .product__price .elem:first-child{
    font-weight: 700;
    font-size: 24px;
