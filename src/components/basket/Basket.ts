@@ -115,12 +115,41 @@ class Basket extends ProductPage{
       })
       return amount
    }
+   async formValidation(){
+      await this.basketStructure();
+      const mainForm = document.querySelector('.basket__form') as HTMLElement;
+      const formInput = document.querySelector('.basket__info-input') as HTMLInputElement;
+      const dataUrl = 'https://dummyjson.com/products/' + '34';
+      let productInfo = await this.getFetch(dataUrl);
+   
+      mainForm.onsubmit = (e) => {
+         let promoVal: string = formInput.value
+         const isValidPromo = (promo: string) => {
+         let res = /RS|EPM/gi;
+         return res.test(String(promo).toLowerCase());
+         }
+         if(!isValidPromo(promoVal)){
+            console.log('Please enter a valid promo');
+            return false;
+         }else{
+            const productPrice = productInfo.price;
+            const oldValue = document.querySelector('.basket__info-total') as HTMLElement;
+            const oldPrice = document.querySelector('.basket__product-price') as HTMLElement;
+            const amount = document.querySelector('.basket__product-amount') as HTMLElement;
+            const amountNum = Number(amount.textContent)
+            oldValue.innerHTML = ('Total:' + (productPrice*amountNum)/2 + '$').toString();
+            oldPrice.innerHTML = ((productPrice*amountNum)/2 + '$').toString();
+         }
+         e.preventDefault()
+      }
+      
+   }
    
    
  render() {
    this.basketStructure();
    this.getBasketInfo();
-    
+   this.formValidation();  
     return this.container;
   }
 }
