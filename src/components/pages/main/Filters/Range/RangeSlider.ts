@@ -1,29 +1,48 @@
 import CreateHtml from '../CreateHtml';
 
 class RangeSlider extends CreateHtml {
-  getDoubleRange( type: string,node: HTMLElement, minValue: string, maxValue: string, min: string, max: string) {
+  private routerParams: Record<string, string>;
+  constructor(routerParams: Record<string, string>) {
+    super();
+    this.routerParams = routerParams;
+  }
+  getDoubleRange( type: string, node: HTMLElement, minValue: string, maxValue: string) {
     const divWrapper = this.createElement('div', 'wrapper');
     const values = this.createElement('div', 'values');
     const range1 = this.createElement('span', 'range1');
-    range1.textContent = min;
     const dash = this.createElement('span', 'dash');
     dash.textContent = '-';
     const range2 = this.createElement('span', 'range2');
-    range2.textContent = max;
+
     values.append(range1, dash, range2);
     const divContainer = this.createElement('div', 'container');
     divContainer.classList.add(type)
     const divSliderTrack = this.createElement('div', 'slider-track');
     const inputSlider1 = this.createElement('input', 'slider-1') as HTMLInputElement;
     inputSlider1.setAttribute('type', 'range');
-    inputSlider1.setAttribute('min', min);
-    inputSlider1.setAttribute('max', max);
-    inputSlider1.setAttribute('value', minValue);
+    inputSlider1.setAttribute('min', minValue);
+    inputSlider1.setAttribute('max', maxValue);
+
     const inputSlider2 = this.createElement('input', 'slider-2') as HTMLInputElement;
     inputSlider2.setAttribute('type', 'range');
-    inputSlider2.setAttribute('min', min);
-    inputSlider2.setAttribute('max', max);
-    inputSlider2.setAttribute('value', maxValue);
+    inputSlider2.setAttribute('min', minValue);
+    inputSlider2.setAttribute('max', maxValue);
+
+
+    const searchKey = type.split('-')[0];
+    if (this.routerParams.hasOwnProperty(searchKey)) {
+      const searchKeyArray = this.routerParams[searchKey].split('↕');
+      range1.textContent = searchKeyArray[0];
+      range2.textContent = searchKeyArray[1];
+      inputSlider1.setAttribute('value', searchKeyArray[0]);
+      inputSlider2.setAttribute('value', searchKeyArray[1]);
+    } else {
+      range1.textContent = minValue;
+      range2.textContent = maxValue;
+      inputSlider1.setAttribute('value', minValue);
+      inputSlider2.setAttribute('value', maxValue);
+    }
+
     divContainer.append(divSliderTrack, inputSlider1, inputSlider2);
     divWrapper.append(values, divContainer);
     node.append(divWrapper);

@@ -1,7 +1,7 @@
 import Header from '../header/Header';
 import Footer from '../Footer/Footer';
 import Page from '../common/Page';
-import { ErrorTypes, PageIds } from '../types/types';
+import {ErrorTypes, PageIds} from '../types/types';
 import MainPage from '../pages/main/MainPage';
 import ProductPage from '../pages/product/ProductPage';
 import BasketPage from '../pages/basket/BasketPage';
@@ -16,15 +16,15 @@ class App {
   private footer: Footer;
 
   static renderNewPage(idPage: string) {
-    const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
+    const currentPageHTML = document.querySelector(`main`);
     if (currentPageHTML) {
-      currentPageHTML.remove();
+      currentPageHTML.innerHTML = ''
     }
     let page: Page | null = null;
 
     if (idPage === PageIds.MainPage) {
       page = new MainPage(idPage);
-    } else if (idPage === PageIds.ProductPage) {
+    } else if (idPage.split('/')[0] === PageIds.ProductPage) {
       page = new ProductPage(idPage);
     } else if (idPage === PageIds.BasketPage) {
       page = new BasketPage(idPage);
@@ -34,14 +34,16 @@ class App {
 
     if (page) {
       const pageHTML = page.render();
-      pageHTML.id = App.defaultPageId;
-      App.container.append(pageHTML);
+      const header = document.querySelector('header');
+      header ?
+        header.after(pageHTML) :
+        App.container.append(pageHTML);
     }
   }
 
   private enableRouteChange() {
     window.addEventListener('hashchange', () => {
-      const hash = window.location.hash.slice(1);
+      const hash = window.location.hash.replace('#', '');
       App.renderNewPage(hash);
     });
   }
@@ -58,4 +60,5 @@ class App {
     App.container.append(this.footer.render());
   }
 }
+
 export default App;

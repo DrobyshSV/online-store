@@ -14,12 +14,14 @@ class Filters {
   public priceFilterList: HTMLElement;
   public stockFilterList: HTMLElement;
   private creator: CreateHtml;
+  public routerParams: Record<string, string>;
 
-  constructor() {
+  constructor(routerParams: Record<string, string>) {
+    this.routerParams = routerParams;
     this.creator = new CreateHtml();
     this.container = this.init();
-    this.checkbox = new Checkbox();
-    this.range = new RangeSlider();
+    this.checkbox = new Checkbox(this.routerParams);
+    this.range = new RangeSlider(this.routerParams);
     this.categoryFilterList = this.addFilterDiv('category', 'filter-list__checkbox');
     this.brandFilterList = this.addFilterDiv('brand', 'filter-list__checkbox');
     this.priceFilterList = this.addFilterDiv('price', 'filter-list__range');

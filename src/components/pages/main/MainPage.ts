@@ -3,7 +3,6 @@ import AppController from './products/controller/controller';
 import Cards from './products/cards/Cards';
 import Filters from './Filters/Filters';
 import {ProductType} from '../../types/types';
-import rangeSlider from './Filters/Range/RangeSlider';
 
 export type FilterStateType = {
   categories: Array<string>;
@@ -66,27 +65,71 @@ class MainPage extends Page {
   private filter: Filters;
   readonly filterContainer: HTMLElement;
   private state: Array<ProductType>;
-  private url: URL;
-  private urlParams: URLSearchParams;
-  private routerParams: Record<string, string>;
+  public url: URL;
+  public urlParams: URLSearchParams;
+  public routerParams: Record<string, string>;
+  private filterState: Array<ProductType>;
 
   constructor(id: string) {
     super(id);
     this.controller = new AppController();
-    this.state = this.controller.state;
+    this.state = [];
+    this.filterState = [];
     this.cards = new Cards();
     this.filterContainer = this.getSection('filters__section');
-    this.filter = new Filters();
-    this.routerParams = {}
+    this.routerParams = window.location.search === '' ? {} : this.getSearchParams();
     this.url = new URL('http://localhost:5333/');
-    this.urlParams = new URLSearchParams(this.routerParams);
+    this.urlParams = new URLSearchParams(window.location.search);
+    this.filter = new Filters(this.routerParams);
+  }
+
+  getSearchParams() {
+    return window.location.search.slice(window.location.search.indexOf('?') + 1).split('&')
+      .reduce((params, hash) => {
+        hash.replace('+', ' ');
+        let [key, val] = hash.split('=');
+        return Object.assign(params, {[key]: decodeURIComponent(val).replace('+', ' ')});
+      }, {});
+  }
+
+  getFilterQueryState() {
+    this.filterState = this.state;
+    if (this.routerParams.hasOwnProperty('category')) {
+      this.filterState = this.filterState.filter((t) => {
+        if (this.routerParams.category.split('↕').some(el => el === t.category)) {
+          return t;
+        }
+      });
+    }
+    if (this.routerParams.hasOwnProperty('brand')) {
+      this.filterState = this.filterState.filter((t) => {
+        if (this.routerParams.brand.split('↕').some(el => el === t.brand)) {
+          return t;
+        }
+      });
+    }
+    if (this.routerParams.hasOwnProperty('price')) {
+      this.filterState = [...this.filterState].filter((t) => {
+        if (t.price >= Number(this.routerParams.price.split('↕')[0])
+          && t.price <= Number(this.routerParams.price.split('↕')[1])) {
+          return t;
+        }
+      });
+    }
+    if (this.routerParams.hasOwnProperty('stock')) {
+      this.filterState = [...this.filterState].filter(t => {
+        if (t.stock >= Number(this.routerParams.stock.split('↕')[0])
+          && t.stock <= Number(this.routerParams.stock.split('↕')[1])) {
+          return t;
+        }
+      });
+    }
   }
 
   inputEvent(e: Event) {
-    this.state = this.controller.state;
     const target = e.target as HTMLInputElement;
     if (target) {
-      const data = this.state.filter((obj) => {
+      const data = this.filterState.filter((obj) => {
         if (
           obj.brand.toLowerCase().includes(target.value.toLowerCase()) ||
           obj.price.toString().toLowerCase().includes(target.value.toLowerCase()) ||
@@ -119,148 +162,84 @@ class MainPage extends Page {
     const rangeInputs2 = this.filterContainer.querySelectorAll('.slider-2');
     rangeInputs1.forEach((t, i) => {
       t.addEventListener('click', (e) => {
-        const arr = this.getDataForRangeListenerCallback(i);
-        this.addRangeFilter(arr, e, i);
+        this.addRangeFilter(e, i);
       });
     });
     rangeInputs2.forEach((t, i) => {
       t.addEventListener('click', (e) => {
-        const arr = this.getDataForRangeListenerCallback(i);
-        this.addRangeFilter(arr, e, i);
+        this.addRangeFilter(e, i);
       });
     });
   }
 
-  getDataForRangeListenerCallback(index: number) {
-    const range1 = this.filterContainer.querySelectorAll('.range1');
-    const range2 = this.filterContainer.querySelectorAll('.range2');
-    const allCheckboxes = this.filterContainer.querySelectorAll('.checkbox__input');
-    const arr: Array<ProductType> = [];
-    let isAnyCheckedCheckedBox = false;
-    allCheckboxes.forEach((t) => {
-      if ((t as HTMLInputElement).checked) {
-        isAnyCheckedCheckedBox = true;
-        return;
-      }
-    });
-    const state = isAnyCheckedCheckedBox ? filterState.filter : filterState.state;
-    state.forEach((t) => {
-      if (index === 0) {
-        if (
-          t.price >= Number((range1[index] as HTMLSpanElement).innerText) &&
-          t.price <= Number((range2[index] as HTMLSpanElement).innerText)
-        ) {
-          arr.push(t);
-        }
-      }
-      if (index === 1) {
-        if (
-          t.stock >= Number((range1[index] as HTMLSpanElement).innerText) &&
-          t.stock <= Number((range2[index] as HTMLSpanElement).innerText)
-        ) {
-          arr.push(t);
-        }
-      }
-    });
-    console.log(arr);
-    return arr;
-  }
-
   addCheckboxFilter(e: Event) {
-    const categoryCheckboxes = this.filter.categoryFilterList.querySelectorAll('.checkbox__input');
-    const brandCheckboxes = this.filter.brandFilterList.querySelectorAll('.checkbox__input');
-
-    const categoryArray: Array<string> = [];
-    const brandArray: Array<string> = [];
-    categoryCheckboxes.forEach((t) => {
-      if ((t as HTMLInputElement).checked) {
-        categoryArray.push(t.id.slice(0, -1));
-      }
-    });
-    brandCheckboxes.forEach((t) => {
-      if ((t as HTMLInputElement).checked) {
-        brandArray.push(t.id.slice(0, -1));
-      }
-    });
-    let data = filterState.state.filter((obj) => {
-      if (categoryArray.length !== 0) {
-        if (categoryArray.includes(obj.category)) {
-          return obj;
-        }
+    const target = e.target as HTMLInputElement;
+    const typeOfCheckbox = target.parentElement?.parentElement?.parentElement?.classList.toString();
+    const targetTitle = target.nextElementSibling?.textContent;
+    if (target.checked) {
+      if (this.routerParams.hasOwnProperty(`${typeOfCheckbox}`)) {
+        this.routerParams = {...this.routerParams, [`${typeOfCheckbox}`]: this.routerParams[`${typeOfCheckbox}`] + '↕' + targetTitle};
       } else {
-        if (brandArray.length !== 0) {
-          if (brandArray.includes(obj.brand)) {
-            return obj;
-          }
+        if (targetTitle) {
+          this.routerParams = {...this.routerParams, [`${typeOfCheckbox}`]: targetTitle};
         }
       }
-    });
-    data = data.filter((obj) => {
-      if (brandArray.length !== 0) {
-        if (brandArray.includes(obj.brand)) {
-          return obj;
-        }
-      } else {
-        if (categoryArray.length !== 0) {
-          if (categoryArray.includes(obj.category)) {
-            return obj;
+    } else {
+      if (targetTitle) {
+        let newCategoryTextArr = this.routerParams[`${typeOfCheckbox}`].split('↕').filter(t => t !== targetTitle);
+        if (newCategoryTextArr.length === 0) {
+          console.log(newCategoryTextArr);
+          delete this.routerParams[`${typeOfCheckbox}`]
+          if (!Object.keys(this.routerParams).length) {
+            this.urlParams = new URLSearchParams(this.routerParams);
+            this.url.search = this.urlParams.toString();
+            history.pushState('', '', window.location.origin);
           }
+        } else {
+          let newCategoryText = newCategoryTextArr.join('↕');
+          this.routerParams = {...this.routerParams, [`${typeOfCheckbox}`]: newCategoryText};
         }
       }
-    });
-    this.toUpdateCheckboxSpan(data);
-    this.toUpdateCheckboxSpan(data);
-    if (brandArray.length > 0) {
-      this.routerParams = {...this.routerParams, brand: brandArray.join('↕') }
-      console.log(this.routerParams);
-    }
-    if (categoryArray.length > 0) {
-      this.routerParams = {...this.routerParams, category: categoryArray.join('↕') }
-      console.log(this.routerParams);
     }
     this.urlParams = new URLSearchParams(this.routerParams);
     this.url.search = this.urlParams.toString();
     history.pushState('', '', this.url.search);
-    filterState.setFilter(data);
-    this.cards.drawProducts(data);
+    this.getFilterQueryState()
+    this.toUpdateCheckboxSpan();
+    this.cards.drawProducts(this.filterState);
   }
 
-  toUpdateCheckboxSpan(data: Array<ProductType>) {
+  toUpdateCheckboxSpan() {
     this.filterContainer.querySelectorAll('.checkbox-line').forEach((el) => {
       (el.lastElementChild as HTMLSpanElement).innerHTML = '';
       (el.lastElementChild as HTMLSpanElement).textContent = `(${this.filter.checkbox.countOfProductsAll(
-        data,
+        this.filterState,
         (el.firstChild as HTMLInputElement).id.slice(0, -1),
         el.parentNode as HTMLElement
       )}/${this.filter.checkbox.countOfProductsAll(
-        filterState.state,
+        this.state,
         (el.firstChild as HTMLInputElement).id.slice(0, -1),
         el.parentNode as HTMLElement
       )})`;
     });
   }
 
-  addRangeFilter(arr: Array<ProductType>, e: Event, i: number) {
+  addRangeFilter(e: Event, i: number) {
     e.preventDefault();
     const target = e.target as HTMLInputElement;
-    console.log(target);
     let typeOfRange: string | undefined = target.parentElement?.classList[1].split('-')[0];
     let a = target.classList.toString() === 'slider-1' ?
       [target.value, (target.nextElementSibling as HTMLInputElement).value]
       : [(target.previousElementSibling as HTMLInputElement).value, target.value];
-
-    console.log(typeOfRange);
     if (typeOfRange) {
       this.routerParams = {...this.routerParams, [typeOfRange]: a.join('↕')};
     }
-    console.log(this.routerParams);
     this.urlParams = new URLSearchParams(this.routerParams);
     this.url.search = this.urlParams.toString();
     history.pushState('', '', this.url.search);
-    const data = arr;
-    this.cards.drawProducts(data);
-    this.toUpdateCheckboxSpan(data);
-    this.toUpdateCheckboxSpan(data);
+    this.getFilterQueryState();
+    this.cards.drawProducts(this.filterState);
+    this.toUpdateCheckboxSpan();
   }
 
   render() {
@@ -269,8 +248,11 @@ class MainPage extends Page {
     this.container.append(this.getSection('cards__section'));
     this.controller.getSources((data) => {
       if (data) {
+        this.state = [...data];
         filterState.setState(data);
-        filterState.setFilter(data);
+        window.location.search === ''
+          ? this.filterState = [...data]
+          : this.getFilterQueryState();
         data.forEach((t) => {
           filterState.setCategory(t.category);
           filterState.setBrand(t.brand);
@@ -280,30 +262,28 @@ class MainPage extends Page {
         this.filter.checkbox.getCheckboxes(
           this.filter.categoryFilterList.lastElementChild as HTMLElement,
           filterState.categories,
-          'category__checkbox_span'
+          'category__checkbox_span',
+          this.filterState
         );
         this.filter.checkbox.getCheckboxes(
           this.filter.brandFilterList.lastElementChild as HTMLElement,
           filterState.brands,
-          'brand__checkbox_span'
+          'brand__checkbox_span',
+          this.filterState
         );
         this.filter.range.getDoubleRange(
           'price-container',
           this.filter.priceFilterList.lastElementChild as HTMLElement,
           filterState.price[0].toString(),
           filterState.price[filterState.price.length - 1].toString(),
-          filterState.price[0].toString(),
-          filterState.price[filterState.price.length - 1].toString()
         );
         this.filter.range.getDoubleRange(
           'stock-container',
           this.filter.stockFilterList.lastElementChild as HTMLElement,
           filterState.stock[0].toString(),
           filterState.stock[filterState.stock.length - 1].toString(),
-          filterState.stock[0].toString(),
-          filterState.stock[filterState.stock.length - 1].toString()
         );
-        this.cards.drawProducts(data);
+        this.cards.drawProducts(this.filterState);
         this.addEventListener();
       }
     });

@@ -3,19 +3,31 @@ import {ProductType} from '../../../../types/types';
 import {filterState} from '../../MainPage';
 
 class Checkbox extends CreateHtml {
-  getCheckbox(el: HTMLElement, str: string, index: string, type: string, checked = false) {
+  private routerParams: Record<string, string>;
+
+  constructor(routerParams: Record<string, string>) {
+    super();
+    this.routerParams = routerParams;
+  }
+
+  getCheckbox(el: HTMLElement, str: string, type: string, dataFiltered: Array<ProductType>) {
     const div = this.createElement('div', 'checkbox-line');
-    div.id = index;
     const input = this.createElement('input', 'checkbox__input') as HTMLInputElement;
     input.setAttribute('type', 'checkbox');
-    input.checked = checked;
     input.id = str + '/';
+    const searchKey = type.split('__')[0];
+    if (this.routerParams.hasOwnProperty(searchKey)) {
+      const searchKeyArray = this.routerParams[searchKey].split('↕');
+      if (searchKeyArray.some(t => t === str)) {
+        input.checked = true;
+      }
+    }
     const label = this.createElement('label', 'checkbox__label');
     label.setAttribute('for', str);
     label.textContent = str;
     const span = this.createElement('span', 'filter-count');
     span.classList.add(type);
-    span.textContent = `(${this.countOfProductsAll(filterState.state, str, el)}/${this.countOfProductsAll(
+    span.textContent = `(${this.countOfProductsAll(dataFiltered, str, el)}/${this.countOfProductsAll(
       filterState.state,
       str,
       el
@@ -34,9 +46,9 @@ class Checkbox extends CreateHtml {
     return count;
   }
 
-  getCheckboxes(node: HTMLElement, array: Array<string>, type: string) {
+  getCheckboxes(node: HTMLElement, array: Array<string>, type: string, dataFiltered: Array<ProductType>) {
     array.forEach((el, index) => {
-      this.getCheckbox(node, el, (index + 1).toString(), type);
+      this.getCheckbox(node, el, type, dataFiltered);
     });
   }
 }
