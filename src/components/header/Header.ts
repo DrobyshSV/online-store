@@ -16,6 +16,7 @@ class Header extends Component {
   renderSearchForm() {
     const form = document.createElement('form');
     const input = document.createElement('input');
+    input.classList.add('search__input')
     input.setAttribute('type', 'text');
     input.setAttribute('placeholder', 'Search');
     const button = document.createElement('button');

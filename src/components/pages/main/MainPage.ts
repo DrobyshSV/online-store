@@ -124,24 +124,38 @@ class MainPage extends Page {
         }
       });
     }
-  }
-
-  inputEvent(e: Event) {
-    const target = e.target as HTMLInputElement;
-    if (target) {
-      const data = this.filterState.filter((obj) => {
+    if (this.routerParams.hasOwnProperty('search')) {
+      this.filterState = [...this.filterState].filter((obj) => {
+        const searchText = this.routerParams.search;
         if (
-          obj.brand.toLowerCase().includes(target.value.toLowerCase()) ||
-          obj.price.toString().toLowerCase().includes(target.value.toLowerCase()) ||
-          obj.title.toLowerCase().includes(target.value.toLowerCase()) ||
-          obj.description.toLowerCase().includes(target.value.toLowerCase()) ||
-          obj.category.toLowerCase().includes(target.value.toLowerCase())
+          obj.brand.toLowerCase().includes(searchText) ||
+          obj.price.toString().toLowerCase().includes(searchText) ||
+          obj.title.toLowerCase().includes(searchText) ||
+          obj.description.toLowerCase().includes(searchText) ||
+          obj.category.toLowerCase().includes(searchText)
         ) {
           return obj;
         }
       });
-      this.cards.drawProducts(data);
     }
+
+  }
+
+  inputEvent(e: Event) {
+    const target = e.target as HTMLInputElement;
+    const targetTitle = target.value;
+    if (targetTitle) {
+      this.routerParams = {...this.routerParams, [`search`]: targetTitle};
+    } else {
+      delete this.routerParams[`search`];
+      history.pushState('', '', window.location.origin);
+    }
+    this.urlParams = new URLSearchParams(this.routerParams);
+    this.url.search = this.urlParams.toString();
+    history.pushState('', '', this.url.search);
+    this.getFilterQueryState();
+    this.toUpdateCheckboxSpan();
+    this.cards.drawProducts(this.filterState);
   }
 
   getSection(className: string) {
@@ -178,7 +192,10 @@ class MainPage extends Page {
     const targetTitle = target.nextElementSibling?.textContent;
     if (target.checked) {
       if (this.routerParams.hasOwnProperty(`${typeOfCheckbox}`)) {
-        this.routerParams = {...this.routerParams, [`${typeOfCheckbox}`]: this.routerParams[`${typeOfCheckbox}`] + '↕' + targetTitle};
+        this.routerParams = {
+          ...this.routerParams,
+          [`${typeOfCheckbox}`]: this.routerParams[`${typeOfCheckbox}`] + '↕' + targetTitle
+        };
       } else {
         if (targetTitle) {
           this.routerParams = {...this.routerParams, [`${typeOfCheckbox}`]: targetTitle};
@@ -189,7 +206,7 @@ class MainPage extends Page {
         let newCategoryTextArr = this.routerParams[`${typeOfCheckbox}`].split('↕').filter(t => t !== targetTitle);
         if (newCategoryTextArr.length === 0) {
           console.log(newCategoryTextArr);
-          delete this.routerParams[`${typeOfCheckbox}`]
+          delete this.routerParams[`${typeOfCheckbox}`];
           if (!Object.keys(this.routerParams).length) {
             this.urlParams = new URLSearchParams(this.routerParams);
             this.url.search = this.urlParams.toString();
@@ -204,7 +221,7 @@ class MainPage extends Page {
     this.urlParams = new URLSearchParams(this.routerParams);
     this.url.search = this.urlParams.toString();
     history.pushState('', '', this.url.search);
-    this.getFilterQueryState()
+    this.getFilterQueryState();
     this.toUpdateCheckboxSpan();
     this.cards.drawProducts(this.filterState);
   }
@@ -246,6 +263,11 @@ class MainPage extends Page {
     this.container.append(this.filterContainer);
     this.filterContainer.append(this.filter.init());
     this.container.append(this.getSection('cards__section'));
+    const searchInput = document.querySelector('.search__input') as HTMLInputElement;
+    debugger
+    if (this.routerParams.hasOwnProperty('search')) {
+      searchInput.value = this.routerParams.search;
+    }
     this.controller.getSources((data) => {
       if (data) {
         this.state = [...data];
