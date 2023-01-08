@@ -3,6 +3,7 @@ import AppController from './products/controller/controller';
 import Cards from './products/cards/Cards';
 import Filters from './Filters/Filters';
 import {ProductType} from '../../types/types';
+import {copyTextToClipboard} from '../../../index';
 
 export type FilterStateType = {
   categories: Array<string>;
@@ -190,8 +191,14 @@ class MainPage extends Page {
       this.getFilterQueryState();
       this.toUpdateCheckboxSpan();
       this.toUpdateRangeValue();
+      document.querySelectorAll('.checkbox__input').forEach(t => {
+        (t as HTMLInputElement).checked = false;
+      });
       this.cards.drawProducts(this.filterState);
     });
+    this.filter.filterButtons.btnCopyLink.addEventListener('click', (e) => {
+      copyTextToClipboard(window.location.href)
+    })
   }
 
   addCheckboxFilter(e: Event) {
@@ -251,7 +258,6 @@ class MainPage extends Page {
   }
 
   toUpdateRangeValue() {
-    debugger
     const sortDataByPrice = [...this.filterState].sort((a, b) => a.price - b.price);
     const sortDataByStock = [...this.filterState].sort((a, b) => a.stock - b.stock);
     const leftRanges = this.filterContainer.querySelectorAll('.slider-1');
@@ -326,7 +332,6 @@ class MainPage extends Page {
     this.filterContainer.append(this.filter.init());
     this.container.append(this.getSection('cards__section'));
     const searchInput = document.querySelector('.search__input') as HTMLInputElement;
-    debugger
     if (this.routerParams.hasOwnProperty('search')) {
       searchInput.value = this.routerParams.search;
     }
