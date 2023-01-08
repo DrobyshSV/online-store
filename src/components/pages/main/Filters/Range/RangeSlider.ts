@@ -2,22 +2,26 @@ import CreateHtml from '../CreateHtml';
 
 class RangeSlider extends CreateHtml {
   private routerParams: Record<string, string>;
+
   constructor(routerParams: Record<string, string>) {
     super();
     this.routerParams = routerParams;
   }
-  getDoubleRange( type: string, node: HTMLElement, minValue: string, maxValue: string) {
+
+  getDoubleRange(type: string, node: HTMLElement, minValue: string, maxValue: string) {
     const divWrapper = this.createElement('div', 'wrapper');
     const values = this.createElement('div', 'values');
     const range1 = this.createElement('span', 'range1');
+    range1.classList.add(`${type.split('-')[0]}-range`);
     const dash = this.createElement('span', 'dash');
     dash.textContent = '-';
     const range2 = this.createElement('span', 'range2');
-
+    range2.classList.add(`${type.split('-')[0]}-range`);
     values.append(range1, dash, range2);
     const divContainer = this.createElement('div', 'container');
-    divContainer.classList.add(type)
+    divContainer.classList.add(type);
     const divSliderTrack = this.createElement('div', 'slider-track');
+    divSliderTrack.classList.add(`${type.split('-')[0]}-track`);
     const inputSlider1 = this.createElement('input', 'slider-1') as HTMLInputElement;
     inputSlider1.setAttribute('type', 'range');
     inputSlider1.setAttribute('min', minValue);
@@ -46,7 +50,7 @@ class RangeSlider extends CreateHtml {
     divContainer.append(divSliderTrack, inputSlider1, inputSlider2);
     divWrapper.append(values, divContainer);
     node.append(divWrapper);
-  this.rangeColor(inputSlider1,inputSlider2,divSliderTrack, range1,range2)
+    this.rangeColor(inputSlider1, inputSlider2, divSliderTrack, range1, range2);
     /*function fillColor() {
       const percent1: number = (+inputSlider1.value / +inputSlider1.max) * 100;
       const percent2: number = (+inputSlider2.value / +inputSlider1.max) * 100;
@@ -74,7 +78,8 @@ class RangeSlider extends CreateHtml {
     inputSlider1.addEventListener('change', () => slideOne());
     inputSlider2.addEventListener('change', () => slideTwo());*/
   }
-  rangeColor(inputSlider1: HTMLInputElement, inputSlider2: HTMLInputElement, divSliderTrack: HTMLElement, range1: HTMLElement,range2: HTMLElement) {
+
+  rangeColor(inputSlider1: HTMLInputElement, inputSlider2: HTMLInputElement, divSliderTrack: HTMLElement, range1: HTMLElement, range2: HTMLElement) {
 
     function fillColor() {
       const percent1: number = (+inputSlider1.value / +inputSlider1.max) * 100;

@@ -3,8 +3,8 @@ import { ProductType } from '../../../../types/types';
 
 class Products {
   draw(data: Array<ProductType>) {
-    (document.querySelector('.cards__section') as HTMLElement).innerHTML = '';
-    const fragment = document.createDocumentFragment();
+    const productItems =  (document.querySelector('.product-items') as HTMLElement)
+    productItems.innerHTML = '';
     data.forEach((item, index: number) => {
       const productCard: HTMLElement = document.createElement('div');
       productCard.classList.add('product');
@@ -28,9 +28,8 @@ class Products {
       productAddBtn.textContent = 'ADD';
       productCard.append(productName, productImg, productBrand, productInStock, productDiscont, productPriceWrapper);
       productPriceWrapper.append(productPriceTitle, productAddBtn);
-      fragment.append(productCard);
+      productItems.append(productCard);
     });
-    (document.querySelector('.cards__section') as HTMLElement).append(fragment);
   }
 }
 

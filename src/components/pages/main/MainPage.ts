@@ -168,20 +168,20 @@ class MainPage extends Page {
   addEventListener() {
     const allCheckboxes = this.filterContainer.querySelectorAll('.checkbox__input');
     allCheckboxes.forEach((t, i) => {
-      t.addEventListener('click', (e) => {
+      t.addEventListener('input', (e) => {
         this.addCheckboxFilter(e);
       });
     });
     const rangeInputs1 = this.filterContainer.querySelectorAll('.slider-1');
     const rangeInputs2 = this.filterContainer.querySelectorAll('.slider-2');
     rangeInputs1.forEach((t, i) => {
-      t.addEventListener('click', (e) => {
-        this.addRangeFilter(e, i);
+      t.addEventListener('input', (e) => {
+        this.addRangeFilter(e);
       });
     });
     rangeInputs2.forEach((t, i) => {
-      t.addEventListener('click', (e) => {
-        this.addRangeFilter(e, i);
+      t.addEventListener('input', (e) => {
+        this.addRangeFilter(e);
       });
     });
     this.filter.filterButtons.btnResetFilter.addEventListener('click', (e) => {
@@ -197,8 +197,8 @@ class MainPage extends Page {
       this.cards.drawProducts(this.filterState);
     });
     this.filter.filterButtons.btnCopyLink.addEventListener('click', (e) => {
-      copyTextToClipboard(window.location.href)
-    })
+      copyTextToClipboard(window.location.href).then(r => r);
+    });
   }
 
   addCheckboxFilter(e: Event) {
@@ -257,7 +257,7 @@ class MainPage extends Page {
     });
   }
 
-  toUpdateRangeValue() {
+  toUpdateRangeValue(e?: Event) {
     const sortDataByPrice = [...this.filterState].sort((a, b) => a.price - b.price);
     const sortDataByStock = [...this.filterState].sort((a, b) => a.stock - b.stock);
     const leftRanges = this.filterContainer.querySelectorAll('.slider-1');
@@ -306,10 +306,39 @@ class MainPage extends Page {
       divSliderTracks[1] as HTMLElement,
       leftRangesSpan[1] as HTMLElement,
       rightRangesSpan[1] as HTMLElement);
+    if (e) {
+      const target = e.target as HTMLInputElement;
+      let typeOfRange: string | undefined = target.parentElement?.classList[1].split('-')[0];
+      if (this.routerParams.hasOwnProperty(`${typeOfRange}`)) {
+        const searchKeyArray = this.routerParams[`${typeOfRange}`].split('↕');
+        const ranges = document.querySelectorAll(`.${typeOfRange}-range`);
+        ranges[0].textContent = searchKeyArray[0];
+        ranges[1].textContent = searchKeyArray[1];
+        const sliderTrack = document.querySelector(`.${typeOfRange}-track`);
+        if (target.classList.contains('slider-1')) {
+          target.value = searchKeyArray[0];
+          (target.nextElementSibling as HTMLInputElement).value = searchKeyArray[1];
+          this.filter.range.rangeColor(
+            target as HTMLInputElement,
+            (target.nextElementSibling as HTMLInputElement),
+            sliderTrack as HTMLElement,
+            ranges[0] as HTMLElement,
+            ranges[1] as HTMLElement);
+        } else if (target.classList.contains('slider-2')){
+          target.value = searchKeyArray[1];
+          (target.previousElementSibling as HTMLInputElement).value = searchKeyArray[0];
+          this.filter.range.rangeColor(
+            (target.previousElementSibling as HTMLInputElement),
+            target as HTMLInputElement,
+            sliderTrack as HTMLElement,
+            ranges[0] as HTMLElement,
+            ranges[1] as HTMLElement);
+        }
+      }
+    }
   }
 
-  addRangeFilter(e: Event, i: number) {
-    e.preventDefault();
+  addRangeFilter(e: Event) {
     const target = e.target as HTMLInputElement;
     let typeOfRange: string | undefined = target.parentElement?.classList[1].split('-')[0];
     let a = target.classList.toString() === 'slider-1' ?
@@ -324,13 +353,17 @@ class MainPage extends Page {
     this.getFilterQueryState();
     this.cards.drawProducts(this.filterState);
     this.toUpdateCheckboxSpan();
-    this.toUpdateRangeValue();
+    this.toUpdateRangeValue(e);
   }
 
   render() {
     this.container.append(this.filterContainer);
     this.filterContainer.append(this.filter.init());
-    this.container.append(this.getSection('cards__section'));
+    const cardSection = this.getSection('cards__section');
+    const productItems = document.createElement('div');
+    productItems.classList.add('product-items');
+    cardSection.append(this.cards.cardsHeader.header, productItems);
+    this.container.append(cardSection);
     const searchInput = document.querySelector('.search__input') as HTMLInputElement;
     if (this.routerParams.hasOwnProperty('search')) {
       searchInput.value = this.routerParams.search;
