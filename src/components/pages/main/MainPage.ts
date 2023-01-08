@@ -171,7 +171,6 @@ class MainPage extends Page {
         this.addCheckboxFilter(e);
       });
     });
-
     const rangeInputs1 = this.filterContainer.querySelectorAll('.slider-1');
     const rangeInputs2 = this.filterContainer.querySelectorAll('.slider-2');
     rangeInputs1.forEach((t, i) => {
@@ -183,6 +182,15 @@ class MainPage extends Page {
       t.addEventListener('click', (e) => {
         this.addRangeFilter(e, i);
       });
+    });
+    this.filter.filterButtons.btnResetFilter.addEventListener('click', (e) => {
+      this.routerParams = {};
+      this.urlParams = new URLSearchParams(this.routerParams);
+      history.pushState('', '', window.location.origin);
+      this.getFilterQueryState();
+      this.toUpdateCheckboxSpan();
+      this.toUpdateRangeValue();
+      this.cards.drawProducts(this.filterState);
     });
   }
 
@@ -223,6 +231,7 @@ class MainPage extends Page {
     history.pushState('', '', this.url.search);
     this.getFilterQueryState();
     this.toUpdateCheckboxSpan();
+    this.toUpdateRangeValue();
     this.cards.drawProducts(this.filterState);
   }
 
@@ -241,6 +250,58 @@ class MainPage extends Page {
     });
   }
 
+  toUpdateRangeValue() {
+    debugger
+    const sortDataByPrice = [...this.filterState].sort((a, b) => a.price - b.price);
+    const sortDataByStock = [...this.filterState].sort((a, b) => a.stock - b.stock);
+    const leftRanges = this.filterContainer.querySelectorAll('.slider-1');
+    const rightRanges = this.filterContainer.querySelectorAll('.slider-2');
+    const leftRangesSpan = this.filterContainer.querySelectorAll('.range1');
+    const rightRangesSpan = this.filterContainer.querySelectorAll('.range2');
+    const dashesSpan = this.filterContainer.querySelectorAll('.dash');
+    const divSliderTracks = this.filterContainer.querySelectorAll('.slider-track');
+    (leftRanges[0] as HTMLInputElement).value =
+      sortDataByPrice.length > 1
+        ? sortDataByPrice[0].price.toString()
+        : sortDataByPrice.length === 1
+          ? sortDataByPrice[0].price.toString()
+          : (leftRanges[0] as HTMLInputElement).min;
+    (leftRanges[1] as HTMLInputElement).value =
+      sortDataByStock.length > 1
+        ? sortDataByStock[0].stock.toString()
+        : sortDataByStock.length === 1
+          ? sortDataByStock[0].stock.toString()
+          : (leftRanges[1] as HTMLInputElement).min;
+    (rightRanges[0] as HTMLInputElement).value =
+      sortDataByPrice.length > 1
+        ? sortDataByPrice[sortDataByPrice.length - 1].price.toString()
+        : sortDataByPrice.length === 1
+          ? sortDataByPrice[0].price.toString()
+          : (rightRanges[0] as HTMLInputElement).max;
+    (rightRanges[1] as HTMLInputElement).value =
+      sortDataByStock.length > 1
+        ? sortDataByStock[sortDataByPrice.length - 1].stock.toString()
+        : sortDataByStock.length === 1
+          ? sortDataByStock[0].stock.toString()
+          : (rightRanges[1] as HTMLInputElement).max;
+    leftRangesSpan[0].textContent = sortDataByPrice.length === 0 ? '' : (leftRanges[0] as HTMLInputElement).value;
+    leftRangesSpan[1].textContent = sortDataByStock.length === 0 ? '' : (leftRanges[1] as HTMLInputElement).value;
+    rightRangesSpan[0].textContent = sortDataByPrice.length === 0 ? '' : (rightRanges[0] as HTMLInputElement).value;
+    rightRangesSpan[1].textContent = sortDataByStock.length === 0 ? '' : (rightRanges[1] as HTMLInputElement).value;
+    dashesSpan[0].textContent = sortDataByPrice.length === 0 ? 'NOT FOUND' : '-';
+    dashesSpan[1].textContent = sortDataByStock.length === 0 ? 'NOT FOUND' : '-';
+    this.filter.range.rangeColor(leftRanges[0] as HTMLInputElement,
+      rightRanges[0] as HTMLInputElement,
+      divSliderTracks[0] as HTMLElement,
+      leftRangesSpan[0] as HTMLElement,
+      rightRangesSpan[0] as HTMLElement);
+    this.filter.range.rangeColor(leftRanges[1] as HTMLInputElement,
+      rightRanges[1] as HTMLInputElement,
+      divSliderTracks[1] as HTMLElement,
+      leftRangesSpan[1] as HTMLElement,
+      rightRangesSpan[1] as HTMLElement);
+  }
+
   addRangeFilter(e: Event, i: number) {
     e.preventDefault();
     const target = e.target as HTMLInputElement;
@@ -257,6 +318,7 @@ class MainPage extends Page {
     this.getFilterQueryState();
     this.cards.drawProducts(this.filterState);
     this.toUpdateCheckboxSpan();
+    this.toUpdateRangeValue();
   }
 
   render() {
@@ -281,6 +343,7 @@ class MainPage extends Page {
           filterState.setPrice(t.price);
           filterState.setStock(t.stock);
         });
+        this.filter.filterBtnWrapper.append(this.filter.filterButtons.render());
         this.filter.checkbox.getCheckboxes(
           this.filter.categoryFilterList.lastElementChild as HTMLElement,
           filterState.categories,
@@ -305,6 +368,7 @@ class MainPage extends Page {
           filterState.stock[0].toString(),
           filterState.stock[filterState.stock.length - 1].toString(),
         );
+        this.toUpdateRangeValue();
         this.cards.drawProducts(this.filterState);
         this.addEventListener();
       }

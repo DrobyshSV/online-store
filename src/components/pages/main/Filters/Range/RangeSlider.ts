@@ -46,6 +46,35 @@ class RangeSlider extends CreateHtml {
     divContainer.append(divSliderTrack, inputSlider1, inputSlider2);
     divWrapper.append(values, divContainer);
     node.append(divWrapper);
+  this.rangeColor(inputSlider1,inputSlider2,divSliderTrack, range1,range2)
+    /*function fillColor() {
+      const percent1: number = (+inputSlider1.value / +inputSlider1.max) * 100;
+      const percent2: number = (+inputSlider2.value / +inputSlider1.max) * 100;
+      divSliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #3264fe ${percent1}% , #3264fe ${percent2}%, #dadae5 ${percent2}%)`;
+    }
+
+    function slideOne() {
+      if (parseInt(inputSlider2.value) - parseInt(inputSlider1.value) <= 0) {
+        inputSlider1.value = String(parseInt(inputSlider2.value));
+      }
+      range1.textContent = inputSlider1.value;
+      fillColor();
+    }
+
+    function slideTwo() {
+      if (parseInt(inputSlider2.value) - parseInt(inputSlider1.value) <= 0) {
+        inputSlider2.value = String(parseInt(inputSlider1.value));
+      }
+      range2.textContent = inputSlider2.value;
+      fillColor();
+    }
+
+    slideOne();
+    slideTwo();
+    inputSlider1.addEventListener('change', () => slideOne());
+    inputSlider2.addEventListener('change', () => slideTwo());*/
+  }
+  rangeColor(inputSlider1: HTMLInputElement, inputSlider2: HTMLInputElement, divSliderTrack: HTMLElement, range1: HTMLElement,range2: HTMLElement) {
 
     function fillColor() {
       const percent1: number = (+inputSlider1.value / +inputSlider1.max) * 100;
@@ -71,8 +100,8 @@ class RangeSlider extends CreateHtml {
 
     slideOne();
     slideTwo();
-    inputSlider1.addEventListener('input', () => slideOne());
-    inputSlider2.addEventListener('input', () => slideTwo());
+    inputSlider1.addEventListener('change', () => slideOne());
+    inputSlider2.addEventListener('change', () => slideTwo());
   }
 }
 
