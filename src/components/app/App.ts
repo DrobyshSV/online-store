@@ -1,7 +1,7 @@
 import Header from '../header/Header';
 import Footer from '../Footer/Footer';
 import Page from '../common/Page';
-import { ErrorTypes, PageIds } from '../types/types';
+import {ErrorTypes, PageIds} from '../types/types';
 import MainPage from '../pages/main/MainPage';
 import ProductPage from '../pages/product/ProductPage';
 import BasketPage from '../../components/basket/Basket';
@@ -14,12 +14,11 @@ class App {
   private static defaultPageId = PageIds.ProductPage;
   private header: Header;
   private footer: Footer;
-  private payment: Payment;
 
   static renderNewPage(idPage: string) {
-    const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
+    const currentPageHTML = document.querySelector(`main`);
     if (currentPageHTML) {
-      currentPageHTML.remove();
+      currentPageHTML.innerHTML = ''
     }
     let page: Page | null = null;
 
@@ -35,14 +34,16 @@ class App {
 
     if (page) {
       const pageHTML = page.render();
-      pageHTML.id = App.defaultPageId;
-      App.container.append(pageHTML);
+      const header = document.querySelector('header');
+      header ?
+        header.after(pageHTML) :
+        App.container.append(pageHTML);
     }
   }
 
   private enableRouteChange() {
     window.addEventListener('hashchange', () => {
-      const hash = window.location.hash.slice(1);
+      const hash = window.location.hash.replace('#', '');
       App.renderNewPage(hash);
     });
   }
@@ -50,15 +51,14 @@ class App {
   constructor() {
     this.header = new Header('header', 'header-container');
     this.footer = new Footer('footer', 'footer-container');
-    this.payment = new Payment('payment');
   }
 
   start() {
     App.container.append(this.header.render());
-    App.container.append(this.payment.render());
-    App.renderNewPage('basket-page');
+    App.renderNewPage('main-page');
     this.enableRouteChange();
     App.container.append(this.footer.render());
   }
 }
+
 export default App;
