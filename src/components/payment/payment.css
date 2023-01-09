@@ -82,3 +82,13 @@
    border-radius: 2px;
    box-shadow: 0px 0px 10px 2px rgba(0, 0, 0);
 }
+
+.name-warning.active,
+.number-warning.active,
+.adress-warning.active,
+.email-warning.active,
+.card-warning.active,
+.valid-warning.active,
+.cvv-warning.active{
+   display: none;
+}

@@ -7,7 +7,8 @@ class Header extends Component {
   }
 
   renderLogo() {
-    const title = document.createElement('h1');
+    const title = document.createElement('a');
+    title.href = '#product-page/5'
     title.classList.add('title');
     title.innerText = 'Online-store';
     this.container.append(title);

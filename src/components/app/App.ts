@@ -4,10 +4,10 @@ import Page from '../common/Page';
 import { ErrorTypes, PageIds } from '../types/types';
 import MainPage from '../pages/main/MainPage';
 import ProductPage from '../pages/product/ProductPage';
-import BasketPage from '../pages/basket/BasketPage';
+import BasketPage from '../../components/basket/Basket';
 import ErrorPage from '../pages/error/ErrorPage';
 import Payment from '../payment/Payment';
-import Basket from '../basket/Basket';
+
 
 class App {
   private static container: HTMLElement = document.body;
@@ -15,7 +15,6 @@ class App {
   private header: Header;
   private footer: Footer;
   private payment: Payment;
-  private basket: Basket;
 
   static renderNewPage(idPage: string) {
     const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
@@ -26,7 +25,7 @@ class App {
 
     if (idPage === PageIds.MainPage) {
       page = new MainPage(idPage);
-    } else if (idPage === PageIds.ProductPage) {
+    } else if (idPage.split('/')[0] === PageIds.ProductPage) {
       page = new ProductPage(idPage);
     } else if (idPage === PageIds.BasketPage) {
       page = new BasketPage(idPage);
@@ -56,6 +55,7 @@ class App {
 
   start() {
     App.container.append(this.header.render());
+    App.container.append(this.payment.render());
     App.renderNewPage('basket-page');
     this.enableRouteChange();
     App.container.append(this.footer.render());
