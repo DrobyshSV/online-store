@@ -159,7 +159,8 @@ class MainPage extends Page {
     history.pushState('', '', this.url.search);
     this.getFilterQueryState();
     this.toUpdateCheckboxSpan();
-    this.cards.drawProducts(this.filterState);
+    const viewMode = this.routerParams.hasOwnProperty('view') ? this.routerParams.view : 'cards';
+    this.cards.drawProducts(this.filterState, viewMode);
   }
 
   getSection(className: string) {
@@ -197,8 +198,9 @@ class MainPage extends Page {
       document.querySelectorAll('.checkbox__input').forEach(t => {
         (t as HTMLInputElement).checked = false;
       });
-      this.toUpdateSortSelect()
-      this.cards.drawProducts(this.filterState);
+      this.toUpdateSelect()
+      const viewMode = this.routerParams.hasOwnProperty('view') ? this.routerParams.view : 'cards';
+      this.cards.drawProducts(this.filterState, viewMode);
     });
     this.filter.filterButtons.btnCopyLink.addEventListener('click', (e) => {
       copyTextToClipboard(window.location.href).then(r => r);
@@ -206,6 +208,22 @@ class MainPage extends Page {
     const sortSelect = document.querySelector('.sort__select') as HTMLSelectElement;
     sortSelect.addEventListener('click', (e) => {
       this.addSortFilter(e);
+    });
+  const viewSelect = document.querySelector('.view__select') as HTMLSelectElement;
+    viewSelect.addEventListener('click', (e) => {
+      const target = e.target as HTMLOptionElement;
+      if (target.value === 'cards' || target.value === 'list') {
+
+        this.routerParams = {
+          ...this.routerParams,
+          ['view']: target.value
+        };
+        this.urlParams = new URLSearchParams(this.routerParams);
+        this.url.search = this.urlParams.toString();
+        history.pushState('', '', this.url.search);
+        this.toUpdateSelect()
+        this.cards.drawProducts(this.filterState, this.routerParams.view);
+      }
     });
   }
 
@@ -233,7 +251,8 @@ class MainPage extends Page {
     this.url.search = this.urlParams.toString();
     history.pushState('', '', this.url.search);
     this.toSortFilterState(typeOfSort);
-    this.cards.drawProducts(this.filterState);
+    const viewMode = this.routerParams.hasOwnProperty('view') ? this.routerParams.view : 'cards';
+    this.cards.drawProducts(this.filterState, viewMode);
   }
 
   addCheckboxFilter(e: Event) {
@@ -275,7 +294,8 @@ class MainPage extends Page {
     this.toUpdateCheckboxSpan();
     this.toUpdateRangeValue();
     this.cards.cardsHeader.toUpdateFoundCount(this.filterState);
-    this.cards.drawProducts(this.filterState);
+    const viewMode = this.routerParams.hasOwnProperty('view') ? this.routerParams.view : 'cards';
+    this.cards.drawProducts(this.filterState, viewMode);
   }
 
   toUpdateCheckboxSpan() {
@@ -374,7 +394,7 @@ class MainPage extends Page {
     }
   }
 
-  toUpdateSortSelect() {
+  toUpdateSelect() {
     const sortSelect = document.querySelector('.sort__select') as HTMLSelectElement;
     const sortOptions = sortSelect.querySelectorAll('option');
     if (this.routerParams.hasOwnProperty('sort')) {
@@ -385,6 +405,17 @@ class MainPage extends Page {
       });
     } else {
       sortOptions[0].selected = true;
+    }
+    const viewSelect = document.querySelector('.view__select') as HTMLSelectElement;
+    const viewOptions = viewSelect.querySelectorAll('option');
+    if (this.routerParams.hasOwnProperty('view')) {
+      viewOptions.forEach((opt) => {
+        if (opt.value === this.routerParams.view) {
+          opt.selected = true;
+        }
+      });
+    } else {
+      viewOptions[0].selected = true;
     }
   }
 
@@ -401,7 +432,8 @@ class MainPage extends Page {
     this.url.search = this.urlParams.toString();
     history.pushState('', '', this.url.search);
     this.getFilterQueryState();
-    this.cards.drawProducts(this.filterState);
+    const viewMode = this.routerParams.hasOwnProperty('view') ? this.routerParams.view : 'cards';
+    this.cards.drawProducts(this.filterState, viewMode);
     this.toUpdateCheckboxSpan();
     this.toUpdateRangeValue(e);
     this.cards.cardsHeader.toUpdateFoundCount(this.filterState);
@@ -458,9 +490,10 @@ class MainPage extends Page {
           filterState.stock[filterState.stock.length - 1].toString(),
         );
         this.toUpdateRangeValue();
-        this.toUpdateSortSelect();
+        this.toUpdateSelect();
         this.cards.cardsHeader.toUpdateFoundCount(this.filterState);
-        this.cards.drawProducts(this.filterState);
+        const viewMode = this.routerParams.hasOwnProperty('view') ? this.routerParams.view : 'cards';
+        this.cards.drawProducts(this.filterState, viewMode);
         this.addEventListener();
       }
     });

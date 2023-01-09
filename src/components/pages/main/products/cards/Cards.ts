@@ -12,9 +12,9 @@ class Cards {
     this.cardsHeader = new CardsHeader()
   }
 
-  drawProducts(data: Array<ProductType>) {
+  drawProducts(data: Array<ProductType>, viewMode: string) {
     if (data) {
-      this.products.draw(data);
+      this.products.draw(data, viewMode);
     }
   }
 }

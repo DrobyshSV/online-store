@@ -44,15 +44,15 @@ class CardsHeader extends CreateHtml {
     foundSpan.textContent = '0';
     foundDiv.append(foundSpan);
     const viewDiv = this.createElement('div', 'view-wrapper');
-    const viewSelect = this.createElement('select', 'sort__select');
+    const viewSelect = this.createElement('select', 'view__select');
     const viewSelectOptionDefault = document.createElement('option');
     const viewSelectOption1 = document.createElement('option');
     const viewSelectOption2 = document.createElement('option');
     viewSelectOptionDefault.textContent = 'View mode';
     viewSelectOptionDefault.disabled = true;
     viewSelectOptionDefault.defaultSelected = true;
-    viewSelectOption1.textContent = 'view by cards';
-    viewSelectOption2.textContent = 'view by list';
+    viewSelectOption1.textContent = 'View by cards';
+    viewSelectOption2.textContent = 'View by list';
     viewSelectOption1.setAttribute('value', 'cards');
     viewSelectOption2.setAttribute('value', 'list');
     viewDiv.append(viewSelect);
