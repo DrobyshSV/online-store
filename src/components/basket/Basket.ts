@@ -7,6 +7,7 @@ class Basket extends ProductPage{
    constructor(rows: string){
       super('idPage');
       this.rows = rows;
+      this.container.classList.add('basket-page');
    }
    async getFetch(dataUrl: string){
     return fetch(dataUrl)
@@ -87,8 +88,7 @@ class Basket extends ProductPage{
       await this.basketStructure();
       const ids = [4, 5, 6, 7, 8, 10,11];
       let currentPage = 1;
-      let rows = 2;
-      const prodPage = document.querySelector('#product-page') as HTMLElement;
+      const prodPage = document.querySelector('.basket-page') as HTMLElement;
       const header = `
             <div class="basket__product-header">
                <p>Products In Cart</p>
@@ -192,25 +192,27 @@ class Basket extends ProductPage{
          const header = document.querySelector('.header_info-wrapper') as HTMLElement;
          const basketPaginationLeft = header.querySelector('.basket__pagination-left') as HTMLElement;
          const basketPaginationRight = header.querySelector('.basket__pagination-right') as HTMLElement;
-         const pageNumber = header.querySelector('.page-number') as HTMLElement;;
+         let pageNumber = header.querySelector('.page-number') as HTMLElement;
          basketPaginationRight.addEventListener('click', () => {
             count++
             currentPage = currentPage + 1;
             pageNumber.innerHTML = count.toString()
-            displayList(ids,this.rows = '3',currentPage)
+            displayList(ids,this.rows,currentPage)
          })
          basketPaginationLeft.addEventListener('click', () => {
-            if(count <= 0){
-               return count=0
+            let pageNumber = header.querySelector('.page-number') as HTMLElement;
+            if(count <= 1){
+               return count = 1;
             }
             count--
             currentPage = currentPage - 1;
             pageNumber.innerHTML = count.toString()
-            displayList(ids,this.rows = '3',currentPage)
+            displayList(ids,this.rows,currentPage)
+            console.log(this.rows);
          })
          
       }
-      displayList(ids,'3',currentPage)
+      displayList(ids,this.rows = '3',currentPage)
       displayPagination()
       
       const headerr = document.querySelector('.form-wrap') as HTMLElement;
@@ -241,7 +243,7 @@ class Basket extends ProductPage{
          }
           el.preventDefault();
       }
-      return rows
+      return this.rows
    }
    async formValidation(){
       await this.pagination();
@@ -265,8 +267,6 @@ class Basket extends ProductPage{
          }
          e.preventDefault();
       }
-
-   
       // const header = document.querySelector('.form-wrap') as HTMLElement;
       // console.log(header)
       // const mainForm = header.querySelector('.basket__form') as HTMLElement;
@@ -311,7 +311,7 @@ class Basket extends ProductPage{
 
          bag.forEach(el => {
             el.addEventListener('click', (e) =>{
-               console.log(el)
+               // console.log(el)
             })
                const productAmount = el.querySelector('.basket__product-amount') as HTMLElement;
                const basketProductPrice = el.querySelector('.basket__product-price') as HTMLElement;

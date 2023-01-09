@@ -1,4 +1,4 @@
-#product-page{
+.basket-page{
    display: flex;
    flex-direction: column;
 }
