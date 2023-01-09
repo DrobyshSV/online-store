@@ -8,13 +8,18 @@ import BasketPage from '../../components/basket/Basket';
 import ErrorPage from '../pages/error/ErrorPage';
 import Payment from '../payment/Payment';
 
-
 class App {
   private static container: HTMLElement = document.body;
-  private static defaultPageId = PageIds.ProductPage;
+  private static defaultPageId = 'current-page';
   private header: Header;
   private footer: Footer;
   private payment: Payment;
+
+  constructor() {
+    this.header = new Header('header', 'header-container');
+    this.footer = new Footer('footer', 'footer-container');
+    this.payment = new Payment('payment');
+  }
 
   static renderNewPage(idPage: string) {
     const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
@@ -25,7 +30,11 @@ class App {
 
     if (idPage === PageIds.MainPage) {
       page = new MainPage(idPage);
-    } else if (idPage.split('/')[0] === PageIds.ProductPage) {
+    } else if (
+      idPage.split('/')[0] === PageIds.ProductPage &&
+      +idPage.split('/')[1] < 101 &&
+      +idPage.split('/')[1] > 0
+    ) {
       page = new ProductPage(idPage);
     } else if (idPage === PageIds.BasketPage) {
       page = new BasketPage(idPage);
@@ -36,29 +45,26 @@ class App {
     if (page) {
       const pageHTML = page.render();
       pageHTML.id = App.defaultPageId;
-      App.container.append(pageHTML);
+      const header = document.querySelector('header');
+      header ? header.after(pageHTML) : App.container.append(pageHTML);
     }
   }
 
   private enableRouteChange() {
     window.addEventListener('hashchange', () => {
-      const hash = window.location.hash.slice(1);
+      const hash = window.location.hash.replace('#', '');
       App.renderNewPage(hash);
     });
   }
 
-  constructor() {
-    this.header = new Header('header', 'header-container');
-    this.footer = new Footer('footer', 'footer-container');
-    this.payment = new Payment('payment');
-  }
-
   start() {
     App.container.append(this.header.render());
-    App.container.append(this.payment.render());
-    App.renderNewPage('basket-page');
+    App.renderNewPage('main-page');
     this.enableRouteChange();
-    App.container.append(this.footer.render());
+    const footer = this.footer.render()
+    App.container.append(footer);
+    footer.append(this.payment.render())
   }
 }
+
 export default App;

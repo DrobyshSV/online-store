@@ -3,6 +3,11 @@ import ProductPage from '../pages/product/ProductPage';
 import MainPage from '../pages/main/MainPage';
 
 class Basket extends ProductPage{
+   rows: string;
+   constructor(rows: string){
+      super('idPage');
+      this.rows = rows;
+   }
    async getFetch(dataUrl: string){
     return fetch(dataUrl)
     .then((response) => {
@@ -121,7 +126,7 @@ class Basket extends ProductPage{
          headerInfoWrapper.append(headerContent, infoContent)
          prodPage.append(headerInfoWrapper)
 
-      const displayList = (elem: number[],productsPerPage: number, page: number) => {
+      const displayList = (elem: number[],productsPerPage: string, page: number) => {
          let mainWrapper: HTMLElement;
          if(document.querySelector('.main-wrapper') as HTMLElement){
             mainWrapper = document.querySelector('.main-wrapper') as HTMLElement;
@@ -129,13 +134,11 @@ class Basket extends ProductPage{
          }else{
          mainWrapper = document.createElement('div') as HTMLElement;
          mainWrapper.classList.add('main-wrapper');
-         // let mainContent = prodPage.querySelector('.main-wrapper') as HTMLElement;
-         // mainContent.innerHTML = "";
          prodPage.append(mainWrapper);
          }
          page--;
-         const start = productsPerPage * page;
-         const end = start + productsPerPage;
+         const start = Number(productsPerPage) * page;
+         const end = start + Number(productsPerPage);
          const paginatedData = elem.slice(start, end)
 
          paginatedData.forEach(async (el)=>{
@@ -185,29 +188,29 @@ class Basket extends ProductPage{
          })
       }
       const displayPagination  = () => {
-         let count: number = 0;
+         let count: number = 1;
          const header = document.querySelector('.header_info-wrapper') as HTMLElement;
          const basketPaginationLeft = header.querySelector('.basket__pagination-left') as HTMLElement;
          const basketPaginationRight = header.querySelector('.basket__pagination-right') as HTMLElement;
          const pageNumber = header.querySelector('.page-number') as HTMLElement;;
-         basketPaginationLeft.addEventListener('click', () => {
+         basketPaginationRight.addEventListener('click', () => {
             count++
             currentPage = currentPage + 1;
             pageNumber.innerHTML = count.toString()
-            displayList(ids,rows,currentPage)
+            displayList(ids,this.rows = '3',currentPage)
          })
-         basketPaginationRight.addEventListener('click', () => {
+         basketPaginationLeft.addEventListener('click', () => {
             if(count <= 0){
                return count=0
             }
             count--
             currentPage = currentPage - 1;
             pageNumber.innerHTML = count.toString()
-            displayList(ids,rows,currentPage)
+            displayList(ids,this.rows = '3',currentPage)
          })
          
       }
-      displayList(ids,rows,currentPage)
+      displayList(ids,'3',currentPage)
       displayPagination()
       
       const headerr = document.querySelector('.form-wrap') as HTMLElement;
@@ -226,7 +229,6 @@ class Basket extends ProductPage{
             console.log('Please enter a valid promo');
             const oldValue = headerr.querySelector('.basket__info-total') as HTMLElement;
             const amount = document.querySelector('.basket__product-amount') as HTMLElement;
-            console.log(amount.textContent)
             return false;
          }else{
             const productPrice = productInfo.price;
@@ -243,8 +245,6 @@ class Basket extends ProductPage{
    }
    async formValidation(){
       await this.pagination();
-      let rows = await this.pagination();
-      console.log(rows);
       const header = document.querySelector('.header_info-wrapper') as HTMLElement;
       const headerLimitForm = header.querySelector('.basket__limit-form') as HTMLElement;
       const headerLimitInput = header.querySelector('.basket__limit-input') as HTMLInputElement;
@@ -252,7 +252,6 @@ class Basket extends ProductPage{
       console.log(headerLimitInput);
       headerLimitForm.onsubmit = (e) => {
          let limitVal : string = headerLimitInput.value;
-
          const isValidLimit = (limit: string) => {
             let res = /^[0-9]$/;
             return res.test(String(limit).toLowerCase());
@@ -261,8 +260,8 @@ class Basket extends ProductPage{
             console.log('Please enter a valid limit');
             return false;
          }else{
-            rows = Number(limitVal)
-            console.log(rows);
+            this.rows = limitVal
+            console.log(this.rows);
          }
          e.preventDefault();
       }
@@ -318,7 +317,6 @@ class Basket extends ProductPage{
                const basketProductPrice = el.querySelector('.basket__product-price') as HTMLElement;
                const basketInfoProd = header.querySelector('.basket__info-prod') as HTMLElement;
                const basketInfoTotal = header.querySelector('.basket__info-total') as HTMLElement;
-               // productAmount.innerHTML = 'TEST'
 
                if(target.classList.contains('basket_button-plus')){
                   amount++
