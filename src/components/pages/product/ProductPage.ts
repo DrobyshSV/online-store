@@ -7,7 +7,7 @@ class ProductPage extends Page{
   static TextObject = {
     MainTitle: 'Settings Page',
   };
-  public id: string | undefined;
+  private id: string | undefined;
 
   constructor(id: string) {
     super(id);
@@ -76,7 +76,7 @@ class ProductPage extends Page{
                 paument.classList.add('open');
                 popupPay.classList.add('open');
               }
-            popUpPay()"><a href="#basket-page">buy now</a></div>
+            popUpPay()"><a href="#">buy now</a></div>
               <div class = "product__price elem"><p>add to cart</p></div>
             </div>
 
@@ -153,7 +153,7 @@ class ProductPage extends Page{
     this.createProductContainer().then((productContainer) => {
       this.container.append(productContainer);
     }).then(()=>{this.setDivs()}).then(()=>{this.setEvents()})
-    history.pushState('', '', '');
+    history.pushState('', '', window.location.origin + window.location.hash);
     return this.container;
   }
 }

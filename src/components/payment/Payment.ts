@@ -6,7 +6,7 @@ class Payment extends ProductPage {
     super(id);
     this.container = document.createElement('div');
     this.container.classList.add(id);
-    this.id = id;
+    this.container.id = id;
   }
 
   async payment() {
@@ -217,9 +217,7 @@ class Payment extends ProductPage {
       popUpPay.classList.remove('open');
       e.preventDefault();
     });
-
   }
-
   render() {
     this.payment();
     this.setEvents();
