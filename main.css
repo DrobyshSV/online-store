@@ -221,7 +221,7 @@ header form{position:relative;width:300px;margin:0 auto;background:#fcfaeb}heade
    right: 0px;
    top: 0px;
 }
-#product-page{
+.basket-page {
    display: flex;
    flex-direction: column;
 }
@@ -306,6 +306,7 @@ header form{position:relative;width:300px;margin:0 auto;background:#fcfaeb}heade
    justify-content: space-around;
    align-items: flex-start;
 }
+
 #payment {
    min-height: 1px;
    display: none;
