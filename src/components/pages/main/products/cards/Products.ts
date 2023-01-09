@@ -1,5 +1,5 @@
 import './Product.scss';
-import {ProductType} from '../../../../types/types';
+import { ProductType } from '../../../../types/types';
 import CreateHtml from '../../Filters/CreateHtml';
 
 class Products extends CreateHtml {
@@ -53,9 +53,7 @@ class Products extends CreateHtml {
           productPrice,
           productButtonsWrapper
         );
-
       } else if (viewMode === 'list') {
-
         const listImgWrapper = this.createElement('div', 'list-wrapper__img');
         const listInfoWrapper = this.createElement('h4', 'list-info');
         const productDescription = this.createElement('p', 'product-description');
@@ -68,7 +66,6 @@ class Products extends CreateHtml {
       }
       productItems.append(productCard);
     });
-
   }
 }
 

@@ -1,24 +1,23 @@
 import Header from '../header/Header';
 import Footer from '../Footer/Footer';
 import Page from '../common/Page';
-import {ErrorTypes, PageIds} from '../types/types';
+import { ErrorTypes, PageIds } from '../types/types';
 import MainPage from '../pages/main/MainPage';
 import ProductPage from '../pages/product/ProductPage';
 import BasketPage from '../../components/basket/Basket';
 import ErrorPage from '../pages/error/ErrorPage';
 import Payment from '../payment/Payment';
 
-
 class App {
   private static container: HTMLElement = document.body;
-  private static defaultPageId = PageIds.ProductPage;
+  private static defaultPageId = PageIds.MainPage;
   private header: Header;
   private footer: Footer;
 
   static renderNewPage(idPage: string) {
     const currentPageHTML = document.querySelector(`main`);
     if (currentPageHTML) {
-      currentPageHTML.innerHTML = ''
+      currentPageHTML.remove();
     }
     let page: Page | null = null;
 
@@ -35,9 +34,7 @@ class App {
     if (page) {
       const pageHTML = page.render();
       const header = document.querySelector('header');
-      header ?
-        header.after(pageHTML) :
-        App.container.append(pageHTML);
+      header ? header.after(pageHTML) : App.container.append(pageHTML);
     }
   }
 

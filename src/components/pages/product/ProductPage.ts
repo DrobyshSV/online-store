@@ -3,7 +3,7 @@ import './product.css'
 
 
 class ProductPage extends Page{
-  
+
   static TextObject = {
     MainTitle: 'Settings Page',
   };
@@ -14,7 +14,7 @@ class ProductPage extends Page{
     this.id = id;
   }
 
-  
+
   async getFetch(dataUrl: string){
     return fetch(dataUrl)
     .then((response) => {
@@ -24,13 +24,13 @@ class ProductPage extends Page{
       return data;
     });
   }
-  
+
   async createProductContainer(){
     const dataUrl = 'https://dummyjson.com/products/' + this.id?.split('/')[1];
     let productInfo = await this.getFetch(dataUrl);
     const productContainer = document.createElement('div');
     productContainer.classList.add('product-container');
-    
+
     const productTitle = productInfo.title;
     const productDescription = productInfo.description;
     const productCategory = productInfo.category;
@@ -98,7 +98,7 @@ class ProductPage extends Page{
         </div>
       </div>
    `;
-        
+
     productContainer.innerHTML = structure;
     return productContainer;
   }
@@ -138,7 +138,7 @@ class ProductPage extends Page{
       e.preventDefault();
     });
 
-    const productImage = document.querySelectorAll('.product__image'); 
+    const productImage = document.querySelectorAll('.product__image');
     productImage.forEach((element) => {
       element.addEventListener('click', () => {
       const thisImage = element.querySelector('img')
@@ -153,6 +153,7 @@ class ProductPage extends Page{
     this.createProductContainer().then((productContainer) => {
       this.container.append(productContainer);
     }).then(()=>{this.setDivs()}).then(()=>{this.setEvents()})
+    history.pushState('', '', '');
     return this.container;
   }
 }
