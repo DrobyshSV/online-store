@@ -10,14 +10,22 @@ class Payment extends ProductPage{
               <h3>Personal details</h3>
               <form class="pay__form" action="" novalidate >
                   <input type="text" class="input pay__input pay__input-name" name="name" placeholder="Name">
+                  <p class="name-warning"></p>
                   <input type="tel" class="input pay__input pay__input-phone" name="phone" placeholder="Phone number">
+                  <p class="number-warning"></p>
                   <input type="text" class="input pay__input pay__input-adress" name="address" placeholder="Address">
+                  <p class="adress-warning"></p>
                   <input type="email" class="input pay__input pay__input-email" name="email" placeholder="Email">
+                  <p class="email-warning"></p>
                   <h3>Credict card details</h3>
                   <input type="text" class="input pay__input pay__input-card" name="card" placeholder="Card">
+                  <p class="card-warning"></p>
+                  <p class="card-name"></p>
                   <input type="text" class="input pay__input pay__input-valid" name="valid" placeholder="Valid thru">
+                  <p class="valid-warning"></p>
                   <input type="text" class="input pay__input pay__input-cvv" name="cvv" placeholder="cvv">
-                  <button type="submit" class="btn">Submit</button>    
+                  <p class="cvv-warning"></p>
+                  <button type="submit" class="btn">Submit</button>
             </form>
               <a href = "#" class = "pay__popup__close">X</a>
           </div>
@@ -38,7 +46,27 @@ class Payment extends ProductPage{
         inputValid = this.container.querySelector('.pay__input-valid') as HTMLFormElement,
         inputCvv = this.container.querySelector('.pay__input-cvv') as HTMLFormElement,
         inputCard = this.container.querySelector('.pay__input-card') as HTMLFormElement;
-    
+        
+    const cardBrands = [4, 5, 6]
+    const cardName = this.container.querySelector('.card-name') as HTMLElement;
+      
+      inputCard.oninput = ()=>{
+        let val = inputCard.value.trim();
+        const master = String(cardBrands[0])
+        const visa = String(cardBrands[1])
+        const bel = String(cardBrands[2])
+        const newVal = val.slice(0,1)
+        if(newVal == master){
+         cardName.innerHTML = 'MASTERCARD';
+        }else if(newVal == visa){
+          cardName.innerHTML = 'VISA';
+        }else if(newVal == bel){
+          cardName.innerHTML = 'BELKART';
+        }else{
+          cardName.innerHTML = '';
+        }
+      };
+
     form.onsubmit = () => {
       let emailVal: string = inputEmail.value,
           phoneVal: string = inputPhone.value,
@@ -93,75 +121,92 @@ class Payment extends ProductPage{
       });
 
       if(emptyInputs.length !== 0){
-        console.log('Please enter a valid value');
         return false;
       }
 
       if(!isValidName(nameVal)){
-        console.log('Please enter a valid name');
+        const payInputName = document.querySelector('.name-warning') as HTMLElement; 
+        payInputName.innerHTML = 'Please enter a valid name';
         inputName.classList.add('error');
         return false;
       }else{
         inputName.classList.remove('error');
+        const payInputName = document.querySelector('.name-warning') as HTMLElement; 
+        payInputName.classList.add('active')
       }
 
       if(!isValidPhone(phoneVal)){
-        console.log('Please enter a valid phone number');
+        const payInputNumber = document.querySelector('.number-warning') as HTMLElement; 
+        payInputNumber.innerHTML = 'Please enter a valid phone number';
         inputPhone.classList.add('error');
         return false;
       }else{
         inputPhone.classList.remove('error');
+        const payInputNumber = document.querySelector('.number-warning') as HTMLElement; 
+        payInputNumber.classList.add('active')
       }
 
       if(!isValidAdress(adressVal)){
-        console.log('Please enter a valid adress');
+        const payInputAdress = document.querySelector('.adress-warning') as HTMLElement; 
+        payInputAdress.innerHTML = 'Please enter a valid adress';
         inputAdress.classList.add('error');
         return false;
       }else{
         inputAdress.classList.remove('error');
+        const payInputAdress = document.querySelector('.adress-warning') as HTMLElement; 
+        payInputAdress.classList.add('active')
       }
 
       if(!isValidEmail(emailVal)){
-        console.log('Please enter a valid email');
+        const payInputEmail = document.querySelector('.email-warning') as HTMLElement; 
+        payInputEmail.innerHTML = 'Please enter a valid email';
         inputEmail.classList.add('error');
         return false;
       }else{
         inputEmail.classList.remove('error');
+        const payInputEmail = document.querySelector('.email-warning') as HTMLElement; 
+        payInputEmail.classList.add('active')
       } 
 
       if(!isValidCard(cardVal)){
-        console.log('Please enter a valid card');
+        const payInputCard = document.querySelector('.card-warning') as HTMLElement; 
+        payInputCard.innerHTML = 'Please enter a valid card';
         inputCard.classList.add('error');
         return false;
       }else{
         inputCard.classList.remove('error');
+        const payInputCard = document.querySelector('.card-warning') as HTMLElement; 
+        payInputCard.classList.add('active')
       } 
 
       if(!isValidValid(validVal)){
-        console.log('Please enter a valid date');
+        const payInputValid = document.querySelector('.valid-warning') as HTMLElement; 
+        payInputValid.innerHTML = 'Please enter a valid date';
         inputValid.classList.add('error');
         return false;
       }else{
         inputValid.classList.remove('error');
+        const payInputValid = document.querySelector('.valid-warning') as HTMLElement; 
+        payInputValid.classList.add('active')
       } 
 
       if(!isValidCvv(cvvVal)){
-        console.log('Please enter a valid cvv');
+        const payInputCvv = document.querySelector('.cvv-warning') as HTMLElement; 
+        payInputCvv.innerHTML = 'Please enter a valid cvv';
         inputCvv.classList.add('error');
         return false;
       }else{
         inputCvv.classList.remove('error');
-      } 
-
+        const payInputCvv = document.querySelector('.cvv-warning') as HTMLElement; 
+        payInputCvv.classList.add('active')
+      }
+        alert('Ваш заказ был успешно оплачен! Нажмите для завершения заказа.')
+        window.location.href= "http://localhost:5333/#main-page"
     }
-    
-    // payPopupBody.addEventListener('click', () =>{
-    //   const popUpPay = document.querySelector('.popup__pay') as HTMLElement;;
-    //   popUpPay.classList.remove('open');
-    // })
-    closeButton.addEventListener('click', () =>{
+    closeButton.addEventListener('click', (e) =>{
       const popUpPay = document.querySelector('.popup__pay') as HTMLElement;;
       popUpPay.classList.remove('open');
+      e.preventDefault();
     })
    
   }

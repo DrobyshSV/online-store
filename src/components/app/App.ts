@@ -4,10 +4,10 @@ import Page from '../common/Page';
 import {ErrorTypes, PageIds} from '../types/types';
 import MainPage from '../pages/main/MainPage';
 import ProductPage from '../pages/product/ProductPage';
-import BasketPage from '../pages/basket/BasketPage';
+import BasketPage from '../../components/basket/Basket';
 import ErrorPage from '../pages/error/ErrorPage';
 import Payment from '../payment/Payment';
-import Basket from '../basket/Basket';
+
 
 class App {
   private static container: HTMLElement = document.body;
