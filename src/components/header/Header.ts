@@ -8,7 +8,6 @@ class Header extends Component {
 
   renderLogo() {
     const title = document.createElement('a');
-    title.href = '#product-page/5'
     title.classList.add('title');
     title.innerText = 'Online-store';
     this.container.append(title);
@@ -17,6 +16,7 @@ class Header extends Component {
   renderSearchForm() {
     const form = document.createElement('form');
     const input = document.createElement('input');
+    input.classList.add('search__input')
     input.setAttribute('type', 'text');
     input.setAttribute('placeholder', 'Search');
     const button = document.createElement('button');

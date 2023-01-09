@@ -1,7 +1,7 @@
 import Header from '../header/Header';
 import Footer from '../Footer/Footer';
 import Page from '../common/Page';
-import { ErrorTypes, PageIds } from '../types/types';
+import {ErrorTypes, PageIds} from '../types/types';
 import MainPage from '../pages/main/MainPage';
 import ProductPage from '../pages/product/ProductPage';
 import BasketPage from '../../components/basket/Basket';
@@ -13,7 +13,6 @@ class App {
   private static defaultPageId = 'current-page';
   private header: Header;
   private footer: Footer;
-  private payment: Payment;
 
   constructor() {
     this.header = new Header('header', 'header-container');
@@ -22,9 +21,9 @@ class App {
   }
 
   static renderNewPage(idPage: string) {
-    const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
+    const currentPageHTML = document.querySelector(`main`);
     if (currentPageHTML) {
-      currentPageHTML.remove();
+      currentPageHTML.innerHTML = ''
     }
     let page: Page | null = null;
 
@@ -44,6 +43,7 @@ class App {
 
     if (page) {
       const pageHTML = page.render();
+
       pageHTML.id = App.defaultPageId;
       const header = document.querySelector('header');
       header ? header.after(pageHTML) : App.container.append(pageHTML);
@@ -55,6 +55,11 @@ class App {
       const hash = window.location.hash.replace('#', '');
       App.renderNewPage(hash);
     });
+  }
+
+  constructor() {
+    this.header = new Header('header', 'header-container');
+    this.footer = new Footer('footer', 'footer-container');
   }
 
   start() {
