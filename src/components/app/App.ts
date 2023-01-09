@@ -25,7 +25,7 @@ class App {
 
     if (idPage === PageIds.MainPage) {
       page = new MainPage(idPage);
-    } else if (idPage === PageIds.ProductPage) {
+    } else if (idPage.split('/')[0] === PageIds.ProductPage) {
       page = new ProductPage(idPage);
     } else if (idPage === PageIds.BasketPage) {
       page = new BasketPage(idPage);

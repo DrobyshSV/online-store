@@ -80,6 +80,10 @@
 .source_item{
    text-transform: uppercase;
 }
+.source_item a{
+   text-decoration: none;
+   color: #000;
+}
 .product__image img{
    max-width: 100px;
 }

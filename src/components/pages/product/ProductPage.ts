@@ -7,9 +7,11 @@ class ProductPage extends Page{
   static TextObject = {
     MainTitle: 'Settings Page',
   };
+  private id: string | undefined;
 
   constructor(id: string) {
     super(id);
+    this.id = id;
   }
 
   
@@ -23,13 +25,12 @@ class ProductPage extends Page{
     });
   }
   
-  async createProductContainer(productId: string){
-    const dataUrl = 'https://dummyjson.com/products/' + productId;
+  async createProductContainer(){
+    const dataUrl = 'https://dummyjson.com/products/' + this.id?.split('/')[1];
     let productInfo = await this.getFetch(dataUrl);
     const productContainer = document.createElement('div');
     productContainer.classList.add('product-container');
     
-
     const productTitle = productInfo.title;
     const productDescription = productInfo.description;
     const productCategory = productInfo.category;
@@ -44,17 +45,13 @@ class ProductPage extends Page{
     const structure = `
       <div class = "product__wrap">
         <div class = "product__source">
-          <div class = "product__source source_item"><p>Store<span>/</span></p></div>
+          <div class = "product__source source_item"><a href="http://localhost:5333/#main-page">Store<span>/</span></a></div>
           <div class = "product__source source_item">${productCategory}<span>/</span></div>
           <div class = "product__source source_item">${productBrand}<span>/</span></div>
           <div class = "product__source source_item">${productTitle}<span>/</span></div>
         </div>
         <div class = "product__main">
           <div class = "product__galery">
-            <div class="product__image" onclick="function setNewImg(){const newImg = document.querySelector('.main_img img');newImg.src = '${productImages[1]}'}setNewImg()"><img src="${productImages[1]}" alt="product"></img>
-            </div>
-            <div class="product__image" onclick="function setNewImg(){const newImg = document.querySelector('.main_img img');newImg.src = '${productImages[2]}'}setNewImg()"><img src="${productImages[2]}" alt="product"></img></div>
-            <div class="product__image" onclick="function setNewImg(){const newImg = document.querySelector('.main_img img');newImg.src = '${productImages[3]}'}setNewImg()"><img src="${productImages[3]}" alt="product"></img></div>
           </div>
           
           <div class = "product__image main_img" onclick="function popUp(){
@@ -66,7 +63,7 @@ class ProductPage extends Page{
             popUp.classList.add('open');
             popUpContent.append(newImg);
           }
-          popUp()"><img src="${productImages[4]}" alt="product"></img></div>
+          popUp()"><img src="${productImages[0]}" alt="product"></img></div>
           
           <div class = "product__description">
             <div class = "product__name">${productTitle}</div>
@@ -79,8 +76,8 @@ class ProductPage extends Page{
                 paument.classList.add('open');
                 popupPay.classList.add('open');
               }
-            popUpPay()"><p>add to card</p></div>
-              <div class = "product__price elem"><a href="http://localhost:5333/#basket">buy now</a></div>
+            popUpPay()"><a href="http://localhost:5333/#basket">buy now</a></div>
+              <div class = "product__price elem"><p>add to cart</p></div>
             </div>
 
             <div class = "product__description item"><span class = "pre__description">Brand:</span> ${productBrand}</div>
@@ -93,17 +90,9 @@ class ProductPage extends Page{
         </div>
       </div>
       <div class = "popup">
-        <div class = "popup__body" onclick = "function closePopup(){
-                const popUp = document.querySelector('.popup');
-                const popupClose = document.querySelector('.popup__close');
-                popUp.classList.remove('open');
-              }closePopup()">
+        <div class = "popup__body">
           <div class = "popup__content">
-              <a href = "#" class = "popup__close" onclick = "function closePopup(){
-                const popUp = document.querySelector('.popup');
-                const popupClose = document.querySelector('.popup__close');
-                popUp.classList.remove('open');
-              } closePopup()">X</a>
+              <a href = "#" class = "popup__close">X</a>
               <img src="" class = "popup__img" alt="product"></img>
           </div>
         </div>
@@ -112,14 +101,58 @@ class ProductPage extends Page{
         
     productContainer.innerHTML = structure;
     return productContainer;
-  
+  }
+
+  async setDivs(){
+    this.createProductContainer();
+    const dataUrl = 'https://dummyjson.com/products/' + this.id?.split('/')[1];
+    let productInfo = await this.getFetch(dataUrl);
+    const productGalery = document.querySelector('.product__galery') as HTMLElement;
+    const productImages = productInfo.images;
+    for (let item of productImages) {
+      const productImageWrap = document.createElement('div');
+      const productImageImg = document.createElement('img');
+      productImageImg.src = item
+      productImageWrap.classList.add('product__image')
+      productImageWrap.append(productImageImg)
+      productGalery.append(productImageWrap)
+    }
+  }
+
+  async setEvents(){
+    this.createProductContainer();
+    const dataUrl = 'https://dummyjson.com/products/' + this.id?.split('/')[1];
+    let productInfo = await this.getFetch(dataUrl);
+
+    const popupClose = document.querySelector('.popup__close') as HTMLElement;
+    popupClose.addEventListener('click', (e)=>{
+      const popUp = document.querySelector('.popup') as HTMLElement;
+      popUp.classList.remove('open');
+      e.preventDefault();
+    })
+
+    const popupBody = document.querySelector('.popup__body') as HTMLElement;
+    popupBody.addEventListener('click', (e)=>{
+      const popUp = document.querySelector('.popup') as HTMLElement;
+      popUp.classList.remove('open');
+      e.preventDefault();
+    });
+
+    const productImage = document.querySelectorAll('.product__image'); 
+    productImage.forEach((element) => {
+      element.addEventListener('click', () => {
+      const thisImage = element.querySelector('img')
+      const newSrc = (thisImage as HTMLImageElement).src;
+      const newImg = document.querySelector('.main_img img') as HTMLImageElement;
+      newImg.src = newSrc
+    });
+    });
   }
 
   render() {
-    this.createProductContainer('34').then((productContainer) => {
+    this.createProductContainer().then((productContainer) => {
       this.container.append(productContainer);
-    })
-   
+    }).then(()=>{this.setDivs()}).then(()=>{this.setEvents()})
     return this.container;
   }
 }
