@@ -7,10 +7,13 @@ class Header extends Component {
   }
 
   renderLogo() {
-    const title = document.createElement('a');
+    const titleLink = document.createElement('a');
+    titleLink.href = '#main-page'
+    const title = document.createElement('h1');
     title.classList.add('title');
     title.innerText = 'Online-store';
-    this.container.append(title);
+    titleLink.append(title)
+    this.container.append(titleLink);
   }
 
   renderSearchForm() {
