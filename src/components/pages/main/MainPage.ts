@@ -139,6 +139,9 @@ class MainPage extends Page {
         }
       });
     }
+    if (this.routerParams.hasOwnProperty('sort')) {
+      this.toSortFilterState(this.routerParams.sort);
+    }
 
   }
 
@@ -194,11 +197,43 @@ class MainPage extends Page {
       document.querySelectorAll('.checkbox__input').forEach(t => {
         (t as HTMLInputElement).checked = false;
       });
+      this.toUpdateSortSelect()
       this.cards.drawProducts(this.filterState);
     });
     this.filter.filterButtons.btnCopyLink.addEventListener('click', (e) => {
       copyTextToClipboard(window.location.href).then(r => r);
     });
+    const sortSelect = document.querySelector('.sort__select') as HTMLSelectElement;
+    sortSelect.addEventListener('click', (e) => {
+      this.addSortFilter(e);
+    });
+  }
+
+  toSortFilterState(typeOfSort: string) {
+
+    if (typeOfSort === 'price-ASC') {
+      this.filterState = [...this.filterState].sort((a, b) => a.price - b.price);
+    } else if (typeOfSort === 'price-DESC') {
+      this.filterState = [...this.filterState].sort((a, b) => b.price - a.price);
+    } else if (typeOfSort === 'rating-ASC') {
+      this.filterState = [...this.filterState].sort((a, b) => a.stock - b.stock);
+    } else if (typeOfSort === 'rating-DESC') {
+      this.filterState = [...this.filterState].sort((a, b) => b.stock - a.stock);
+    }
+  }
+
+  addSortFilter(e: Event) {
+    const target = e.target as HTMLOptionElement;
+    const typeOfSort = target.value;
+    this.routerParams = {
+      ...this.routerParams,
+      ['sort']: target.value
+    };
+    this.urlParams = new URLSearchParams(this.routerParams);
+    this.url.search = this.urlParams.toString();
+    history.pushState('', '', this.url.search);
+    this.toSortFilterState(typeOfSort);
+    this.cards.drawProducts(this.filterState);
   }
 
   addCheckboxFilter(e: Event) {
@@ -239,6 +274,7 @@ class MainPage extends Page {
     this.getFilterQueryState();
     this.toUpdateCheckboxSpan();
     this.toUpdateRangeValue();
+    this.cards.cardsHeader.toUpdateFoundCount(this.filterState);
     this.cards.drawProducts(this.filterState);
   }
 
@@ -324,7 +360,7 @@ class MainPage extends Page {
             sliderTrack as HTMLElement,
             ranges[0] as HTMLElement,
             ranges[1] as HTMLElement);
-        } else if (target.classList.contains('slider-2')){
+        } else if (target.classList.contains('slider-2')) {
           target.value = searchKeyArray[1];
           (target.previousElementSibling as HTMLInputElement).value = searchKeyArray[0];
           this.filter.range.rangeColor(
@@ -335,6 +371,20 @@ class MainPage extends Page {
             ranges[1] as HTMLElement);
         }
       }
+    }
+  }
+
+  toUpdateSortSelect() {
+    const sortSelect = document.querySelector('.sort__select') as HTMLSelectElement;
+    const sortOptions = sortSelect.querySelectorAll('option');
+    if (this.routerParams.hasOwnProperty('sort')) {
+      sortOptions.forEach((opt) => {
+        if (opt.value === this.routerParams.sort) {
+          opt.selected = true;
+        }
+      });
+    } else {
+      sortOptions[0].selected = true;
     }
   }
 
@@ -354,6 +404,7 @@ class MainPage extends Page {
     this.cards.drawProducts(this.filterState);
     this.toUpdateCheckboxSpan();
     this.toUpdateRangeValue(e);
+    this.cards.cardsHeader.toUpdateFoundCount(this.filterState);
   }
 
   render() {
@@ -407,6 +458,8 @@ class MainPage extends Page {
           filterState.stock[filterState.stock.length - 1].toString(),
         );
         this.toUpdateRangeValue();
+        this.toUpdateSortSelect();
+        this.cards.cardsHeader.toUpdateFoundCount(this.filterState);
         this.cards.drawProducts(this.filterState);
         this.addEventListener();
       }

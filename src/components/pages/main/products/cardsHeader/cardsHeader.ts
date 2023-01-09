@@ -1,5 +1,7 @@
-import './CardHeader.scss'
+import './CardHeader.scss';
 import CreateHtml from '../../Filters/CreateHtml';
+import products from '../cards/Products';
+import {ProductType} from '../../../../types/types';
 
 class CardsHeader extends CreateHtml {
   public header: HTMLElement;
@@ -7,6 +9,11 @@ class CardsHeader extends CreateHtml {
   constructor() {
     super();
     this.header = this.render();
+  }
+
+  toUpdateFoundCount(data: Array<ProductType>) {
+    const foundSpan = document.querySelector('.found__span') as HTMLSpanElement;
+    foundSpan.innerText = data.length.toString();
   }
 
   render() {
