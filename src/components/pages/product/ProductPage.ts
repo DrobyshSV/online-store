@@ -7,7 +7,7 @@ class ProductPage extends Page{
   static TextObject = {
     MainTitle: 'Settings Page',
   };
-  private id: string | undefined;
+  public id: string | undefined;
 
   constructor(id: string) {
     super(id);
@@ -76,7 +76,7 @@ class ProductPage extends Page{
                 paument.classList.add('open');
                 popupPay.classList.add('open');
               }
-            popUpPay()"><a href="http://localhost:5333/#basket">buy now</a></div>
+            popUpPay()"><a href="#basket-page">buy now</a></div>
               <div class = "product__price elem"><p>add to cart</p></div>
             </div>
 
