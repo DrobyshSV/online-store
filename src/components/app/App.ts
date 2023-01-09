@@ -10,12 +10,12 @@ import Payment from '../payment/Payment';
 
 class App {
   private static container: HTMLElement = document.body;
-  private static defaultPageId = PageIds.MainPage;
+  private static defaultPageId = 'current-page';
   private header: Header;
   private footer: Footer;
 
   static renderNewPage(idPage: string) {
-    const currentPageHTML = document.querySelector(`main`);
+    const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
     if (currentPageHTML) {
       currentPageHTML.remove();
     }
@@ -23,7 +23,9 @@ class App {
 
     if (idPage === PageIds.MainPage) {
       page = new MainPage(idPage);
-    } else if (idPage.split('/')[0] === PageIds.ProductPage) {
+    } else if (idPage.split('/')[0] === PageIds.ProductPage
+      && +idPage.split('/')[1] < 101
+      && +idPage.split('/')[1] > 0) {
       page = new ProductPage(idPage);
     } else if (idPage === PageIds.BasketPage) {
       page = new BasketPage(idPage);
@@ -33,6 +35,7 @@ class App {
 
     if (page) {
       const pageHTML = page.render();
+      pageHTML.id = App.defaultPageId
       const header = document.querySelector('header');
       header ? header.after(pageHTML) : App.container.append(pageHTML);
     }
@@ -50,7 +53,7 @@ class App {
     this.footer = new Footer('footer', 'footer-container');
   }
 
-  start() {
+  start(hash: string) {
     App.container.append(this.header.render());
     App.renderNewPage('main-page');
     this.enableRouteChange();

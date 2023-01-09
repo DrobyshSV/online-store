@@ -14,6 +14,7 @@ class ErrorPage extends Page {
   }
 
   render() {
+    this.container.innerText = 'scass'
     return this.container;
   }
 }
