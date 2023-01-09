@@ -1,8 +1,13 @@
 import './index.scss';
 import App from './components/app/App';
 
+let hash = window.location.hash.replace('#', '');
+if (hash === '') {
+  hash = 'main-page';
+}
+
 const app = new App();
-app.start();
+app.start(hash);
 
 export async function copyTextToClipboard(text: string) {
   try {

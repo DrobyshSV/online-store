@@ -2,8 +2,8 @@ import Page from '../../common/Page';
 import AppController from './products/controller/controller';
 import Cards from './products/cards/Cards';
 import Filters from './Filters/Filters';
-import {ProductType} from '../../types/types';
-import {copyTextToClipboard} from '../../../index';
+import { ProductType } from '../../types/types';
+import { copyTextToClipboard } from '../../../index';
 
 export type FilterStateType = {
   categories: Array<string>;
@@ -85,11 +85,13 @@ class MainPage extends Page {
   }
 
   getSearchParams() {
-    return window.location.search.slice(window.location.search.indexOf('?') + 1).split('&')
+    return window.location.search
+      .slice(window.location.search.indexOf('?') + 1)
+      .split('&')
       .reduce((params, hash) => {
         hash.replace('+', ' ');
-        let [key, val] = hash.split('=');
-        return Object.assign(params, {[key]: decodeURIComponent(val).replace('+', ' ')});
+        const [key, val] = hash.split('=');
+        return Object.assign(params, { [key]: decodeURIComponent(val).replace('+', ' ') });
       }, {});
   }
 
@@ -97,30 +99,34 @@ class MainPage extends Page {
     this.filterState = this.state;
     if (this.routerParams.hasOwnProperty('category')) {
       this.filterState = this.filterState.filter((t) => {
-        if (this.routerParams.category.split('↕').some(el => el === t.category)) {
+        if (this.routerParams.category.split('↕').some((el) => el === t.category)) {
           return t;
         }
       });
     }
     if (this.routerParams.hasOwnProperty('brand')) {
       this.filterState = this.filterState.filter((t) => {
-        if (this.routerParams.brand.split('↕').some(el => el === t.brand)) {
+        if (this.routerParams.brand.split('↕').some((el) => el === t.brand)) {
           return t;
         }
       });
     }
     if (this.routerParams.hasOwnProperty('price')) {
       this.filterState = [...this.filterState].filter((t) => {
-        if (t.price >= Number(this.routerParams.price.split('↕')[0])
-          && t.price <= Number(this.routerParams.price.split('↕')[1])) {
+        if (
+          t.price >= Number(this.routerParams.price.split('↕')[0]) &&
+          t.price <= Number(this.routerParams.price.split('↕')[1])
+        ) {
           return t;
         }
       });
     }
     if (this.routerParams.hasOwnProperty('stock')) {
-      this.filterState = [...this.filterState].filter(t => {
-        if (t.stock >= Number(this.routerParams.stock.split('↕')[0])
-          && t.stock <= Number(this.routerParams.stock.split('↕')[1])) {
+      this.filterState = [...this.filterState].filter((t) => {
+        if (
+          t.stock >= Number(this.routerParams.stock.split('↕')[0]) &&
+          t.stock <= Number(this.routerParams.stock.split('↕')[1])
+        ) {
           return t;
         }
       });
@@ -142,14 +148,13 @@ class MainPage extends Page {
     if (this.routerParams.hasOwnProperty('sort')) {
       this.toSortFilterState(this.routerParams.sort);
     }
-
   }
 
   inputEvent(e: Event) {
     const target = e.target as HTMLInputElement;
     const targetTitle = target.value;
     if (targetTitle) {
-      this.routerParams = {...this.routerParams, [`search`]: targetTitle};
+      this.routerParams = { ...this.routerParams, [`search`]: targetTitle };
     } else {
       delete this.routerParams[`search`];
       history.pushState('', '', window.location.origin);
@@ -195,40 +200,38 @@ class MainPage extends Page {
       this.getFilterQueryState();
       this.toUpdateCheckboxSpan();
       this.toUpdateRangeValue();
-      document.querySelectorAll('.checkbox__input').forEach(t => {
+      document.querySelectorAll('.checkbox__input').forEach((t) => {
         (t as HTMLInputElement).checked = false;
       });
-      this.toUpdateSelect()
+      this.toUpdateSelect();
       const viewMode = this.routerParams.hasOwnProperty('view') ? this.routerParams.view : 'cards';
       this.cards.drawProducts(this.filterState, viewMode);
     });
     this.filter.filterButtons.btnCopyLink.addEventListener('click', (e) => {
-      copyTextToClipboard(window.location.href).then(r => r);
+      copyTextToClipboard(window.location.href).then((r) => r);
     });
     const sortSelect = document.querySelector('.sort__select') as HTMLSelectElement;
     sortSelect.addEventListener('click', (e) => {
       this.addSortFilter(e);
     });
-  const viewSelect = document.querySelector('.view__select') as HTMLSelectElement;
+    const viewSelect = document.querySelector('.view__select') as HTMLSelectElement;
     viewSelect.addEventListener('click', (e) => {
       const target = e.target as HTMLOptionElement;
       if (target.value === 'cards' || target.value === 'list') {
-
         this.routerParams = {
           ...this.routerParams,
-          ['view']: target.value
+          ['view']: target.value,
         };
         this.urlParams = new URLSearchParams(this.routerParams);
         this.url.search = this.urlParams.toString();
         history.pushState('', '', this.url.search);
-        this.toUpdateSelect()
+        this.toUpdateSelect();
         this.cards.drawProducts(this.filterState, this.routerParams.view);
       }
     });
   }
 
   toSortFilterState(typeOfSort: string) {
-
     if (typeOfSort === 'price-ASC') {
       this.filterState = [...this.filterState].sort((a, b) => a.price - b.price);
     } else if (typeOfSort === 'price-DESC') {
@@ -245,7 +248,7 @@ class MainPage extends Page {
     const typeOfSort = target.value;
     this.routerParams = {
       ...this.routerParams,
-      ['sort']: target.value
+      ['sort']: target.value,
     };
     this.urlParams = new URLSearchParams(this.routerParams);
     this.url.search = this.urlParams.toString();
@@ -263,16 +266,16 @@ class MainPage extends Page {
       if (this.routerParams.hasOwnProperty(`${typeOfCheckbox}`)) {
         this.routerParams = {
           ...this.routerParams,
-          [`${typeOfCheckbox}`]: this.routerParams[`${typeOfCheckbox}`] + '↕' + targetTitle
+          [`${typeOfCheckbox}`]: this.routerParams[`${typeOfCheckbox}`] + '↕' + targetTitle,
         };
       } else {
         if (targetTitle) {
-          this.routerParams = {...this.routerParams, [`${typeOfCheckbox}`]: targetTitle};
+          this.routerParams = { ...this.routerParams, [`${typeOfCheckbox}`]: targetTitle };
         }
       }
     } else {
       if (targetTitle) {
-        let newCategoryTextArr = this.routerParams[`${typeOfCheckbox}`].split('↕').filter(t => t !== targetTitle);
+        const newCategoryTextArr = this.routerParams[`${typeOfCheckbox}`].split('↕').filter((t) => t !== targetTitle);
         if (newCategoryTextArr.length === 0) {
           console.log(newCategoryTextArr);
           delete this.routerParams[`${typeOfCheckbox}`];
@@ -282,8 +285,8 @@ class MainPage extends Page {
             history.pushState('', '', window.location.origin);
           }
         } else {
-          let newCategoryText = newCategoryTextArr.join('↕');
-          this.routerParams = {...this.routerParams, [`${typeOfCheckbox}`]: newCategoryText};
+          const newCategoryText = newCategoryTextArr.join('↕');
+          this.routerParams = { ...this.routerParams, [`${typeOfCheckbox}`]: newCategoryText };
         }
       }
     }
@@ -326,45 +329,49 @@ class MainPage extends Page {
       sortDataByPrice.length > 1
         ? sortDataByPrice[0].price.toString()
         : sortDataByPrice.length === 1
-          ? sortDataByPrice[0].price.toString()
-          : (leftRanges[0] as HTMLInputElement).min;
+        ? sortDataByPrice[0].price.toString()
+        : (leftRanges[0] as HTMLInputElement).min;
     (leftRanges[1] as HTMLInputElement).value =
       sortDataByStock.length > 1
         ? sortDataByStock[0].stock.toString()
         : sortDataByStock.length === 1
-          ? sortDataByStock[0].stock.toString()
-          : (leftRanges[1] as HTMLInputElement).min;
+        ? sortDataByStock[0].stock.toString()
+        : (leftRanges[1] as HTMLInputElement).min;
     (rightRanges[0] as HTMLInputElement).value =
       sortDataByPrice.length > 1
         ? sortDataByPrice[sortDataByPrice.length - 1].price.toString()
         : sortDataByPrice.length === 1
-          ? sortDataByPrice[0].price.toString()
-          : (rightRanges[0] as HTMLInputElement).max;
+        ? sortDataByPrice[0].price.toString()
+        : (rightRanges[0] as HTMLInputElement).max;
     (rightRanges[1] as HTMLInputElement).value =
       sortDataByStock.length > 1
         ? sortDataByStock[sortDataByPrice.length - 1].stock.toString()
         : sortDataByStock.length === 1
-          ? sortDataByStock[0].stock.toString()
-          : (rightRanges[1] as HTMLInputElement).max;
+        ? sortDataByStock[0].stock.toString()
+        : (rightRanges[1] as HTMLInputElement).max;
     leftRangesSpan[0].textContent = sortDataByPrice.length === 0 ? '' : (leftRanges[0] as HTMLInputElement).value;
     leftRangesSpan[1].textContent = sortDataByStock.length === 0 ? '' : (leftRanges[1] as HTMLInputElement).value;
     rightRangesSpan[0].textContent = sortDataByPrice.length === 0 ? '' : (rightRanges[0] as HTMLInputElement).value;
     rightRangesSpan[1].textContent = sortDataByStock.length === 0 ? '' : (rightRanges[1] as HTMLInputElement).value;
     dashesSpan[0].textContent = sortDataByPrice.length === 0 ? 'NOT FOUND' : '-';
     dashesSpan[1].textContent = sortDataByStock.length === 0 ? 'NOT FOUND' : '-';
-    this.filter.range.rangeColor(leftRanges[0] as HTMLInputElement,
+    this.filter.range.rangeColor(
+      leftRanges[0] as HTMLInputElement,
       rightRanges[0] as HTMLInputElement,
       divSliderTracks[0] as HTMLElement,
       leftRangesSpan[0] as HTMLElement,
-      rightRangesSpan[0] as HTMLElement);
-    this.filter.range.rangeColor(leftRanges[1] as HTMLInputElement,
+      rightRangesSpan[0] as HTMLElement
+    );
+    this.filter.range.rangeColor(
+      leftRanges[1] as HTMLInputElement,
       rightRanges[1] as HTMLInputElement,
       divSliderTracks[1] as HTMLElement,
       leftRangesSpan[1] as HTMLElement,
-      rightRangesSpan[1] as HTMLElement);
+      rightRangesSpan[1] as HTMLElement
+    );
     if (e) {
       const target = e.target as HTMLInputElement;
-      let typeOfRange: string | undefined = target.parentElement?.classList[1].split('-')[0];
+      const typeOfRange: string | undefined = target.parentElement?.classList[1].split('-')[0];
       if (this.routerParams.hasOwnProperty(`${typeOfRange}`)) {
         const searchKeyArray = this.routerParams[`${typeOfRange}`].split('↕');
         const ranges = document.querySelectorAll(`.${typeOfRange}-range`);
@@ -376,19 +383,21 @@ class MainPage extends Page {
           (target.nextElementSibling as HTMLInputElement).value = searchKeyArray[1];
           this.filter.range.rangeColor(
             target as HTMLInputElement,
-            (target.nextElementSibling as HTMLInputElement),
+            target.nextElementSibling as HTMLInputElement,
             sliderTrack as HTMLElement,
             ranges[0] as HTMLElement,
-            ranges[1] as HTMLElement);
+            ranges[1] as HTMLElement
+          );
         } else if (target.classList.contains('slider-2')) {
           target.value = searchKeyArray[1];
           (target.previousElementSibling as HTMLInputElement).value = searchKeyArray[0];
           this.filter.range.rangeColor(
-            (target.previousElementSibling as HTMLInputElement),
+            target.previousElementSibling as HTMLInputElement,
             target as HTMLInputElement,
             sliderTrack as HTMLElement,
             ranges[0] as HTMLElement,
-            ranges[1] as HTMLElement);
+            ranges[1] as HTMLElement
+          );
         }
       }
     }
@@ -421,12 +430,13 @@ class MainPage extends Page {
 
   addRangeFilter(e: Event) {
     const target = e.target as HTMLInputElement;
-    let typeOfRange: string | undefined = target.parentElement?.classList[1].split('-')[0];
-    let a = target.classList.toString() === 'slider-1' ?
-      [target.value, (target.nextElementSibling as HTMLInputElement).value]
-      : [(target.previousElementSibling as HTMLInputElement).value, target.value];
+    const typeOfRange: string | undefined = target.parentElement?.classList[1].split('-')[0];
+    const a =
+      target.classList.toString() === 'slider-1'
+        ? [target.value, (target.nextElementSibling as HTMLInputElement).value]
+        : [(target.previousElementSibling as HTMLInputElement).value, target.value];
     if (typeOfRange) {
-      this.routerParams = {...this.routerParams, [typeOfRange]: a.join('↕')};
+      this.routerParams = { ...this.routerParams, [typeOfRange]: a.join('↕') };
     }
     this.urlParams = new URLSearchParams(this.routerParams);
     this.url.search = this.urlParams.toString();
@@ -455,9 +465,7 @@ class MainPage extends Page {
       if (data) {
         this.state = [...data];
         filterState.setState(data);
-        window.location.search === ''
-          ? this.filterState = [...data]
-          : this.getFilterQueryState();
+        window.location.search === '' ? (this.filterState = [...data]) : this.getFilterQueryState();
         data.forEach((t) => {
           filterState.setCategory(t.category);
           filterState.setBrand(t.brand);
@@ -481,13 +489,13 @@ class MainPage extends Page {
           'price-container',
           this.filter.priceFilterList.lastElementChild as HTMLElement,
           filterState.price[0].toString(),
-          filterState.price[filterState.price.length - 1].toString(),
+          filterState.price[filterState.price.length - 1].toString()
         );
         this.filter.range.getDoubleRange(
           'stock-container',
           this.filter.stockFilterList.lastElementChild as HTMLElement,
           filterState.stock[0].toString(),
-          filterState.stock[filterState.stock.length - 1].toString(),
+          filterState.stock[filterState.stock.length - 1].toString()
         );
         this.toUpdateRangeValue();
         this.toUpdateSelect();

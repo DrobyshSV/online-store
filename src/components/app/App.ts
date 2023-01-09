@@ -13,6 +13,13 @@ class App {
   private static defaultPageId = 'current-page';
   private header: Header;
   private footer: Footer;
+  private payment: Payment;
+
+  constructor() {
+    this.header = new Header('header', 'header-container');
+    this.footer = new Footer('footer', 'footer-container');
+    this.payment = new Payment('payment');
+  }
 
   constructor() {
     this.header = new Header('header', 'header-container');
@@ -21,9 +28,9 @@ class App {
   }
 
   static renderNewPage(idPage: string) {
-    const currentPageHTML = document.querySelector(`main`);
+    const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
     if (currentPageHTML) {
-      currentPageHTML.innerHTML = ''
+      currentPageHTML.remove();
     }
     let page: Page | null = null;
 
@@ -43,7 +50,6 @@ class App {
 
     if (page) {
       const pageHTML = page.render();
-
       pageHTML.id = App.defaultPageId;
       const header = document.querySelector('header');
       header ? header.after(pageHTML) : App.container.append(pageHTML);
@@ -57,18 +63,13 @@ class App {
     });
   }
 
-  constructor() {
-    this.header = new Header('header', 'header-container');
-    this.footer = new Footer('footer', 'footer-container');
-  }
-
-  start() {
+  start(hash: string) {
     App.container.append(this.header.render());
-    App.renderNewPage('main-page');
+    App.renderNewPage(hash);
     this.enableRouteChange();
-    const footer = this.footer.render()
+    const footer = this.footer.render();
     App.container.append(footer);
-    footer.append(this.payment.render())
+    footer.append(this.payment.render());
   }
 }
 
