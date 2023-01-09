@@ -21,12 +21,6 @@ class App {
     this.payment = new Payment('payment');
   }
 
-  constructor() {
-    this.header = new Header('header', 'header-container');
-    this.footer = new Footer('footer', 'footer-container');
-    this.payment = new Payment('payment');
-  }
-
   static renderNewPage(idPage: string) {
     const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
     if (currentPageHTML) {

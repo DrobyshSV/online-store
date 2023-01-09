@@ -9,6 +9,11 @@ class Products extends CreateHtml {
 
   draw(data: Array<ProductType>, viewMode: string) {
     const productItems = document.querySelector('.product-items') as HTMLElement;
+    if (productItems.classList.contains('items-list')) {
+      productItems.classList.remove('items-list')
+    } else if (productItems.classList.contains('items-cards')) {
+      productItems.classList.remove('items-cards')
+    }
     productItems.classList.add(`items-${viewMode}`);
     productItems.innerHTML = '';
 

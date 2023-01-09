@@ -7,13 +7,14 @@
   gap: 10px
 }
 .items-cards {
+  flex-direction: row;
 }
 .items-list {
   flex-direction: column;
 }
 .product-cards {
   width: 200px;
-  height: 300px;
+  main-height: 320px;
   margin: 0 auto;
   border: 1px solid black;
 }
