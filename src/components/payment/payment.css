@@ -1,6 +1,6 @@
 #payment {
    min-height: 1px;
-  display: none;
+   display: none;
 }
 #payment.open{
    display: block;

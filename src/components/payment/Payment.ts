@@ -2,6 +2,12 @@ import './payment.css'
 import ProductPage from '../pages/product/ProductPage';
 
 class Payment extends ProductPage{
+  constructor(id: string) {
+    super(id);
+    this.container = document.createElement('div');
+    this.container.classList.add(id);
+    this.container.id = id;
+  }
    async payment(){
    const popUp = `
       <div class = "popup__pay">
@@ -208,9 +214,7 @@ class Payment extends ProductPage{
       popUpPay.classList.remove('open');
       e.preventDefault();
     })
-   
   }
-
   render() {
     this.payment();
     this.setEvents();
