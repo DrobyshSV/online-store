@@ -1,7 +1,10 @@
 import './index.scss';
 import App from './components/app/App';
 
-const hash = window.location.hash.replace('#', '');
+let hash = window.location.hash.replace('#', '');
+if (hash === '') {
+  hash = 'main-page';
+}
 
 const app = new App();
 app.start(hash);

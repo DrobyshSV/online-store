@@ -1,7 +1,7 @@
 import Header from '../header/Header';
 import Footer from '../Footer/Footer';
 import Page from '../common/Page';
-import { ErrorTypes, PageIds } from '../types/types';
+import {ErrorTypes, PageIds} from '../types/types';
 import MainPage from '../pages/main/MainPage';
 import ProductPage from '../pages/product/ProductPage';
 import BasketPage from '../../components/basket/Basket';
@@ -59,11 +59,11 @@ class App {
 
   start(hash: string) {
     App.container.append(this.header.render());
-    App.renderNewPage('main-page');
+    App.renderNewPage(hash);
     this.enableRouteChange();
-    const footer = this.footer.render()
+    const footer = this.footer.render();
     App.container.append(footer);
-    footer.append(this.payment.render())
+    footer.append(this.payment.render());
   }
 }
 
