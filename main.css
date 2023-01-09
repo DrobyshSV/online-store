@@ -308,7 +308,7 @@ header form{position:relative;width:300px;margin:0 auto;background:#fcfaeb}heade
 }
 #payment {
    min-height: 1px;
-  display: none;
+   display: none;
 }
 #payment.open{
    display: block;
