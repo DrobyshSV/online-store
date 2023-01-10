@@ -7,6 +7,7 @@ class Basket extends ProductPage{
    constructor(rows: string){
       super('idPage');
       this.rows = rows;
+      this.container.classList.add('basket-page');
    }
    async getFetch(dataUrl: string){
     return fetch(dataUrl)
@@ -21,6 +22,7 @@ class Basket extends ProductPage{
    async basketStructure(){
       const dataUrl = 'https://dummyjson.com/products/' + '34';
       let productInfo = await this.getFetch(dataUrl);
+      console.log(typeof(productInfo.id))
       const productTitle = productInfo.title;
       const productDescription = productInfo.description;
       const productCategory = productInfo.category;
@@ -87,8 +89,7 @@ class Basket extends ProductPage{
       await this.basketStructure();
       const ids = [4, 5, 6, 7, 8, 10,11];
       let currentPage = 1;
-      let rows = 2;
-      const prodPage = document.querySelector('#product-page') as HTMLElement;
+      const prodPage = document.querySelector('.basket-page') as HTMLElement;
       const header = `
             <div class="basket__product-header">
                <p>Products In Cart</p>
@@ -157,19 +158,18 @@ class Basket extends ProductPage{
                <div class="basket__product-wrapper">                  
                   <div class="basket__product-body">
                      <div class="basket__product-img">
-                        <p>Num</p>
                         <img src="${productImages[1]}" alt="альтернативный текст">
                      </div>
                      <div class="basket__product-info">
-                        <p>${productTitle}</p>
-                        <p>${productDescription}</p>
+                        <p class="bag-title">${productTitle}</p>
+                        <p class="bag-description">${productDescription}</p>
                         <div class="basket__product-rating">
-                           <p>${productRating}</p>
-                           <p>${productDiscount}</p>
+                           <p class="bag-rating">${productRating}</p>
+                           <p class="bag-discount">${productDiscount}</p>
                         </div>
                      </div>  
                      <div class="basket__product-count">
-                     <p>Stock: ${productStock}</p>
+                     <p class="bag-title">Stock: ${productStock}</p>
                      <div class="basket__product-buttons">
                         <button type="button" class="basket_button-plus">+</button>
                         <div class="basket__product-amount"></div>
@@ -192,109 +192,32 @@ class Basket extends ProductPage{
          const header = document.querySelector('.header_info-wrapper') as HTMLElement;
          const basketPaginationLeft = header.querySelector('.basket__pagination-left') as HTMLElement;
          const basketPaginationRight = header.querySelector('.basket__pagination-right') as HTMLElement;
-         const pageNumber = header.querySelector('.page-number') as HTMLElement;;
+         let pageNumber = header.querySelector('.page-number') as HTMLElement;
          basketPaginationRight.addEventListener('click', () => {
             count++
             currentPage = currentPage + 1;
             pageNumber.innerHTML = count.toString()
-            displayList(ids,this.rows = '3',currentPage)
+            displayList(ids,this.rows,currentPage)
          })
          basketPaginationLeft.addEventListener('click', () => {
-            if(count <= 0){
-               return count=0
+            let pageNumber = header.querySelector('.page-number') as HTMLElement;
+            if(count <= 1){
+               return count = 1;
             }
             count--
             currentPage = currentPage - 1;
             pageNumber.innerHTML = count.toString()
-            displayList(ids,this.rows = '3',currentPage)
+            displayList(ids,this.rows,currentPage)
+            console.log(this.rows);
          })
          
       }
-      displayList(ids,'3',currentPage)
+      displayList(ids,this.rows = '3',currentPage)
       displayPagination()
       
-      const headerr = document.querySelector('.form-wrap') as HTMLElement;
-      const mainForm = headerr.querySelector('.basket__form') as HTMLElement;
-      const formInput = headerr.querySelector('.basket__info-input') as HTMLFormElement;
-      const dataUrl = 'https://dummyjson.com/products/' + '34';
-      let productInfo = await this.getFetch(dataUrl);
-      mainForm.onsubmit =(el)=> {
-         let promoVal: string = formInput.value
-
-         const isValidPromo = (promo: string) => {
-         let res = /RS|EPM/gi;
-         return res.test(String(promo).toLowerCase());
-         }
-         if(!isValidPromo(promoVal)){
-            console.log('Please enter a valid promo');
-            const oldValue = headerr.querySelector('.basket__info-total') as HTMLElement;
-            const amount = document.querySelector('.basket__product-amount') as HTMLElement;
-            return false;
-         }else{
-            const productPrice = productInfo.price;
-            const oldValue = headerr.querySelector('.basket__info-total') as HTMLElement;
-            const oldPrice = headerr.querySelector('.basket__product-price') as HTMLElement;
-            const amount = headerr.querySelector('.basket__product-amount') as HTMLElement;
-            const amountNum = Number(amount.textContent)
-            oldValue.innerHTML = ('Total:' + (productPrice*amountNum)/2 + '$').toString();
-            oldPrice.innerHTML = ((productPrice*amountNum)/2 + '$').toString();
-         }
-          el.preventDefault();
-      }
-      return rows
+      return this.rows
    }
-   async formValidation(){
-      await this.pagination();
-      const header = document.querySelector('.header_info-wrapper') as HTMLElement;
-      const headerLimitForm = header.querySelector('.basket__limit-form') as HTMLElement;
-      const headerLimitInput = header.querySelector('.basket__limit-input') as HTMLInputElement;
-      console.log(headerLimitForm);
-      console.log(headerLimitInput);
-      headerLimitForm.onsubmit = (e) => {
-         let limitVal : string = headerLimitInput.value;
-         const isValidLimit = (limit: string) => {
-            let res = /^[0-9]$/;
-            return res.test(String(limit).toLowerCase());
-         }
-         if(!isValidLimit(limitVal)){
-            console.log('Please enter a valid limit');
-            return false;
-         }else{
-            this.rows = limitVal
-            console.log(this.rows);
-         }
-         e.preventDefault();
-      }
 
-   
-      // const header = document.querySelector('.form-wrap') as HTMLElement;
-      // console.log(header)
-      // const mainForm = header.querySelector('.basket__form') as HTMLElement;
-      // mainForm.innerHTML = "HALOooooooooo"
-      // const formInput = document.querySelector('.basket__info-input') as HTMLInputElement;
-      // const dataUrl = 'https://dummyjson.com/products/' + '34';
-      // let productInfo = await this.getFetch(dataUrl);
-      // mainForm.onsubmit = (e) => {
-      //    let promoVal: string = formInput.value
-      //    const isValidPromo = (promo: string) => {
-      //    let res = /RS|EPM/gi;
-      //    return res.test(String(promo).toLowerCase());
-      //    }
-      //    if(!isValidPromo(promoVal)){
-      //       console.log('Please enter a valid promo');
-      //       return false;
-      //    }else{
-      //       const productPrice = productInfo.price;
-      //       const oldValue = document.querySelector('.basket__info-total') as HTMLElement;
-      //       const oldPrice = document.querySelector('.basket__product-price') as HTMLElement;
-      //       const amount = document.querySelector('.basket__product-amount') as HTMLElement;
-      //       const amountNum = Number(amount.textContent)
-      //       oldValue.innerHTML = ('Total:' + (productPrice*amountNum)/2 + '$').toString();
-      //       oldPrice.innerHTML = ((productPrice*amountNum)/2 + '$').toString();
-      //    }
-      //     e.preventDefault();
-      // }
-   }
    async getBasketInfo(){
       await this.pagination();
       const dataUrl = 'https://dummyjson.com/products/' + '34';
@@ -305,81 +228,105 @@ class Basket extends ProductPage{
       const mainWrapper = document.querySelector('.main-wrapper') as HTMLElement;
       const productPrice = productInfo.price;
       
-      mainWrapper.addEventListener('click', (e) =>{
-         const target = e.target as HTMLInputElement;
-         const bag = mainWrapper.querySelectorAll('.basket__pag');
-
-         bag.forEach(el => {
-            el.addEventListener('click', (e) =>{
-               console.log(el)
-            })
-               const productAmount = el.querySelector('.basket__product-amount') as HTMLElement;
-               const basketProductPrice = el.querySelector('.basket__product-price') as HTMLElement;
-               const basketInfoProd = header.querySelector('.basket__info-prod') as HTMLElement;
-               const basketInfoTotal = header.querySelector('.basket__info-total') as HTMLElement;
-
-               if(target.classList.contains('basket_button-plus')){
-                  amount++
-                  productAmount.innerHTML = amount.toString();
-                 
-                  basketProductPrice.innerHTML = (amount*productPrice + '$').toString();
-                  basketInfoProd.innerHTML = 'Products:' + amount.toString();
-                  basketInfoTotal.innerHTML = ('Total:' + amount*productPrice + '$').toString();
-               }else if(target.classList.contains('basket_button-minus')){
-                  amount--
-                  basketProductPrice.innerHTML = (amount*productPrice + '$').toString()
-                  basketInfoProd.innerHTML = 'Products:' + amount.toString();
-                  basketInfoTotal.innerHTML = ('Total:' + amount*productPrice + '$').toString();
-                  if(amount <= 0) {
-                     basketProductPrice.innerHTML = '0$'
-                     basketInfoProd.innerHTML = 'Products: 0'
-                     basketInfoTotal.innerHTML = 'Total: 0$'
-                     productAmount.innerHTML = '0';
-                     return amount=0;
-                  }
-                  productAmount.innerHTML = amount.toString()
-                  return amount
-               }
-            
-         });
-         
-      })
-      // buttonPlus.forEach((item) => {
-      //    item.addEventListener('click', () => {
-      //    console.log('test')
-      //    amount++
-      //    productAmount.innerHTML = amount.toString();
-      //    basketProductPrice.innerHTML = (amount*productPrice + '$').toString();
-      //    basketInfoProd.innerHTML = 'Products:' + amount.toString();
-      //    basketInfoTotal.innerHTML = ('Total:' + amount*productPrice + '$').toString();
-      // })
-      // })
-      // buttonMinus.forEach((item) => {
-      // item.addEventListener('click', () => {
-      // console.log('test')
-      //  amount--
-      //  basketProductPrice.innerHTML = (amount*productPrice + '$').toString()
-      //  basketInfoProd.innerHTML = 'Products:' + amount.toString();
-      //  basketInfoTotal.innerHTML = ('Total:' + amount*productPrice + '$').toString();
-      //  if(amount <= 0) {
-      //    basketProductPrice.innerHTML = '0$'
-      //    basketInfoProd.innerHTML = 'Products: 0'
-      //    basketInfoTotal.innerHTML = 'Total: 0$'
-      //    productAmount.innerHTML = '0';
-      //    return amount=0;
-      //  }
-      //  productAmount.innerHTML = amount.toString()
-      //  return amount
-      // })
-      // })
+      mainWrapper.addEventListener('click', (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target.classList.contains('basket_button-plus')
+      || target.classList.contains('basket_button-minus')) {
+        const basketProductPrice = (target.parentElement as HTMLElement).nextElementSibling as HTMLElement;
+        console.log(basketProductPrice)
+        const basketInfoProd = header.querySelector('.basket__info-prod') as HTMLElement;
+        const basketInfoTotal = header.querySelector('.basket__info-total') as HTMLElement;
+        if (target.classList.contains('basket_button-plus')) {
+          const productAmount = target.nextElementSibling as HTMLElement;
+          amount++;
+          productAmount.innerHTML = amount.toString();
+          basketProductPrice.innerHTML = (amount * productPrice + '$').toString();
+          basketInfoProd.innerHTML = 'Products:' + amount.toString();
+          basketInfoTotal.innerHTML = ('Total:' + amount * productPrice + '$').toString();
+        } else if (target.classList.contains('basket_button-minus')) {
+          const productAmount = target.previousElementSibling as HTMLElement;
+          amount--;
+          basketProductPrice.innerHTML = (amount * productPrice + '$').toString();
+          basketInfoProd.innerHTML = 'Products:' + amount.toString();
+          basketInfoTotal.innerHTML = ('Total:' + amount * productPrice + '$').toString();
+          if (amount <= 0) {
+            basketProductPrice.innerHTML = '0$';
+            basketInfoProd.innerHTML = 'Products: 0';
+            basketInfoTotal.innerHTML = 'Total: 0$';
+            productAmount.innerHTML = '0';
+            return amount = 0;
+          }
+          productAmount.innerHTML = amount.toString();
+          return amount;
+        }
+      }
+    });
       return amount
+   }
+   async promoValidation(){
+      await this.getBasketInfo()
+      const formWrap = document.querySelector('.form-wrap') as HTMLElement;
+      const mainForm = formWrap.querySelector('.basket__form') as HTMLElement;
+      const formInput = formWrap.querySelector('.basket__info-input') as HTMLInputElement;
+      const dataUrl = 'https://dummyjson.com/products/' + '34';
+      let productInfo = await this.getFetch(dataUrl);
+
+      mainForm.onsubmit =(e)=> {
+         let promoVal: string = formInput.value
+         const isValidPromo = (promo: string) => {
+            let res = /rs|epm/gi;
+            return res.test(String(promo).toLowerCase());
+         }
+         if(!isValidPromo(promoVal)){
+            console.log('Please enter a valid promo');
+            return false;
+         }else{
+            console.log('secc')
+            const productPrice = productInfo.price;
+            const oldValue = formWrap.querySelector('.basket__info-total') as HTMLElement;
+            const oldPrice = document.querySelector('.basket__product-price') as HTMLElement;
+            const bpag = document.querySelector('.basket__pag') as HTMLElement;
+            const amount = bpag.querySelector('.basket__product-amount') as HTMLElement;
+            const amountNum = Number(amount.textContent)
+            console.log(bpag)
+            oldValue.innerHTML = ('Total:' + (productPrice*amountNum)*0.9 + '$').toString();
+            oldPrice.innerHTML = ((productPrice*amountNum)*0.9 + '$').toString();
+            console.log(amount)
+         }
+         e.preventDefault();
+      }
+   }
+
+   async formValidation(){
+      await this.promoValidation();
+      const headers = document.querySelector('.header_info-wrapper') as HTMLElement;
+      const headerLimitForm = document.querySelector('.basket__limit-form') as HTMLElement;
+      const headerLimitInput = headers.querySelector('.basket__limit-input') as HTMLInputElement;
+
+      headerLimitForm.onsubmit = (e) => {
+         let limitVal : string = headerLimitInput.value;
+         const isValidLimit = (limit: string) => {
+            let res = /^[0-9]$/;
+            return res.test(String(limit).toLowerCase());
+         }
+         if(!isValidLimit(limitVal)){
+            console.log('Please enter a valid limit');
+            console.log(this.rows);
+            return false;
+         }else{
+            this.rows = limitVal
+            console.log(this.rows);
+         }
+         e.preventDefault();
+      }
    }
    
  render() {
    this.basketStructure(); 
-   this.pagination();
-   this.formValidation(); 
+   this.pagination();; 
    this.getBasketInfo();
+   this.formValidation()
+   this.promoValidation()
     return this.container;
   }
 }

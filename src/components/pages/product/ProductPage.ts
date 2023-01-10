@@ -45,7 +45,7 @@ class ProductPage extends Page{
     const structure = `
       <div class = "product__wrap">
         <div class = "product__source">
-          <div class = "product__source source_item"><a href="http://localhost:5333/#main-page">Store<span>/</span></a></div>
+          <div class = "product__source source_item"><a href="#main-page">Store<span>/</span></a></div>
           <div class = "product__source source_item">${productCategory}<span>/</span></div>
           <div class = "product__source source_item">${productBrand}<span>/</span></div>
           <div class = "product__source source_item">${productTitle}<span>/</span></div>
@@ -76,7 +76,7 @@ class ProductPage extends Page{
                 paument.classList.add('open');
                 popupPay.classList.add('open');
               }
-            popUpPay()"><a href="#">buy now</a></div>
+            popUpPay()"><a>buy now</a></div>
               <div class = "product__price elem"><p>add to cart</p></div>
             </div>
 
@@ -92,7 +92,7 @@ class ProductPage extends Page{
       <div class = "popup">
         <div class = "popup__body">
           <div class = "popup__content">
-              <a href = "#" class = "popup__close">X</a>
+              <p class = "popup__close">X</p>
               <img src="" class = "popup__img" alt="product"></img>
           </div>
         </div>
