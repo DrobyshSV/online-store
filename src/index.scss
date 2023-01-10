@@ -3,6 +3,12 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+a {
+  text-decoration: none;
+  color: #1a1919;
+}
+
 header {
   height: 120px;
   background: #A3D0C3;
@@ -15,6 +21,7 @@ main {
   min-height: calc(100vh - 240px);
   display: flex;
 }
+
 footer {
   height: 100px;
   display: flex;

@@ -7,20 +7,23 @@ class Header extends Component {
   }
 
   renderLogo() {
-    const title = document.createElement('a');
+    const titleLink = document.createElement('a');
+    titleLink.href = '#main-page'
+    const title = document.createElement('h1');
     title.classList.add('title');
     title.innerText = 'Online-store';
-    this.container.append(title);
+    titleLink.append(title)
+    this.container.append(titleLink);
   }
 
   renderSearchForm() {
     const form = document.createElement('form');
     const input = document.createElement('input');
-    input.classList.add('search__input')
+    input.classList.add('search__input');
     input.setAttribute('type', 'text');
     input.setAttribute('placeholder', 'Search');
     const button = document.createElement('button');
-    button.setAttribute('type', 'submit');
+    button.setAttribute('type', 'button');
     form.append(input, button);
     this.container.append(form);
     input.addEventListener('keypress', (e) => {
@@ -29,11 +32,19 @@ class Header extends Component {
   }
 
   renderBasket() {
-    const basket = document.createElement('div');
+    const basket = document.createElement('a');
     basket.classList.add('basket');
-    const count = document.createElement('span');
-    count.innerText = '0';
-    basket.append(count);
+    basket.href = '#basket-page';
+    const basketLogo = document.createElement('div');
+    basketLogo.classList.add('basket-logo');
+    const countWrapper = document.createElement('div');
+    basketLogo.classList.add('count-wrapper');
+    const countItem = document.createElement('p');
+    countItem.innerHTML = `Count: <span class='basket-item-count'>0</span>`;
+    const countPrice = document.createElement('p');
+    countPrice.innerHTML = `Total: <span class='basket-item-count'>0</span> €`;
+    basket.append(basketLogo, countWrapper);
+    countWrapper.append(countItem,countPrice)
     this.container.append(basket);
   }
 
