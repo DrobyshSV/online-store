@@ -1,7 +1,7 @@
 import Header from '../header/Header';
 import Footer from '../Footer/Footer';
 import Page from '../common/Page';
-import {ErrorTypes, PageIds} from '../types/types';
+import { ErrorTypes, PageIds } from '../types/types';
 import MainPage from '../pages/main/MainPage';
 import ProductPage from '../pages/product/ProductPage';
 import BasketPage from '../../components/basket/Basket';
@@ -56,8 +56,13 @@ class App {
       App.renderNewPage(hash);
     });
   }
-
   start(hash: string) {
+    debugger;
+    if (localStorage.getItem('id') === null) {
+      localStorage.setItem('id', JSON.stringify([]));
+      localStorage.setItem('count', JSON.stringify(0));
+      localStorage.setItem('price', JSON.stringify(0));
+    }
     App.container.append(this.header.render());
     App.renderNewPage(hash);
     this.enableRouteChange();

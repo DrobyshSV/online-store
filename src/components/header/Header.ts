@@ -1,18 +1,21 @@
 import './header.scss';
 import Component from '../common/Component';
+import { ProductType } from '../types/types';
 
 class Header extends Component {
+  public state: Array<ProductType>;
   constructor(tagName: string, className: string) {
     super(tagName, className);
+    this.state = [];
   }
 
   renderLogo() {
     const titleLink = document.createElement('a');
-    titleLink.href = '#main-page'
+    titleLink.href = '#main-page';
     const title = document.createElement('h1');
     title.classList.add('title');
     title.innerText = 'Online-store';
-    titleLink.append(title)
+    titleLink.append(title);
     this.container.append(titleLink);
   }
 
@@ -32,6 +35,7 @@ class Header extends Component {
   }
 
   renderBasket() {
+    debugger
     const basket = document.createElement('a');
     basket.classList.add('basket');
     basket.href = '#basket-page';
@@ -40,11 +44,11 @@ class Header extends Component {
     const countWrapper = document.createElement('div');
     basketLogo.classList.add('count-wrapper');
     const countItem = document.createElement('p');
-    countItem.innerHTML = `Count: <span class='basket-item-count'>0</span>`;
+    countItem.innerHTML = `Count: <span class='basket-item-count'>${JSON.parse(localStorage.count)}</span>`;
     const countPrice = document.createElement('p');
-    countPrice.innerHTML = `Total: <span class='basket-item-count'>0</span> €`;
+    countPrice.innerHTML = `Total: <span class='basket-item-price'>${JSON.parse(localStorage.price)}</span> €`;
     basket.append(basketLogo, countWrapper);
-    countWrapper.append(countItem,countPrice)
+    countWrapper.append(countItem, countPrice);
     this.container.append(basket);
   }
 
