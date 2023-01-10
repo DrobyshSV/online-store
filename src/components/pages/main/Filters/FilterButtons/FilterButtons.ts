@@ -1,6 +1,6 @@
 import CreateHtml from '../CreateHtml';
 
-class FilterButtons extends CreateHtml{
+class FilterButtons extends CreateHtml {
   private routerParams: Record<string, string>;
   public btnCopyLink: HTMLElement;
   public btnResetFilter: HTMLElement;
@@ -14,11 +14,11 @@ class FilterButtons extends CreateHtml{
   render() {
     const fragment = document.createDocumentFragment();
     this.btnCopyLink.setAttribute('type', 'button');
-    this.btnCopyLink.textContent = 'Copy Link'
+    this.btnCopyLink.textContent = 'Copy Link';
     this.btnResetFilter.setAttribute('type', 'reset');
-    this.btnResetFilter.textContent = 'Reset Filters'
+    this.btnResetFilter.textContent = 'Reset Filters';
     fragment.append(this.btnResetFilter, this.btnCopyLink);
     return fragment;
   }
 }
-export default FilterButtons
+export default FilterButtons;

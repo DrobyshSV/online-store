@@ -3,7 +3,6 @@ import './RangeSlider.scss';
 import Checkbox from './Checkbox/Checkbox';
 import RangeSlider from './Range/RangeSlider';
 import CreateHtml from './CreateHtml';
-import {ProductType} from '../../../types/types';
 import FilterButtons from './FilterButtons/FilterButtons';
 
 class Filters {
@@ -48,11 +47,13 @@ class Filters {
 
   init() {
     const fragment = document.createDocumentFragment();
-    fragment.append(this.filterBtnWrapper,
+    fragment.append(
+      this.filterBtnWrapper,
       this.categoryFilterList,
       this.brandFilterList,
       this.priceFilterList,
-      this.stockFilterList);
+      this.stockFilterList
+    );
     return fragment;
   }
 }

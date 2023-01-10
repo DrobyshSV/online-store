@@ -1,7 +1,6 @@
 import './CardHeader.scss';
 import CreateHtml from '../../Filters/CreateHtml';
-import products from '../cards/Products';
-import {ProductType} from '../../../../types/types';
+import { ProductType } from '../../../../types/types';
 
 class CardsHeader extends CreateHtml {
   public header: HTMLElement;
@@ -37,7 +36,13 @@ class CardsHeader extends CreateHtml {
     sortSelectOption3.setAttribute('value', 'rating-ASC');
     sortSelectOption4.setAttribute('value', 'rating-DESC');
     sortDiv.append(sortSelect);
-    sortSelect.append(sortSelectOptionDefault, sortSelectOption1, sortSelectOption2, sortSelectOption3, sortSelectOption4);
+    sortSelect.append(
+      sortSelectOptionDefault,
+      sortSelectOption1,
+      sortSelectOption2,
+      sortSelectOption3,
+      sortSelectOption4
+    );
     const foundDiv = this.createElement('div', 'found-wrapper');
     foundDiv.innerText = 'Found:';
     const foundSpan = this.createElement('span', 'found__span');

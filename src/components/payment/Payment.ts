@@ -59,7 +59,7 @@ class Payment extends ProductPage {
     const cardName = this.container.querySelector('.card-name') as HTMLElement;
 
     inputCard.oninput = () => {
-      let val = inputCard.value.trim();
+      const val = inputCard.value.trim();
       const master = String(cardBrands[0]);
       const visa = String(cardBrands[1]);
       const bel = String(cardBrands[2]);
@@ -76,51 +76,53 @@ class Payment extends ProductPage {
     };
 
     form.onsubmit = () => {
-      let emailVal: string = inputEmail.value,
+      const emailVal: string = inputEmail.value,
         phoneVal: string = inputPhone.value,
         adressVal: string = inputAdress.value,
         nameVal: string = inputName.value,
         cardVal: string = inputCard.value,
         validVal: string = inputValid.value,
         cvvVal: string = inputCvv.value,
-        emptyInputs = Array.from(formInputs).filter(input => (input as HTMLTextAreaElement).value === '');
+        emptyInputs = Array.from(formInputs).filter((input) => (input as HTMLTextAreaElement).value === '');
 
       const isValidName = (name: string) => {
-        let result = /^[A-Za-zА-Яа-яЁё]{3,100}(\s+[A-Za-zА-Яа-яЁё]{3,100})$/;
+        const result = /^[A-Za-zА-Яа-яЁё]{3,100}(\s+[A-Za-zА-Яа-яЁё]{3,100})$/;
         return result.test(String(name).toLowerCase());
       };
 
       const isValidPhone = (phone: string) => {
-        let result = /^(\+)[0-9]{9,14}$/;
+        const result = /^(\+)[0-9]{9,14}$/;
         return result.test(String(phone).toLowerCase());
       };
 
       const isValidAdress = (adress: string) => {
-        let result = /^[A-Za-zА-Яа-яЁё]{5,100}(\s+[A-Za-zА-Яа-яЁё]{5,100})(\s+[A-Za-zА-Яа-яЁё]{5,100})$/;
+        const result = /^[A-Za-zА-Яа-яЁё]{5,100}(\s+[A-Za-zА-Яа-яЁё]{5,100})(\s+[A-Za-zА-Яа-яЁё]{5,100})$/;
         return result.test(String(adress).toLowerCase());
       };
 
       const isValidEmail = (email: string) => {
-        let result = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const result =
+          /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return result.test(String(email).toLowerCase());
       };
 
       const isValidCard = (card: string) => {
-        let result = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
+        const result =
+          /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
         return result.test(String(card).toLowerCase());
       };
 
       const isValidValid = (valid: string) => {
-        let result = /^(0[1-9]|1[0-2])\/\d{2}$/;
+        const result = /^(0[1-9]|1[0-2])\/\d{2}$/;
         return result.test(String(valid).toLowerCase());
       };
 
       const isValidCvv = (cvv: string) => {
-        let result = /^[0-9]{3}$/;
+        const result = /^[0-9]{3}$/;
         return result.test(String(cvv).toLowerCase());
       };
 
-      formInputs.forEach(input => {
+      formInputs.forEach((input) => {
         if ((input as HTMLTextAreaElement).value === '') {
           input.classList.add('error');
         } else {
@@ -213,7 +215,6 @@ class Payment extends ProductPage {
     };
     closeButton.addEventListener('click', (e) => {
       const popUpPay = document.querySelector('.popup__pay') as HTMLElement;
-      ;
       popUpPay.classList.remove('open');
       e.preventDefault();
     });

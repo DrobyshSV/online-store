@@ -1,6 +1,6 @@
 import CreateHtml from '../CreateHtml';
-import {ProductType} from '../../../../types/types';
-import {filterState} from '../../MainPage';
+import { ProductType } from '../../../../types/types';
+import { filterState } from '../../../../state/state';
 
 class Checkbox extends CreateHtml {
   private routerParams: Record<string, string>;
@@ -18,7 +18,7 @@ class Checkbox extends CreateHtml {
     const searchKey = type.split('__')[0];
     if (this.routerParams.hasOwnProperty(searchKey)) {
       const searchKeyArray = this.routerParams[searchKey].split('↕');
-      if (searchKeyArray.some(t => t === str)) {
+      if (searchKeyArray.some((t) => t === str)) {
         input.checked = true;
       }
     }
@@ -47,7 +47,7 @@ class Checkbox extends CreateHtml {
   }
 
   getCheckboxes(node: HTMLElement, array: Array<string>, type: string, dataFiltered: Array<ProductType>) {
-    array.forEach((el, index) => {
+    array.forEach((el) => {
       this.getCheckbox(node, el, type, dataFiltered);
     });
   }

@@ -10,14 +10,15 @@
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
     "serve": "webpack serve",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts --fix",
+    "fix-styles": "prettier-stylelint --write 'src/**/*.{css,scss}' "
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DrobyshSV/online-store.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "DrobyshSV & Markuschaaaa",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/DrobyshSV/online-store/issues"
@@ -43,10 +44,16 @@
     "mini-css-extract-plugin": "^2.7.2",
     "postcss": "^8.4.20",
     "postcss-loader": "^7.0.2",
-    "prettier": "2.8.1",
+    "prettier": "^2.8.1",
+    "prettier-stylelint": "^0.4.2",
     "sass": "^1.56.2",
     "sass-loader": "^13.2.0",
     "style-loader": "^3.3.1",
+    "stylelint": "^14.16.1",
+    "stylelint-config-idiomatic-order": "^9.0.0",
+    "stylelint-config-prettier": "^9.0.4",
+    "stylelint-config-sass-guidelines": "^9.0.1",
+    "stylelint-prettier": "^2.0.0",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.4",
     "webpack": "^5.75.0",

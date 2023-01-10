@@ -1,4 +1,4 @@
-import { IOptions, ProductType, RespType, StatusCode } from '../../../../types/types';
+import { IOptions, ISources, ProductType, RespType, StatusCode } from '../../../../types/types';
 
 class ProductsLoader {
   baseLink: string;
@@ -43,7 +43,7 @@ class ProductsLoader {
   load(method: string, endpoint: string, callback: <T>(data: T) => void, options = {}): void {
     fetch(this.makeUrl(options, endpoint), { method })
       .then(this.errorHandler)
-      .then((res): Promise<any> => res.json())
+      .then((res): Promise<ISources> => res.json())
       .then((data) => {
         if (this.state.length === 0) {
           this.state = [...data.products];

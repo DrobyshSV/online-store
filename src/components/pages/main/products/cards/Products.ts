@@ -1,7 +1,6 @@
 import './Product.scss';
 import { ProductType } from '../../../../types/types';
 import CreateHtml from '../../Filters/CreateHtml';
-import Basket from '../../../../basket/Basket';
 
 class Products extends CreateHtml {
   constructor() {
@@ -18,7 +17,7 @@ class Products extends CreateHtml {
     productItems.classList.add(`items-${viewMode}`);
     productItems.innerHTML = '';
 
-    data.forEach((item, index: number) => {
+    data.forEach((item) => {
       const productCard = this.createElement('div', `product-${viewMode}`);
       productCard.setAttribute('key', item.id.toString());
       const productTitle = this.createElement('h3', 'product-title');
@@ -48,13 +47,12 @@ class Products extends CreateHtml {
         let basketPrice: number = JSON.parse(localStorage.price);
         const arrBasketId: Array<number> = JSON.parse(localStorage.id);
         const target = e.target as HTMLInputElement;
-        let object = JSON.parse(localStorage.basketId)
+        const object = JSON.parse(localStorage.basketId);
         if (target.textContent === add) {
-          // object[item.id] = 1
           arrBasketId.push(item.id);
           basketCount += 1;
           basketPrice += item.price;
-          localStorage.basketId = JSON.stringify({...object, [item.id]: 1});
+          localStorage.basketId = JSON.stringify({ ...object, [item.id]: 1 });
           localStorage.id = JSON.stringify(arrBasketId);
           localStorage.count = JSON.stringify(basketCount);
           localStorage.price = JSON.stringify(basketPrice);

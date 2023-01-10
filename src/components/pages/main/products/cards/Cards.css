@@ -1,7 +1,5 @@
 .cards__section {
-  width: calc(100% - 300px);
   display: flex;
+  width: calc(100% - 300px);
   flex-direction: column;
 }
-
-/*# sourceMappingURL=Cards.css.map */

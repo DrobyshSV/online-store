@@ -1,9 +1,7 @@
 import Page from '../../common/Page';
-import './product.css'
+import './product.css';
 
-
-class ProductPage extends Page{
-
+class ProductPage extends Page {
   static TextObject = {
     MainTitle: 'Settings Page',
   };
@@ -14,21 +12,20 @@ class ProductPage extends Page{
     this.id = id;
   }
 
-
-  async getFetch(dataUrl: string){
+  async getFetch(dataUrl: string) {
     return fetch(dataUrl)
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      return data;
-    });
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        return data;
+      });
   }
 
-  async createProductContainer(){
-    const id = this.id?.split('/')[1]
+  async createProductContainer() {
+    const id = this.id?.split('/')[1];
     const dataUrl = 'https://dummyjson.com/products/' + id;
-    let productInfo = await this.getFetch(dataUrl);
+    const productInfo = await this.getFetch(dataUrl);
     const productContainer = document.createElement('div');
     productContainer.classList.add('product-container');
 
@@ -104,36 +101,36 @@ class ProductPage extends Page{
     return productContainer;
   }
 
-  async setDivs(){
+  async setDivs() {
     this.createProductContainer();
     const dataUrl = 'https://dummyjson.com/products/' + this.id?.split('/')[1];
-    let productInfo = await this.getFetch(dataUrl);
+    const productInfo = await this.getFetch(dataUrl);
     const productGalery = document.querySelector('.product__galery') as HTMLElement;
     const productImages = productInfo.images;
-    for (let item of productImages) {
+    for (const item of productImages) {
       const productImageWrap = document.createElement('div');
       const productImageImg = document.createElement('img');
-      productImageImg.src = item
-      productImageWrap.classList.add('product__image')
-      productImageWrap.append(productImageImg)
-      productGalery.append(productImageWrap)
+      productImageImg.src = item;
+      productImageWrap.classList.add('product__image');
+      productImageWrap.append(productImageImg);
+      productGalery.append(productImageWrap);
     }
   }
 
-  async setEvents(){
+  async setEvents() {
     this.createProductContainer();
     const dataUrl = 'https://dummyjson.com/products/' + this.id?.split('/')[1];
-    let productInfo = await this.getFetch(dataUrl);
+    const productInfo = await this.getFetch(dataUrl);
 
     const popupClose = document.querySelector('.popup__close') as HTMLElement;
-    popupClose.addEventListener('click', (e)=>{
+    popupClose.addEventListener('click', (e) => {
       const popUp = document.querySelector('.popup') as HTMLElement;
       popUp.classList.remove('open');
       e.preventDefault();
-    })
+    });
 
     const popupBody = document.querySelector('.popup__body') as HTMLElement;
-    popupBody.addEventListener('click', (e)=>{
+    popupBody.addEventListener('click', (e) => {
       const popUp = document.querySelector('.popup') as HTMLElement;
       popUp.classList.remove('open');
       e.preventDefault();
@@ -142,18 +139,25 @@ class ProductPage extends Page{
     const productImage = document.querySelectorAll('.product__image');
     productImage.forEach((element) => {
       element.addEventListener('click', () => {
-      const thisImage = element.querySelector('img')
-      const newSrc = (thisImage as HTMLImageElement).src;
-      const newImg = document.querySelector('.main_img img') as HTMLImageElement;
-      newImg.src = newSrc
-    });
+        const thisImage = element.querySelector('img');
+        const newSrc = (thisImage as HTMLImageElement).src;
+        const newImg = document.querySelector('.main_img img') as HTMLImageElement;
+        newImg.src = newSrc;
+      });
     });
   }
 
   render() {
-    this.createProductContainer().then((productContainer) => {
-      this.container.append(productContainer);
-    }).then(()=>{this.setDivs()}).then(()=>{this.setEvents()})
+    this.createProductContainer()
+      .then((productContainer) => {
+        this.container.append(productContainer);
+      })
+      .then(() => {
+        this.setDivs();
+      })
+      .then(() => {
+        this.setEvents();
+      });
     history.pushState('', '', window.location.origin + window.location.hash);
     return this.container;
   }

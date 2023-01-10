@@ -4,60 +4,7 @@ import Cards from './products/cards/Cards';
 import Filters from './Filters/Filters';
 import { ProductType } from '../../types/types';
 import { copyTextToClipboard } from '../../../index';
-
-export type FilterStateType = {
-  categories: Array<string>;
-  brands: Array<string>;
-  price: Array<number>;
-  stock: Array<number>;
-  state: Array<ProductType>;
-  filter: Array<ProductType>;
-  setCategory: (str: string) => void;
-  setBrand: (str: string) => void;
-  setPrice: (str: number) => void;
-  setStock: (str: number) => void;
-  setState: (arr: Array<ProductType>) => void;
-  setFilter: (arr: Array<ProductType>) => void;
-};
-
-export const filterState: FilterStateType = {
-  categories: [],
-  brands: [],
-  price: [],
-  stock: [],
-  state: [],
-  filter: [],
-  setCategory(category: string) {
-    if (!this.categories.some((t) => t === category)) {
-      this.categories.push(category);
-      this.categories.sort();
-    }
-  },
-  setBrand(brand: string) {
-    if (!this.brands.some((t) => t.toLowerCase() === brand.toLowerCase())) {
-      this.brands.push(brand);
-      this.brands.sort();
-    }
-  },
-  setPrice(price: number) {
-    if (!this.price.some((t) => t === price)) {
-      this.price.push(price);
-    }
-    this.price.sort((a, b) => a - b);
-  },
-  setStock(stock: number) {
-    if (!this.stock.some((t) => t === stock)) {
-      this.stock.push(stock);
-    }
-    this.stock.sort((a, b) => a - b);
-  },
-  setState(arr: Array<ProductType>) {
-    this.state = [...arr];
-  },
-  setFilter(arr: Array<ProductType>) {
-    this.filter = [...arr];
-  },
-};
+import { filterState } from '../../state/state';
 
 class MainPage extends Page {
   static TextObject = {};
@@ -176,24 +123,24 @@ class MainPage extends Page {
 
   addEventListener() {
     const allCheckboxes = this.filterContainer.querySelectorAll('.checkbox__input');
-    allCheckboxes.forEach((t, i) => {
+    allCheckboxes.forEach((t) => {
       t.addEventListener('input', (e) => {
         this.addCheckboxFilter(e);
       });
     });
     const rangeInputs1 = this.filterContainer.querySelectorAll('.slider-1');
     const rangeInputs2 = this.filterContainer.querySelectorAll('.slider-2');
-    rangeInputs1.forEach((t, i) => {
+    rangeInputs1.forEach((t) => {
       t.addEventListener('input', (e) => {
         this.addRangeFilter(e);
       });
     });
-    rangeInputs2.forEach((t, i) => {
+    rangeInputs2.forEach((t) => {
       t.addEventListener('input', (e) => {
         this.addRangeFilter(e);
       });
     });
-    this.filter.filterButtons.btnResetFilter.addEventListener('click', (e) => {
+    this.filter.filterButtons.btnResetFilter.addEventListener('click', () => {
       this.routerParams = {};
       this.urlParams = new URLSearchParams(this.routerParams);
       history.pushState('', '', window.location.origin);
@@ -207,7 +154,7 @@ class MainPage extends Page {
       const viewMode = this.routerParams.hasOwnProperty('view') ? this.routerParams.view : 'cards';
       this.cards.drawProducts(this.filterState, viewMode);
     });
-    this.filter.filterButtons.btnCopyLink.addEventListener('click', (e) => {
+    this.filter.filterButtons.btnCopyLink.addEventListener('click', () => {
       copyTextToClipboard(window.location.href).then((r) => r);
     });
     const sortSelect = document.querySelector('.sort__select') as HTMLSelectElement;
