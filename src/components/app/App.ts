@@ -57,8 +57,8 @@ class App {
     });
   }
   start(hash: string) {
-    debugger;
     if (localStorage.getItem('id') === null) {
+      localStorage.setItem('basketId', JSON.stringify({}));
       localStorage.setItem('id', JSON.stringify([]));
       localStorage.setItem('count', JSON.stringify(0));
       localStorage.setItem('price', JSON.stringify(0));

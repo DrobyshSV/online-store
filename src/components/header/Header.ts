@@ -35,7 +35,6 @@ class Header extends Component {
   }
 
   renderBasket() {
-    debugger
     const basket = document.createElement('a');
     basket.classList.add('basket');
     basket.href = '#basket-page';
