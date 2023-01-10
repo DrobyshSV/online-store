@@ -26,7 +26,8 @@ class ProductPage extends Page{
   }
 
   async createProductContainer(){
-    const dataUrl = 'https://dummyjson.com/products/' + this.id?.split('/')[1];
+    const id = this.id?.split('/')[1]
+    const dataUrl = 'https://dummyjson.com/products/' + id;
     let productInfo = await this.getFetch(dataUrl);
     const productContainer = document.createElement('div');
     productContainer.classList.add('product-container');
@@ -77,7 +78,7 @@ class ProductPage extends Page{
                 popupPay.classList.add('open');
               }
             popUpPay()"><a>buy now</a></div>
-              <div class = "product__price elem"><p>add to cart</p></div>
+              <div class = "product__price elem"><p> add to cart</p></div>
             </div>
 
             <div class = "product__description item"><span class = "pre__description">Brand:</span> ${productBrand}</div>

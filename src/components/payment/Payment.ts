@@ -86,7 +86,7 @@ class Payment extends ProductPage {
         emptyInputs = Array.from(formInputs).filter(input => (input as HTMLTextAreaElement).value === '');
 
       const isValidName = (name: string) => {
-        let result = /^[A-Za-zА-Яа-яЁё]{2,100}(\s+[A-Za-zА-Яа-яЁё]{2,100})$/;
+        let result = /^[A-Za-zА-Яа-яЁё]{3,100}(\s+[A-Za-zА-Яа-яЁё]{3,100})$/;
         return result.test(String(name).toLowerCase());
       };
 

@@ -87,7 +87,7 @@ class Basket extends ProductPage{
    
    async pagination(){
       await this.basketStructure();
-      const ids = [4, 5, 6, 7, 8, 10,11];
+      const ids = JSON.parse(localStorage.id);
       let currentPage = 1;
       const prodPage = document.querySelector('.basket-page') as HTMLElement;
       const header = `
@@ -141,8 +141,8 @@ class Basket extends ProductPage{
          const start = Number(productsPerPage) * page;
          const end = start + Number(productsPerPage);
          const paginatedData = elem.slice(start, end)
-
-         paginatedData.forEach(async (el)=>{
+         
+         paginatedData.forEach(async (el)=>{ 
             const dataUrl = 'https://dummyjson.com/products/' + el;
             let productInfo = await this.getFetch(dataUrl);
             const productTitle = productInfo.title;
@@ -154,6 +154,8 @@ class Basket extends ProductPage{
             const productPrice = productInfo.price;
             const productRating = productInfo.rating;
             const productStock = productInfo.stock;
+            let object = JSON.parse(localStorage.basketId)
+
             const struc = `
                <div class="basket__product-wrapper">                  
                   <div class="basket__product-body">
@@ -170,16 +172,15 @@ class Basket extends ProductPage{
                      </div>  
                      <div class="basket__product-count">
                      <p class="bag-title">Stock: ${productStock}</p>
-                     <div class="basket__product-buttons">
+                     <div class="basket__product-buttons" id="basket-${el}">
                         <button type="button" class="basket_button-plus">+</button>
-                        <div class="basket__product-amount"></div>
+                        <div class="basket__product-amount">${object[el]}</div>
                         <button type="button" class="basket_button-minus">-</button>
                      </div>
                         <p class="basket__product-price"></p>
                      </div>              
                   </div>
                </div>
-            
             `
             const newCont = document.createElement('div')
             newCont.classList.add('basket__pag')
@@ -220,48 +221,82 @@ class Basket extends ProductPage{
 
    async getBasketInfo(){
       await this.pagination();
-      const dataUrl = 'https://dummyjson.com/products/' + '34';
-      let productInfo = await this.getFetch(dataUrl);
-      let amount: number = 0;
-
       const header = document.querySelector('.header_info-wrapper') as HTMLElement;
       const mainWrapper = document.querySelector('.main-wrapper') as HTMLElement;
-      const productPrice = productInfo.price;
-      
-      mainWrapper.addEventListener('click', (e) => {
+      const basketInfoProd = header.querySelector('.basket__info-prod') as HTMLElement;
+      const basketInfoTotal = header.querySelector('.basket__info-total') as HTMLElement;
+      basketInfoProd.innerHTML = 'Products:' + JSON.parse(localStorage.count);
+      basketInfoTotal.innerHTML = ('Total:' + JSON.parse(localStorage.price));
+      mainWrapper.addEventListener('click', async (e) => {
       const target = e.target as HTMLInputElement;
+      const id =+ (target.parentElement as HTMLElement).id.split('-')[1];
+      const dataUrl = 'https://dummyjson.com/products/' + id;
+      let productInfo = await this.getFetch(dataUrl);
+      const productPrice = productInfo.price;
+      const basketInfoProd = header.querySelector('.basket__info-prod') as HTMLElement;
+      const basketInfoTotal = header.querySelector('.basket__info-total') as HTMLElement;
+
       if (target.classList.contains('basket_button-plus')
       || target.classList.contains('basket_button-minus')) {
         const basketProductPrice = (target.parentElement as HTMLElement).nextElementSibling as HTMLElement;
-        console.log(basketProductPrice)
-        const basketInfoProd = header.querySelector('.basket__info-prod') as HTMLElement;
-        const basketInfoTotal = header.querySelector('.basket__info-total') as HTMLElement;
+        const pag = (((((target.parentElement as HTMLElement)
+        .parentElement as HTMLElement)
+        .parentElement as HTMLElement)
+        .parentElement as HTMLElement)
+        .parentElement as HTMLElement)
+        let count = JSON.parse(localStorage.count);
+        let price = JSON.parse(localStorage.price);
+        let basketId = JSON.parse(localStorage.basketId);
+        let arrayId = JSON.parse(localStorage.id);
         if (target.classList.contains('basket_button-plus')) {
           const productAmount = target.nextElementSibling as HTMLElement;
-          amount++;
-          productAmount.innerHTML = amount.toString();
-          basketProductPrice.innerHTML = (amount * productPrice + '$').toString();
-          basketInfoProd.innerHTML = 'Products:' + amount.toString();
-          basketInfoTotal.innerHTML = ('Total:' + amount * productPrice + '$').toString();
+          count += 1;
+          price += productPrice;
+          basketId[id] += 1;
+
+          localStorage.count = JSON.stringify(count);
+          localStorage.price = JSON.stringify(price);
+          localStorage.basketId = JSON.stringify(basketId);
+
+          productAmount.innerHTML = basketId[id].toString();
+          basketProductPrice.innerHTML = (basketId[id] * productPrice + '$').toString();
+          basketInfoProd.innerHTML = 'Products:' + count.toString();
+          basketInfoTotal.innerHTML = ('Total:' + price+ '$').toString();
+
+         const basketItemCount = document.querySelector('.basket-item-count') as HTMLElement;
+         basketItemCount.innerHTML = count;
+         const basketItemPrice = document.querySelector('.basket-item-price') as HTMLElement;
+         basketItemPrice.innerHTML = price;
         } else if (target.classList.contains('basket_button-minus')) {
-          const productAmount = target.previousElementSibling as HTMLElement;
-          amount--;
-          basketProductPrice.innerHTML = (amount * productPrice + '$').toString();
-          basketInfoProd.innerHTML = 'Products:' + amount.toString();
-          basketInfoTotal.innerHTML = ('Total:' + amount * productPrice + '$').toString();
-          if (amount <= 0) {
-            basketProductPrice.innerHTML = '0$';
-            basketInfoProd.innerHTML = 'Products: 0';
-            basketInfoTotal.innerHTML = 'Total: 0$';
-            productAmount.innerHTML = '0';
-            return amount = 0;
+         const productAmount = target.previousElementSibling as HTMLElement;
+          count -= 1;
+          price -= productPrice;
+          basketId[id] -= 1;
+
+          localStorage.count = JSON.stringify(count);
+          localStorage.price = JSON.stringify(price);
+          
+         productAmount.innerHTML = basketId[id].toString();
+         basketProductPrice.innerHTML = (basketId[id] * productPrice + '$').toString();
+         basketInfoProd.innerHTML = 'Products:' + count.toString();
+         basketInfoTotal.innerHTML = ('Total:' + price + '$').toString();
+         
+         const basketItemCount = document.querySelector('.basket-item-count') as HTMLElement;
+         basketItemCount.innerHTML = count;
+         const basketItemPrice = document.querySelector('.basket-item-price') as HTMLElement;
+         basketItemPrice.innerHTML = price;
+         
+         if (Number(productAmount.textContent) <= 0) {
+            const indexToDelete = arrayId.indexOf(id);
+            arrayId.splice(indexToDelete, 1);
+            localStorage.id = JSON.stringify(arrayId);
+            delete basketId[id]
+            pag.remove()
           }
-          productAmount.innerHTML = amount.toString();
-          return amount;
+          localStorage.basketId = JSON.stringify(basketId);
         }
       }
     });
-      return amount
    }
    async promoValidation(){
       await this.getBasketInfo()
