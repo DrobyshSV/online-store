@@ -1,5 +1,5 @@
 import './Product.scss';
-import {ProductType} from '../../../../types/types';
+import { ProductType } from '../../../../types/types';
 import CreateHtml from '../../Filters/CreateHtml';
 
 class Products extends CreateHtml {
@@ -10,9 +10,9 @@ class Products extends CreateHtml {
   draw(data: Array<ProductType>, viewMode: string) {
     const productItems = document.querySelector('.product-items') as HTMLElement;
     if (productItems.classList.contains('items-list')) {
-      productItems.classList.remove('items-list')
+      productItems.classList.remove('items-list');
     } else if (productItems.classList.contains('items-cards')) {
-      productItems.classList.remove('items-cards')
+      productItems.classList.remove('items-cards');
     }
     productItems.classList.add(`items-${viewMode}`);
     productItems.innerHTML = '';
@@ -38,7 +38,40 @@ class Products extends CreateHtml {
       productPrice.innerHTML = `Price: <span>${item.price.toString()}$</span>`;
       const productButtonsWrapper = this.createElement('div', 'btn-wrapper');
       const productAddBtn = this.createElement('button', 'add__btn');
-      productAddBtn.textContent = 'ADD';
+      const add = 'ADD';
+      const remove = 'REMOVE';
+      const arrBasketId: Array<number> = JSON.parse(localStorage.id);
+      productAddBtn.textContent = arrBasketId.some((t) => t === item.id) ? remove : add;
+      productAddBtn.addEventListener('click', (e) => {
+        let basketCount: number = JSON.parse(localStorage.count);
+        let basketPrice: number = JSON.parse(localStorage.price);
+        const arrBasketId: Array<number> = JSON.parse(localStorage.id);
+        const target = e.target as HTMLInputElement;
+        if (target.textContent === add) {
+          arrBasketId.push(item.id);
+          basketCount += 1;
+          basketPrice += item.price;
+          localStorage.id = JSON.stringify(arrBasketId);
+          localStorage.count = JSON.stringify(basketCount);
+          localStorage.price = JSON.stringify(basketPrice);
+          target.textContent = remove;
+        } else {
+          const indexToDelete = arrBasketId.indexOf(item.id);
+          arrBasketId.splice(indexToDelete, 1);
+          basketCount -= 1;
+          basketPrice -= item.price;
+          localStorage.id = JSON.stringify(arrBasketId);
+          localStorage.count = JSON.stringify(basketCount);
+          localStorage.price = JSON.stringify(basketPrice);
+          target.textContent = add;
+        }
+        basketCount = JSON.parse(localStorage.count);
+        basketPrice = JSON.parse(localStorage.price);
+        const headerItemCount = document.querySelector('.basket-item-count') as HTMLSpanElement;
+        const headerItemPrice = document.querySelector('.basket-item-price') as HTMLSpanElement;
+        headerItemCount.textContent = basketCount.toString();
+        headerItemPrice.textContent = basketPrice.toString();
+      });
       productAddBtn.setAttribute('type', 'button');
       const productDetailsLink = this.createElement('a', 'details__link') as HTMLLinkElement;
       productDetailsLink.href = `#product-page/${item.id}`;
@@ -58,9 +91,7 @@ class Products extends CreateHtml {
           productPrice,
           productButtonsWrapper
         );
-
       } else if (viewMode === 'list') {
-
         const listImgWrapper = this.createElement('div', 'list-wrapper__img');
         const listInfoWrapper = this.createElement('h4', 'list-info');
         const productDescription = this.createElement('p', 'product-description');
@@ -73,7 +104,6 @@ class Products extends CreateHtml {
       }
       productItems.append(productCard);
     });
-
   }
 }
 
