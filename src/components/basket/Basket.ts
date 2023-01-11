@@ -21,14 +21,10 @@ class Basket extends ProductPage {
   async basketStructure() {
     const dataUrl = 'https://dummyjson.com/products/' + '34';
     const productInfo = await this.getFetch(dataUrl);
-    console.log(typeof productInfo.id);
     const productTitle = productInfo.title;
     const productDescription = productInfo.description;
-    const productCategory = productInfo.category;
-    const productBrand = productInfo.brand;
     const productDiscount = productInfo.discountPercentage;
     const productImages = productInfo.images;
-    const productPrice = productInfo.price;
     const productRating = productInfo.rating;
     const productStock = productInfo.stock;
     const structure = `
@@ -146,11 +142,8 @@ class Basket extends ProductPage {
         const productInfo = await this.getFetch(dataUrl);
         const productTitle = productInfo.title;
         const productDescription = productInfo.description;
-        const productCategory = productInfo.category;
-        const productBrand = productInfo.brand;
         const productDiscount = productInfo.discountPercentage;
         const productImages = productInfo.images;
-        const productPrice = productInfo.price;
         const productRating = productInfo.rating;
         const productStock = productInfo.stock;
         const object = JSON.parse(localStorage.basketId);
@@ -362,7 +355,3 @@ class Basket extends ProductPage {
   }
 }
 export default Basket;
-
-function replace(arg0: RegExp, arg1: string): any {
-  throw new Error('Function not implemented.');
-}

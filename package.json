@@ -11,7 +11,7 @@
     "watch": "webpack --watch",
     "serve": "webpack serve",
     "lint": "eslint . --ext .ts --fix",
-    "fix-styles": "prettier-stylelint --write 'src/**/*.{css,scss}' "
+    "fix-styles": "npx stylelint \"**/*.{css,scss}\" --fix"
   },
   "repository": {
     "type": "git",
@@ -62,6 +62,7 @@
     "workbox-webpack-plugin": "^6.5.4"
   },
   "dependencies": {
-    "ajv-dist": "^8.11.2"
+    "ajv-dist": "^8.11.2",
+    "stylelint-webpack-plugin": "^3.3.0"
   }
 }

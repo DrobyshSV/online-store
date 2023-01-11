@@ -1,9 +1,9 @@
-#payment {
+.payment {
   display: none;
   min-height: 1px;
 }
 
-#payment.open {
+.payment.open {
   display: block;
 }
 
@@ -24,11 +24,11 @@
   visibility: visible;
 }
 
-.popup__pay.open.pay__popup__content {
+.popup__pay.open.pay__popup_content {
   opacity: 1;
 }
 
-.pay__popup__body {
+.pay__popup_body {
   display: flex;
   min-height: 100%;
   align-items: center;
@@ -36,7 +36,7 @@
   padding: 30px 10px;
 }
 
-.pay__popup__content {
+.pay__popup_content {
   position: relative;
   display: flex;
   width: 100%;
@@ -52,7 +52,7 @@
   transition: all 0.8s ease 0s;
 }
 
-.pay__popup__close {
+.pay__popup_close {
   position: absolute;
   top: 10px;
   right: 10px;

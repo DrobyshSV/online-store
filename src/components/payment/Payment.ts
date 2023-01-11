@@ -12,8 +12,8 @@ class Payment extends ProductPage {
   async payment() {
     const popUp = `
       <div class = 'popup__pay'>
-        <div class = 'pay__popup__body'>
-          <div class = 'pay__popup__content'>
+        <div class = 'pay__popup_body'>
+          <div class = 'pay__popup_content'>
               <h3>Personal details</h3>
               <form class='pay__form' action='' novalidate >
                   <input type='text' class='input pay__input pay__input-name' name='name' placeholder='Name'>
@@ -34,7 +34,7 @@ class Payment extends ProductPage {
                   <p class='cvv-warning'></p>
                   <button type='submit' class='btn'>Submit</button>
             </form>
-              <a href = '#' class = 'pay__popup__close'>X</a>
+              <a href = '#' class = 'pay__popup_close'>X</a>
           </div>
         </div>
       </div>
@@ -43,8 +43,7 @@ class Payment extends ProductPage {
   }
 
   async setEvents() {
-    const payPopupBody = this.container.querySelector('.pay__popup__body') as HTMLElement;
-    const closeButton = this.container.querySelector('.pay__popup__close') as HTMLElement;
+    const closeButton = this.container.querySelector('.pay__popup_close') as HTMLElement;
     const form = this.container.querySelector('.pay__form') as HTMLElement,
       formInputs = this.container.querySelectorAll('.pay__input'),
       inputEmail = this.container.querySelector('.pay__input-email') as HTMLFormElement,
