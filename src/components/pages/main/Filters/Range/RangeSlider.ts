@@ -32,7 +32,6 @@ class RangeSlider extends CreateHtml {
     inputSlider2.setAttribute('min', minValue);
     inputSlider2.setAttribute('max', maxValue);
 
-
     const searchKey = type.split('-')[0];
     if (this.routerParams.hasOwnProperty(searchKey)) {
       const searchKeyArray = this.routerParams[searchKey].split('↕');
@@ -79,8 +78,13 @@ class RangeSlider extends CreateHtml {
     inputSlider2.addEventListener('change', () => slideTwo());*/
   }
 
-  rangeColor(inputSlider1: HTMLInputElement, inputSlider2: HTMLInputElement, divSliderTrack: HTMLElement, range1: HTMLElement, range2: HTMLElement) {
-
+  rangeColor(
+    inputSlider1: HTMLInputElement,
+    inputSlider2: HTMLInputElement,
+    divSliderTrack: HTMLElement,
+    range1: HTMLElement,
+    range2: HTMLElement
+  ) {
     function fillColor() {
       const percent1: number = (+inputSlider1.value / +inputSlider1.max) * 100;
       const percent2: number = (+inputSlider2.value / +inputSlider1.max) * 100;

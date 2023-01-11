@@ -1,4 +1,4 @@
-import './Cards.scss'
+import './Cards.scss';
 import Products from './Products';
 import { ProductType } from '../../../../types/types';
 import CardsHeader from '../cardsHeader/cardsHeader';
@@ -9,7 +9,7 @@ class Cards {
 
   constructor() {
     this.products = new Products();
-    this.cardsHeader = new CardsHeader()
+    this.cardsHeader = new CardsHeader();
   }
 
   drawProducts(data: Array<ProductType>, viewMode: string) {

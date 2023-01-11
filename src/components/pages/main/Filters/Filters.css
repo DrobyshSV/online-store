@@ -7,6 +7,7 @@
   height: 120px;
   overflow-y: scroll;
 }
+
 .filter-list__checkbox::-webkit-scrollbar {
   width: 6px;
   background-color: #e35050;
@@ -15,5 +16,3 @@
 .filter-list__range {
   height: 120px;
 }
-
-/*# sourceMappingURL=Filters.css.map */

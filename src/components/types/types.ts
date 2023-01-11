@@ -48,3 +48,18 @@ export enum StatusCode {
   Unauthorized = 401,
   NotFound = 404,
 }
+
+export type FilterStateType = {
+  categories: Array<string>;
+  brands: Array<string>;
+  price: Array<number>;
+  stock: Array<number>;
+  state: Array<ProductType>;
+  filter: Array<ProductType>;
+  setCategory: (str: string) => void;
+  setBrand: (str: string) => void;
+  setPrice: (str: number) => void;
+  setStock: (str: number) => void;
+  setState: (arr: Array<ProductType>) => void;
+  setFilter: (arr: Array<ProductType>) => void;
+};

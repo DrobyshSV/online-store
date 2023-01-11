@@ -16,7 +16,7 @@ class ErrorPage extends Page {
   render() {
     this.container.innerHTML = `<h2 class='text-danger'>SORRY</h2>
           <h3>Product Not Found !</h3>`;
-    this.container.classList.add('error-page')
+    this.container.classList.add('error-page');
     return this.container;
   }
 }
