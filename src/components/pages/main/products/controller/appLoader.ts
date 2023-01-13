@@ -6,7 +6,7 @@ const limit = '100';
 class AppLoader extends ProductsLoader {
   constructor() {
     super(url, {
-      limit: limit, // лимит продуктов
+      limit: limit,
     });
   }
 }
