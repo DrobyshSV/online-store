@@ -29,9 +29,6 @@ class Header extends Component {
     button.setAttribute('type', 'button');
     form.append(input, button);
     this.container.append(form);
-    input.addEventListener('keypress', (e) => {
-      console.log(e);
-    });
   }
 
   renderBasket() {
