@@ -2,7 +2,7 @@ import Page from '../../common/Page';
 import AppController from './products/controller/controller';
 import Cards from './products/cards/Cards';
 import Filters from './Filters/Filters';
-import { ProductType } from '../../types/types';
+import { ProductType } from '../../types';
 import { copyTextToClipboard } from '../../../index';
 import { filterState } from '../../state/state';
 

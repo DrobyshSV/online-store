@@ -1,5 +1,5 @@
 import CreateHtml from '../CreateHtml';
-import { ProductType } from '../../../../types/types';
+import { ProductType } from '../../../../types';
 import { filterState } from '../../../../state/state';
 
 class Checkbox extends CreateHtml {

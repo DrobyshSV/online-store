@@ -1,6 +1,6 @@
 import './Cards.scss';
 import Products from './Products';
-import { ProductType } from '../../../../types/types';
+import { ProductType } from '../../../../types';
 import CardsHeader from '../cardsHeader/cardsHeader';
 
 class Cards {

@@ -1,5 +1,5 @@
 import './Product.scss';
-import { ProductType } from '../../../../types/types';
+import { ProductType } from '../../../../types';
 import CreateHtml from '../../Filters/CreateHtml';
 
 class Products extends CreateHtml {

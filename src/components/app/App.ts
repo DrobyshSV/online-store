@@ -1,7 +1,7 @@
 import Header from '../header/Header';
 import Footer from '../Footer/Footer';
 import Page from '../common/Page';
-import { ErrorTypes, PageIds } from '../types/types';
+import { ErrorTypes, PageIds } from '../types';
 import MainPage from '../pages/main/MainPage';
 import ProductPage from '../pages/product/ProductPage';
 import BasketPage from '../../components/basket/Basket';

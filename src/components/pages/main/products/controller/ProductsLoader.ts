@@ -1,4 +1,4 @@
-import { IOptions, ISources, ProductType, RespType, StatusCode } from '../../../../types/types';
+import { IOptions, ISources, ProductType, RespType, StatusCode } from '../../../../types';
 
 class ProductsLoader {
   baseLink: string;
