@@ -85,40 +85,40 @@ class Payment extends ProductPage {
         emptyInputs = Array.from(formInputs).filter((input) => (input as HTMLTextAreaElement).value === '');
 
       const isValidName = (name: string) => {
-        const result = /^[A-Za-zА-Яа-яЁё]{3,100}(\s+[A-Za-zА-Яа-яЁё]{3,100})$/;
-        return result.test(String(name).toLowerCase());
+        const nameRegEx = /^[A-Za-zА-Яа-яЁё]{3,100}(\s+[A-Za-zА-Яа-яЁё]{3,100})$/;
+        return nameRegEx.test(String(name).toLowerCase());
       };
 
       const isValidPhone = (phone: string) => {
-        const result = /^(\+)[0-9]{9,14}$/;
-        return result.test(String(phone).toLowerCase());
+        const phoneRegEx = /^(\+)[0-9]{9,14}$/;
+        return phoneRegEx.test(String(phone).toLowerCase());
       };
 
       const isValidAdress = (adress: string) => {
-        const result = /^[A-Za-zА-Яа-яЁё]{5,100}(\s+[A-Za-zА-Яа-яЁё]{5,100})(\s+[A-Za-zА-Яа-яЁё]{5,100})$/;
-        return result.test(String(adress).toLowerCase());
+        const adressRegEx = /^[A-Za-zА-Яа-яЁё]{5,100}(\s+[A-Za-zА-Яа-яЁё]{5,100})(\s+[A-Za-zА-Яа-яЁё]{5,100})$/;
+        return adressRegEx.test(String(adress).toLowerCase());
       };
 
       const isValidEmail = (email: string) => {
-        const result =
+        const emailRegEx =
           /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return result.test(String(email).toLowerCase());
+        return emailRegEx.test(String(email).toLowerCase());
       };
 
       const isValidCard = (card: string) => {
-        const result =
+        const cardRegEx =
           /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
-        return result.test(String(card).toLowerCase());
+        return cardRegEx.test(String(card).toLowerCase());
       };
 
       const isValidValid = (valid: string) => {
-        const result = /^(0[1-9]|1[0-2])\/\d{2}$/;
-        return result.test(String(valid).toLowerCase());
+        const validRegEx = /^(0[1-9]|1[0-2])\/\d{2}$/;
+        return validRegEx.test(String(valid).toLowerCase());
       };
 
       const isValidCvv = (cvv: string) => {
-        const result = /^[0-9]{3}$/;
-        return result.test(String(cvv).toLowerCase());
+        const cvvRegEx = /^[0-9]{3}$/;
+        return cvvRegEx.test(String(cvv).toLowerCase());
       };
 
       formInputs.forEach((input) => {
