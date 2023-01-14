@@ -81,7 +81,8 @@ class ProductPage extends Page {
 
   async setDivs() {
     this.createProductContainer();
-    const dataUrl = 'https://dummyjson.com/products/' + this.id?.split('/')[1];
+    const productId = this.id?.split('/')[1];
+    const dataUrl = 'https://dummyjson.com/products/' + productId
     const productInfo = await this.getFetch(dataUrl);
     const productGalery = document.querySelector('.product__galery') as HTMLElement;
     const productImages = productInfo.images;
