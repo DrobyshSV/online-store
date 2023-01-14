@@ -29,15 +29,7 @@ class ProductPage extends Page {
     const productContainer = document.createElement('div');
     productContainer.classList.add('product-container');
 
-    const productTitle = productInfo.title;
-    const productDescription = productInfo.description;
-    const productCategory = productInfo.category;
-    const productBrand = productInfo.brand;
-    const productDiscount = productInfo.discountPercentage;
-    const productImages = productInfo.images;
-    const productPrice = productInfo.price;
-    const productRating = productInfo.rating;
-    const productStock = productInfo.stock;
+    const {productTitle, productDescription, productCategory, productBrand, productDiscount, productImages, productPrice, productRating, productStock} = productInfo;
 
     // CODE STRUCTURE
     const structure = `
