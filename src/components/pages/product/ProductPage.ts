@@ -29,45 +29,24 @@ class ProductPage extends Page {
     const productContainer = document.createElement('div');
     productContainer.classList.add('product-container');
 
-    const productTitle = productInfo.title;
-    const productDescription = productInfo.description;
-    const productCategory = productInfo.category;
-    const productBrand = productInfo.brand;
-    const productDiscount = productInfo.discountPercentage;
-    const productImages = productInfo.images;
-    const productPrice = productInfo.price;
-    const productRating = productInfo.rating;
-    const productStock = productInfo.stock;
-
+    const {title, description, category, brand, discount, images, price, rating, stock} = productInfo;
     // CODE STRUCTURE
     const structure = `
       <div class = 'product__wrap'>
         <div class = 'product__source'>
           <div class = 'product__source source_item'><a href='#main-page'>Store<span>/</span></a></div>
-          <div class = 'product__source source_item'>${productCategory}<span>/</span></div>
-          <div class = 'product__source source_item'>${productBrand}<span>/</span></div>
-          <div class = 'product__source source_item'>${productTitle}<span>/</span></div>
+          <div class = 'product__source source_item'>${category}<span>/</span></div>
+          <div class = 'product__source source_item'>${brand}<span>/</span></div>
+          <div class = 'product__source source_item'>${title}<span>/</span></div>
         </div>
         <div class = 'product__main'>
           <div class = 'product__galery'>
-          </div>
-          
-          <div class = 'product__image main_img' onclick="function popUp(){
-            const popUp = document.querySelector('.popup');
-            const thisImage = document.querySelector('.main_img img');
-            const newImg = document.querySelector('.popup__img');
-            newImg.src = thisImage.src;
-            const popUpContent = document.querySelector('.popup__content');
-            popUp.classList.add('open');
-            popUpContent.append(newImg);
-          }
-          popUp()"><img src='${productImages[0]}' alt='product'></img></div>
-          
+          </div>   
+          <div class = 'product__image main_img'><img src='${images[0]}' alt='product'></img></div>   
           <div class = 'product__description'>
-            <div class = 'product__name'>${productTitle}</div>
-            
+            <div class = 'product__name'>${title}</div>          
             <div class = 'product__price'>
-              <div class = 'product__price elem'>${productPrice}$</div>
+              <div class = 'product__price elem'>${price}$</div>
               <div class = 'product__price elem' onclick="function popUpPay(){
                 const popupPay = document.querySelector('.popup__pay');
                 const paument = document.querySelector('#payment');
@@ -77,13 +56,12 @@ class ProductPage extends Page {
             popUpPay()"><a>buy now</a></div>
               <div class = 'product__price elem'><p> add to cart</p></div>
             </div>
-
-            <div class = 'product__description item'><span class = 'pre__description'>Brand:</span> ${productBrand}</div>
-            <div class = 'product__description item'><span class = 'pre__description'>Category:</span> ${productCategory}</div>
-            <div class = 'product__description item'><span class = 'pre__description'>In stock:</span> ${productStock}</div>
-            <div class = 'product__description item'><span class = 'pre__description'>Description:</span> ${productDescription}</div>
-            <div class = 'product__description item'><span class = 'pre__description'>Discount:</span> ${productDiscount}</div>
-            <div class = 'product__description item'><span class = 'pre__description'>Rating:</span> ${productRating}</div>
+            <div class = 'product__description item'><span class = 'pre__description'>Brand:</span> ${brand}</div>
+            <div class = 'product__description item'><span class = 'pre__description'>Category:</span> ${category}</div>
+            <div class = 'product__description item'><span class = 'pre__description'>In stock:</span> ${stock}</div>
+            <div class = 'product__description item'><span class = 'pre__description'>Description:</span> ${description}</div>
+            <div class = 'product__description item'><span class = 'pre__description'>Discount:</span> ${discount}</div>
+            <div class = 'product__description item'><span class = 'pre__description'>Rating:</span> ${rating}</div>
           </div>
         </div>
       </div>
@@ -103,7 +81,8 @@ class ProductPage extends Page {
 
   async setDivs() {
     this.createProductContainer();
-    const dataUrl = 'https://dummyjson.com/products/' + this.id?.split('/')[1];
+    const productId = this.id?.split('/')[1];
+    const dataUrl = 'https://dummyjson.com/products/' + productId
     const productInfo = await this.getFetch(dataUrl);
     const productGalery = document.querySelector('.product__galery') as HTMLElement;
     const productImages = productInfo.images;
@@ -119,6 +98,17 @@ class ProductPage extends Page {
 
   async setEvents() {
     await this.createProductContainer();
+    const mainImage = document.querySelector('.main_img') as HTMLElement;
+    mainImage.addEventListener('click', () => {
+      const popUp = document.querySelector('.popup') as HTMLElement;
+      const thisImage = document.querySelector('.main_img img') as HTMLImageElement;
+      const newImg = document.querySelector('.popup__img') as HTMLImageElement;
+       const popUpContent = document.querySelector('.popup__content') as HTMLElement;
+      newImg.src = thisImage.src;
+      popUp.classList.add('open');
+      popUpContent.append(newImg);
+    })
+
     const popupClose = document.querySelector('.popup__close') as HTMLElement;
     popupClose.addEventListener('click', (e) => {
       const popUp = document.querySelector('.popup') as HTMLElement;
