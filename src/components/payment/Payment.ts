@@ -54,14 +54,14 @@ class Payment extends ProductPage {
       inputCvv = this.container.querySelector('.pay__input-cvv') as HTMLFormElement,
       inputCard = this.container.querySelector('.pay__input-card') as HTMLFormElement;
 
-    const cardBrands = [4, 5, 6];
+    enum Brands {Visa = 4, Mastercard = 5, Belcard = 6};
     const cardName = this.container.querySelector('.card-name') as HTMLElement;
 
     inputCard.oninput = () => {
       const val = inputCard.value.trim();
-      const master = String(cardBrands[0]);
-      const visa = String(cardBrands[1]);
-      const bel = String(cardBrands[2]);
+      const master = Brands.Visa;
+      const visa = Brands.Mastercard;
+      const bel = Brands.Belcard;
       const newVal = val.slice(0, 1);
       if (newVal == master) {
         cardName.innerHTML = 'MASTERCARD';
