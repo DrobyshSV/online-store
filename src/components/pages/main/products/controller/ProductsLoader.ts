@@ -1,4 +1,4 @@
-import { IOptions, ISources, ProductType, RespType, StatusCode } from '../../../../types';
+import {IOptions, ISources, loadCallbackType, ProductType, RespType, StatusCode} from '../../../../types';
 
 class ProductsLoader {
   baseLink: string;
@@ -40,7 +40,7 @@ class ProductsLoader {
     return url.slice(0, -1);
   }
 
-  load(method: string, endpoint: string, callback: <T>(data: T) => void, options = {}): void {
+  load(method: string, endpoint: string, callback: loadCallbackType, options = {}): void {
     fetch(this.makeUrl(options, endpoint), { method })
       .then(this.errorHandler)
       .then((res): Promise<ISources> => res.json())

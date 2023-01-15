@@ -63,3 +63,5 @@ export type FilterStateType = {
   setState: (arr: Array<ProductType>) => void;
   setFilter: (arr: Array<ProductType>) => void;
 };
+
+export type loadCallbackType = <T>(data: T) => void;
