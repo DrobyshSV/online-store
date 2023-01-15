@@ -1,7 +1,8 @@
-import './basket.css';
-import ProductPage from '../pages/product/ProductPage';
+import ProductPage from '../product';
 
-class Basket extends ProductPage {
+import './basket.css';
+
+class BasketPage extends ProductPage {
   rows: string;
   constructor(rows: string) {
     super('idPage');
@@ -354,4 +355,4 @@ class Basket extends ProductPage {
     return this.container;
   }
 }
-export default Basket;
+export default BasketPage;

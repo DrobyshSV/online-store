@@ -1,5 +1,5 @@
 import './index.scss';
-import App from './components/app/App';
+import App from './components/app';
 import { PageIds } from './components/types';
 
 let hash = window.location.hash.replace('#', '');

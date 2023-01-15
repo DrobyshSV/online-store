@@ -1,5 +1,6 @@
+import ProductPage from '../pages/product';
+
 import './payment.css';
-import ProductPage from '../pages/product/ProductPage';
 
 class Payment extends ProductPage {
   constructor(id: string) {

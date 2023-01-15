@@ -1,5 +1,6 @@
-import './footer.scss';
 import Component from '../common/Component';
+
+import './footer.scss';
 
 const rssPath = 'https://rs.school/js/';
 const gitPath = 'https://github.com/DrobyshSV';

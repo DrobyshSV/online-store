@@ -1,9 +1,10 @@
-import './Filters.scss';
-import './RangeSlider.scss';
 import Checkbox from './Checkbox/Checkbox';
 import RangeSlider from './Range/RangeSlider';
 import CreateHtml from './CreateHtml';
 import FilterButtons from './FilterButtons/FilterButtons';
+
+import './Filters.scss';
+import './RangeSlider.scss';
 
 class Filters {
   private container: DocumentFragment;
@@ -41,8 +42,7 @@ class Filters {
   }
 
   addFilterList(type: string) {
-    const div = this.creator.createElement('form', type);
-    return div;
+    return this.creator.createElement('form', type);
   }
 
   init() {

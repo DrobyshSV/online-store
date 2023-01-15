@@ -1,6 +1,7 @@
-import './Product.scss';
 import { ProductType } from '../../../../types';
 import CreateHtml from '../../Filters/CreateHtml';
+
+import './Product.scss';
 
 const add = 'ADD';
 const remove = 'REMOVE';

@@ -1,10 +1,8 @@
 import Page from '../../common/Page';
+
 import './product.css';
 
 class ProductPage extends Page {
-  static TextObject = {
-    MainTitle: 'Settings Page',
-  };
   private id: string | undefined;
 
   constructor(id: string) {

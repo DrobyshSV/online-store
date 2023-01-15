@@ -1,6 +1,7 @@
-import './header.scss';
 import Component from '../common/Component';
 import { ProductType } from '../types';
+
+import './header.scss';
 
 class Header extends Component {
   public state: Array<ProductType>;

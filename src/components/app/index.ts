@@ -1,13 +1,14 @@
-import Header from '../header/Header';
-import Footer from '../Footer/Footer';
-import Page from '../common/Page';
-import { ErrorTypes, PageIds } from '../types';
-import MainPage from '../pages/main/MainPage';
-import ProductPage from '../pages/product/ProductPage';
-import BasketPage from '../../components/basket/Basket';
-import ErrorPage from '../pages/error/ErrorPage';
-import Payment from '../payment/Payment';
 import { idHelper } from '../../index';
+
+import Page from '../common/Page';
+import MainPage from '../pages/main';
+import ProductPage from '../pages/product';
+import BasketPage from '../pages/basket';
+import ErrorPage from '../pages/error';
+import Header from '../header';
+import Footer from '../footer';
+import { ErrorTypes, PageIds } from '../types';
+import Payment from '../payment/Payment';
 
 class App {
   private static container: HTMLElement = document.body;

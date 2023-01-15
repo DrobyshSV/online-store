@@ -1,10 +1,11 @@
+import { copyTextToClipboard } from '../../../index';
 import Page from '../../common/Page';
+import { ProductType } from '../../types';
+import { filterState } from '../../state/state';
+
 import AppController from './products/controller/controller';
 import Cards from './products/cards/Cards';
 import Filters from './Filters/Filters';
-import { ProductType } from '../../types';
-import { copyTextToClipboard } from '../../../index';
-import { filterState } from '../../state/state';
 
 class MainPage extends Page {
   static TextObject = {};

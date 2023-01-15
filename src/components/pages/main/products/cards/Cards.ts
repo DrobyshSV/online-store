@@ -1,7 +1,9 @@
-import './Cards.scss';
-import Products from './Products';
 import { ProductType } from '../../../../types';
 import CardsHeader from '../cardsHeader/cardsHeader';
+
+import Products from './Products';
+
+import './Cards.scss';
 
 class Cards {
   private products: Products;
