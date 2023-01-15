@@ -1,12 +1,13 @@
 import Header from '../header/Header';
 import Footer from '../Footer/Footer';
 import Page from '../common/Page';
-import { ErrorTypes, PageIds } from '../types';
+import {ErrorTypes, PageIds} from '../types';
 import MainPage from '../pages/main/MainPage';
 import ProductPage from '../pages/product/ProductPage';
 import BasketPage from '../../components/basket/Basket';
 import ErrorPage from '../pages/error/ErrorPage';
 import Payment from '../payment/Payment';
+import {idHelper} from '../../index';
 
 class App {
   private static container: HTMLElement = document.body;
@@ -30,11 +31,7 @@ class App {
 
     if (idPage === PageIds.MainPage) {
       page = new MainPage(idPage);
-    } else if (
-      idPage.split('/')[0] === PageIds.ProductPage &&
-      +idPage.split('/')[1] < 101 &&
-      +idPage.split('/')[1] > 0
-    ) {
+    } else if (idHelper(idPage)) {
       page = new ProductPage(idPage);
     } else if (idPage === PageIds.BasketPage) {
       page = new BasketPage(idPage);
@@ -56,6 +53,7 @@ class App {
       App.renderNewPage(hash);
     });
   }
+
   start(hash: string) {
     if (localStorage.getItem('id') === null) {
       localStorage.setItem('basketId', JSON.stringify({}));
