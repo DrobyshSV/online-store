@@ -2,11 +2,47 @@ import './Product.scss';
 import { ProductType } from '../../../../types';
 import CreateHtml from '../../Filters/CreateHtml';
 
+const add = 'ADD';
+const remove = 'REMOVE';
+
 class Products extends CreateHtml {
   constructor() {
     super();
   }
-
+  addProductEventListener(e: Event, item: ProductType) {
+    let basketCount: number = JSON.parse(localStorage.count);
+    let basketPrice: number = JSON.parse(localStorage.price);
+    const arrBasketId: Array<number> = JSON.parse(localStorage.id);
+    const target = e.target as HTMLInputElement;
+    const object = JSON.parse(localStorage.basketId);
+    if (target.textContent === add) {
+      arrBasketId.push(item.id);
+      basketCount += 1;
+      basketPrice += item.price;
+      localStorage.basketId = JSON.stringify({ ...object, [item.id]: 1 });
+      localStorage.id = JSON.stringify(arrBasketId);
+      localStorage.count = JSON.stringify(basketCount);
+      localStorage.price = JSON.stringify(basketPrice);
+      target.textContent = remove;
+    } else {
+      delete object[item.id];
+      const indexToDelete = arrBasketId.indexOf(item.id);
+      arrBasketId.splice(indexToDelete, 1);
+      basketCount -= 1;
+      basketPrice -= item.price;
+      localStorage.basketId = JSON.stringify(object);
+      localStorage.id = JSON.stringify(arrBasketId);
+      localStorage.count = JSON.stringify(basketCount);
+      localStorage.price = JSON.stringify(basketPrice);
+      target.textContent = add;
+    }
+    basketCount = JSON.parse(localStorage.count);
+    basketPrice = JSON.parse(localStorage.price);
+    const headerItemCount = document.querySelector('.basket-item-count') as HTMLSpanElement;
+    const headerItemPrice = document.querySelector('.basket-item-price') as HTMLSpanElement;
+    headerItemCount.textContent = basketCount.toString();
+    headerItemPrice.textContent = basketPrice.toString();
+  }
   draw(data: Array<ProductType>, viewMode: string) {
     const productItems = document.querySelector('.product-items') as HTMLElement;
     if (productItems.classList.contains('items-list')) {
@@ -16,7 +52,6 @@ class Products extends CreateHtml {
     }
     productItems.classList.add(`items-${viewMode}`);
     productItems.innerHTML = '';
-
     data.forEach((item) => {
       const productCard = this.createElement('div', `product-${viewMode}`);
       productCard.setAttribute('key', item.id.toString());
@@ -38,44 +73,9 @@ class Products extends CreateHtml {
       productPrice.innerHTML = `Price: <span>${item.price.toString()}$</span>`;
       const productButtonsWrapper = this.createElement('div', 'btn-wrapper');
       const productAddBtn = this.createElement('button', 'add__btn');
-      const add = 'ADD';
-      const remove = 'REMOVE';
       const arrBasketId: Array<number> = JSON.parse(localStorage.id);
       productAddBtn.textContent = arrBasketId.some((t) => t === item.id) ? remove : add;
-      productAddBtn.addEventListener('click', (e) => {
-        let basketCount: number = JSON.parse(localStorage.count);
-        let basketPrice: number = JSON.parse(localStorage.price);
-        const arrBasketId: Array<number> = JSON.parse(localStorage.id);
-        const target = e.target as HTMLInputElement;
-        const object = JSON.parse(localStorage.basketId);
-        if (target.textContent === add) {
-          arrBasketId.push(item.id);
-          basketCount += 1;
-          basketPrice += item.price;
-          localStorage.basketId = JSON.stringify({ ...object, [item.id]: 1 });
-          localStorage.id = JSON.stringify(arrBasketId);
-          localStorage.count = JSON.stringify(basketCount);
-          localStorage.price = JSON.stringify(basketPrice);
-          target.textContent = remove;
-        } else {
-          delete object[item.id];
-          const indexToDelete = arrBasketId.indexOf(item.id);
-          arrBasketId.splice(indexToDelete, 1);
-          basketCount -= 1;
-          basketPrice -= item.price;
-          localStorage.basketId = JSON.stringify(object);
-          localStorage.id = JSON.stringify(arrBasketId);
-          localStorage.count = JSON.stringify(basketCount);
-          localStorage.price = JSON.stringify(basketPrice);
-          target.textContent = add;
-        }
-        basketCount = JSON.parse(localStorage.count);
-        basketPrice = JSON.parse(localStorage.price);
-        const headerItemCount = document.querySelector('.basket-item-count') as HTMLSpanElement;
-        const headerItemPrice = document.querySelector('.basket-item-price') as HTMLSpanElement;
-        headerItemCount.textContent = basketCount.toString();
-        headerItemPrice.textContent = basketPrice.toString();
-      });
+      productAddBtn.addEventListener('click', (e) => this.addProductEventListener(e, item));
       productAddBtn.setAttribute('type', 'button');
       const productDetailsLink = this.createElement('a', 'details__link') as HTMLLinkElement;
       productDetailsLink.href = `#product-page/${item.id}`;
