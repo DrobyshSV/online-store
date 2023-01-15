@@ -1,4 +1,4 @@
-import {IOptions, ISources, loadCallbackType, ProductType, RespType, StatusCode} from '../../../../types';
+import { IOptions, ISources, loadCallbackType, ProductType, RespType, StatusCode } from '../../../../types';
 
 class ProductsLoader {
   baseLink: string;
@@ -33,7 +33,8 @@ class ProductsLoader {
   makeUrl(options: IOptions, endpoint: string) {
     const urlOptions: { [index: string]: string } = { ...this.options, ...options };
     let url = `${this.baseLink}${endpoint}`;
-    Object.keys(urlOptions).forEach((key) => {
+    const urlOptionsKeys = Object.keys(urlOptions);
+    urlOptionsKeys.forEach((key) => {
       url += `?${key}=${urlOptions[key]}&`;
     });
 
