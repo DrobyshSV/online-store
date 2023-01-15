@@ -1,5 +1,5 @@
 import Page from '../../common/Page';
-import { ErrorTypes } from '../../types/types';
+import { ErrorTypes } from '../../types';
 
 class ErrorPage extends Page {
   private errorType: ErrorTypes | string;

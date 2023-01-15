@@ -1,6 +1,6 @@
-import CreateHtml from '../CreateHtml';
-import { ProductType } from '../../../../types/types';
+import { ProductType } from '../../../../types';
 import { filterState } from '../../../../state/state';
+import CreateHtml from '../CreateHtml';
 
 class Checkbox extends CreateHtml {
   private routerParams: Record<string, string>;

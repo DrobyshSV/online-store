@@ -22,95 +22,69 @@ class RangeSlider extends CreateHtml {
     divContainer.classList.add(type);
     const divSliderTrack = this.createElement('div', 'slider-track');
     divSliderTrack.classList.add(`${type.split('-')[0]}-track`);
-    const inputSlider1 = this.createElement('input', 'slider-1') as HTMLInputElement;
-    inputSlider1.setAttribute('type', 'range');
-    inputSlider1.setAttribute('min', minValue);
-    inputSlider1.setAttribute('max', maxValue);
+    const rangeSliderLeft = this.createElement('input', 'slider-1') as HTMLInputElement;
+    rangeSliderLeft.setAttribute('type', 'range');
+    rangeSliderLeft.setAttribute('min', minValue);
+    rangeSliderLeft.setAttribute('max', maxValue);
 
-    const inputSlider2 = this.createElement('input', 'slider-2') as HTMLInputElement;
-    inputSlider2.setAttribute('type', 'range');
-    inputSlider2.setAttribute('min', minValue);
-    inputSlider2.setAttribute('max', maxValue);
+    const rangeSliderRight = this.createElement('input', 'slider-2') as HTMLInputElement;
+    rangeSliderRight.setAttribute('type', 'range');
+    rangeSliderRight.setAttribute('min', minValue);
+    rangeSliderRight.setAttribute('max', maxValue);
 
     const searchKey = type.split('-')[0];
     if (this.routerParams.hasOwnProperty(searchKey)) {
       const searchKeyArray = this.routerParams[searchKey].split('↕');
       range1.textContent = searchKeyArray[0];
       range2.textContent = searchKeyArray[1];
-      inputSlider1.setAttribute('value', searchKeyArray[0]);
-      inputSlider2.setAttribute('value', searchKeyArray[1]);
+      rangeSliderLeft.setAttribute('value', searchKeyArray[0]);
+      rangeSliderRight.setAttribute('value', searchKeyArray[1]);
     } else {
       range1.textContent = minValue;
       range2.textContent = maxValue;
-      inputSlider1.setAttribute('value', minValue);
-      inputSlider2.setAttribute('value', maxValue);
+      rangeSliderLeft.setAttribute('value', minValue);
+      rangeSliderRight.setAttribute('value', maxValue);
     }
 
-    divContainer.append(divSliderTrack, inputSlider1, inputSlider2);
+    divContainer.append(divSliderTrack, rangeSliderLeft, rangeSliderRight);
     divWrapper.append(values, divContainer);
     node.append(divWrapper);
-    this.rangeColor(inputSlider1, inputSlider2, divSliderTrack, range1, range2);
-    /*function fillColor() {
-      const percent1: number = (+inputSlider1.value / +inputSlider1.max) * 100;
-      const percent2: number = (+inputSlider2.value / +inputSlider1.max) * 100;
-      divSliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #3264fe ${percent1}% , #3264fe ${percent2}%, #dadae5 ${percent2}%)`;
-    }
-
-    function slideOne() {
-      if (parseInt(inputSlider2.value) - parseInt(inputSlider1.value) <= 0) {
-        inputSlider1.value = String(parseInt(inputSlider2.value));
-      }
-      range1.textContent = inputSlider1.value;
-      fillColor();
-    }
-
-    function slideTwo() {
-      if (parseInt(inputSlider2.value) - parseInt(inputSlider1.value) <= 0) {
-        inputSlider2.value = String(parseInt(inputSlider1.value));
-      }
-      range2.textContent = inputSlider2.value;
-      fillColor();
-    }
-
-    slideOne();
-    slideTwo();
-    inputSlider1.addEventListener('change', () => slideOne());
-    inputSlider2.addEventListener('change', () => slideTwo());*/
+    this.rangeColor(rangeSliderLeft, rangeSliderRight, divSliderTrack, range1, range2);
   }
 
   rangeColor(
-    inputSlider1: HTMLInputElement,
-    inputSlider2: HTMLInputElement,
+    rangeSliderLeft: HTMLInputElement,
+    rangeSliderRight: HTMLInputElement,
     divSliderTrack: HTMLElement,
     range1: HTMLElement,
     range2: HTMLElement
   ) {
     function fillColor() {
-      const percent1: number = (+inputSlider1.value / +inputSlider1.max) * 100;
-      const percent2: number = (+inputSlider2.value / +inputSlider1.max) * 100;
+      const percent1: number = (parseInt(rangeSliderLeft.value) / parseInt(rangeSliderLeft.max)) * 100;
+      const percent2: number = (parseInt(rangeSliderRight.value) / parseInt(rangeSliderLeft.max)) * 100;
       divSliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #3264fe ${percent1}% , #3264fe ${percent2}%, #dadae5 ${percent2}%)`;
     }
 
-    function slideOne() {
-      if (parseInt(inputSlider2.value) - parseInt(inputSlider1.value) <= 0) {
-        inputSlider1.value = String(parseInt(inputSlider2.value));
+    function slideLeft() {
+      if (parseInt(rangeSliderRight.value) - parseInt(rangeSliderLeft.value) <= 0) {
+        rangeSliderLeft.value = parseInt(rangeSliderRight.value).toString();
       }
-      range1.textContent = inputSlider1.value;
+      range1.textContent = rangeSliderLeft.value;
       fillColor();
     }
 
-    function slideTwo() {
-      if (parseInt(inputSlider2.value) - parseInt(inputSlider1.value) <= 0) {
-        inputSlider2.value = String(parseInt(inputSlider1.value));
+    function slideRight() {
+      if (parseInt(rangeSliderRight.value) - parseInt(rangeSliderLeft.value) <= 0) {
+        rangeSliderRight.value = parseInt(rangeSliderLeft.value).toString();
       }
-      range2.textContent = inputSlider2.value;
+      range2.textContent = rangeSliderRight.value;
       fillColor();
     }
 
-    slideOne();
-    slideTwo();
-    inputSlider1.addEventListener('change', () => slideOne());
-    inputSlider2.addEventListener('change', () => slideTwo());
+    slideLeft();
+    slideRight();
+    rangeSliderLeft.addEventListener('change', () => slideLeft());
+    rangeSliderRight.addEventListener('change', () => slideRight());
   }
 }
 

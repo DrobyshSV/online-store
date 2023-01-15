@@ -1,5 +1,9 @@
-import './footer.scss';
 import Component from '../common/Component';
+
+import './footer.scss';
+
+const rssPath = 'https://rs.school/js/';
+const gitPath = 'https://github.com/DrobyshSV';
 
 class Footer extends Component {
   constructor(tagName: string, className: string) {
@@ -13,7 +17,7 @@ class Footer extends Component {
     yearSpan.innerText = '2022';
     const gitLink = document.createElement('a');
     gitLink.classList.add('git__link');
-    gitLink.href = 'https://github.com/DrobyshSV';
+    gitLink.href = gitPath;
     const gitLogo = document.createElement('div');
     gitLogo.classList.add('git-logo');
     gitWrapper.append(yearSpan, gitLink);
@@ -24,7 +28,7 @@ class Footer extends Component {
   renderRss() {
     const rssLink = document.createElement('a');
     rssLink.classList.add('rss');
-    rssLink.href = 'https://rs.school/js/';
+    rssLink.href = rssPath;
     const rssLogo = document.createElement('div');
     rssLogo.classList.add('rss-logo');
     rssLink.append(rssLogo);

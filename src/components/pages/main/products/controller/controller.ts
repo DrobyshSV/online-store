@@ -1,8 +1,9 @@
+import { ProductType } from '../../../../types';
+
 import AppLoader from './appLoader';
-import { ProductType } from '../../../../types/types';
 
 class AppController extends AppLoader {
-  getSources(callback: ((data?: Array<ProductType>) => void) | undefined) {
+  getSources(callback: (data?: Array<ProductType>) => void) {
     super.getResp(
       {
         endpoint: 'products',

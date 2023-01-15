@@ -1,6 +1,7 @@
-import './CardHeader.scss';
+import { ProductType } from '../../../../types';
 import CreateHtml from '../../Filters/CreateHtml';
-import { ProductType } from '../../../../types/types';
+
+import './CardHeader.scss';
 
 class CardsHeader extends CreateHtml {
   public header: HTMLElement;

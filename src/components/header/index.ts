@@ -1,6 +1,7 @@
-import './header.scss';
 import Component from '../common/Component';
-import { ProductType } from '../types/types';
+import { ProductType } from '../types';
+
+import './header.scss';
 
 class Header extends Component {
   public state: Array<ProductType>;
@@ -29,9 +30,6 @@ class Header extends Component {
     button.setAttribute('type', 'button');
     form.append(input, button);
     this.container.append(form);
-    input.addEventListener('keypress', (e) => {
-      console.log(e);
-    });
   }
 
   renderBasket() {

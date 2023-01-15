@@ -1,4 +1,4 @@
-import { FilterStateType, ProductType } from '../types/types';
+import { FilterStateType, ProductType } from '../types';
 
 export const filterState: FilterStateType = {
   categories: [],
