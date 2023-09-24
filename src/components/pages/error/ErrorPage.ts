@@ -5,7 +5,7 @@ class ErrorPage extends Page {
   private errorType: ErrorTypes | string;
 
   static TextObject: { [prop: string]: string } = {
-    '404': 'Error! The page was not found.',
+    '404': 'Error, the page was not found.',
   };
 
   constructor(id: string, errorType: ErrorTypes | string) {
